@@ -1,0 +1,22 @@
+.desk{
+	height:256px;
+	background: url(/RestaurantSystem/resources/image/icons8-round-256.png)  center no-repeat ;
+		text-align: center;
+	
+}
+.desk:hover{
+	background: url(/RestaurantSystem/resources/image/icons8-round-256-hover.png)  center no-repeat ;
+}
+.desk .active{
+	background: url(/RestaurantSystem/resources/image/icons8-round-256-hover.png)  center no-repeat ;
+}
+.desk span{
+	background: linear-gradient(to bottom, #1E90FF, #FF00FF);
+    -webkit-background-clip: text;
+    color: transparent;
+    line-height: 246px;
+	font-size: 128px;
+}
+.desk:hover > span{
+	color: gray;
+}
