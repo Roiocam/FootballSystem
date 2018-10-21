@@ -1,5 +1,50 @@
 # FootBallSystem
+# 项目介绍
+本项目为足协内部管理系统，出发点为解决每日踢球人数的提醒.后衍生了多个模块，主要解决了协会赛事报名，抽签，积分换算的繁琐步骤，使用程序实现部分自动化
+# 项目设计
+### DAO层设计
+- 使用通用Mapper简化代码
+- 使用MyBatisGenerator生成代码
+### 业务规范
+- 使用泛型类BaseExcution作为统一返回类型
+- 使用枚举类BaseStateEnum作为统一返回标识
+- 封装IDUtils生成根据时间戳和随机数的ID标识
+### 控制层规范
+- 封装ModelMapUtil作为统一接口响应体格式
+- 封装ParamUtils做参数校验工具
+- 封装HttpServletRequestUtil获取参数
+- 封装ResultUtil判断业务结果
 
-- calutor football player nums on today
-- rank of the team on this season
-- rank of the top scocer on this season
+# 系统模块
+## 后台管理系统
+赛事，球队，球员，赛程，管理员五个主要模块
+
+封装/resources/js/tab.js作为浏览器标签化管理各个模块(iframe)
+
+封装/resources/js/tableutil.js实现表格单击选择，点击table的header实现全选
+
+封装/resources/js/loadingUtils.js为Bootstrap的modal弹出框实现ajax请求时的加载动画
+
+封装/resources/js/pageUtils.js实现前端分页功能
+
+### 赛程模块
+1. 自动化业务为赛事下的9个球队进行随机分组
+2. 自动化业务为每个分组随机生成赛程表（未实现）
+3. 球队积分排行自动化（未实现）
+4. 淘汰赛抽签，分组，晋级自动化（未实现）
+
+## 前台APP
+今日踢球,赛事报名/创建球队,赛事图(40%),赛程表(0%),排行榜(0%)五个主要模块
+### 今日踢球
+### 赛事报名/创建球队
+### 赛事图(20%) ---只实现了分组功能
+### 赛程表(0%) ---只完成前端设计框架
+### 排行榜(0%) ---未敲定样式
+### 赛事直播 ---设计中..
+
+
+
+
+
+# 测试
+> 感谢张同学提供页面流程测试,提供细节化体验意见（已解决部分）
