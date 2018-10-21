@@ -28,3 +28,4 @@ src/main/resources/application.properties
 /src/main/resources/application.properties
 /LOG_PATH_IS_UNDEFINED/
 *.properties
+*.properties
