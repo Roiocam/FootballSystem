@@ -153,7 +153,7 @@
 		<connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource"> 
 		<driverClass>com.mysql.jdbc.Driver</driverClass> <url>jdbc:mysql://120.77.222.42:3306/logback_member?characterEncoding=utf8</url> 
 		<user>root</user> <password>a123456789</password> </connectionSource> </appender> -->
-	<logger name="club.pypzx.RestaurantSystem.dao" level="DEBUG"></logger>
+	<logger name="club.pypzx.FootballSystem.dao" level="DEBUG"></logger>
 	<!--<logger name="org.hibernate" level="error"/> -->
 	<!--<logger name="org.springframework" level="error"/> -->
 	<!--<logger name="org.apache.zookeeper" level="error"/> -->

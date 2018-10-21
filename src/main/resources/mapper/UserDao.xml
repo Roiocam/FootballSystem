@@ -2,38 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="club.pypzx.FootballSystem.dao.UserDao">
 	<insert id="insertUser" useGeneratedKeys="true"
-		keyColumn="user_id" keyProperty="userId">
-		INSERT INTO tb_user (username,
-		password, emplyoee_name, user_type)
-		VALUES(#{username},#{password},#{emplyoeeName},#{userType})
+		keyColumn="username" keyProperty="username">
+		INSERT INTO pypzx_admin (username,
+		password)
+		VALUES(#{username},#{password})
 	</insert>
-	<select id="queryUser" parameterType="club.pypzx.FootballSystem.entity.User"
+	<select id="queryUser"
+		parameterType="club.pypzx.FootballSystem.entity.User"
 		resultType="club.pypzx.FootballSystem.entity.User">
-		select * from tb_user 
+		select * from pypzx_admin
 		<where>
-			<if test="userId>0">AND user_id=#{userId}</if>
 			<if test="username!=null">AND username=#{username}</if>
 			<if test="password!=null">AND password=#{password}</if>
 		</where>
+		LIMIT 1
 	</select>
 	<select id="queryUserList"
 		resultType="club.pypzx.FootballSystem.entity.User">
-		select user_id, username, emplyoee_name, user_type from tb_user ORDER BY user_id ASC LIMIT #{rowIndex},#{pageSize}
+		select username, password from pypzx_admin ORDER BY
+		username ASC LIMIT #{rowIndex},#{pageSize}
 	</select>
-	<delete id="deleteUser" >
-		delete from tb_user where user_id=#{userId}
+	<select id="queryUserListCount" resultType="Integer">
+		select count(*) FROM
+		pypzx_admin
+	</select>
+	<delete id="deleteUser">
+		delete from pypzx_admin where
+		username=#{username}
 	</delete>
 	<update id="updateUser">
-		UPDATE tb_user
+		UPDATE pypzx_admin
 		<set>
 			<if test="password!=null">password=#{password},</if>
-			<if test="userType>0">user_type=#{userType},</if>
-			<if test="emplyoeeName!=null">emplyoee_name=#{emplyoeeName},</if>
 		</set>
-		WHERE user_id=#{userId}
+		WHERE username=#{username}
 	</update>
-	<select id="queryUserByName"
-		resultType="boolean">
-		select count(username) from tb_user where username=#{username}
+	<select id="queryUserByName" resultType="boolean">
+		select count(username)
+		from pypzx_admin where username=#{username}
 	</select>
 </mapper> 

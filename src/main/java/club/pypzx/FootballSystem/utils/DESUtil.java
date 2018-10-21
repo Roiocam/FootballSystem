@@ -83,7 +83,5 @@ public class DESUtil {
 			throw new RuntimeException(e);
 		}
 	}
-	
 
-	
 }

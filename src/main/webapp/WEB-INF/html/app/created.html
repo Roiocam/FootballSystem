@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=0">
+<title>番职足协网页系统</title>
+<link rel="stylesheet" href="/FootballSystem/resources/css/weui.css" />
+<link rel="stylesheet" href="/FootballSystem/resources/css/table.css" />
+</head>
+<body ontouchstart>
+	<div class="weui-toptips weui-toptips_warn js_tooltips"></div>
+
+	<div class="container" id="container">
+		<div class="page js_show">
+			<div class="page__hd">
+				<h1 class="page__title">球队创建成功</h1>
+				<p class="page__desc">1.此页面信息保留12小时,过期失效</p>
+				<p class="page__desc">2.如有信息错误,请联系足球协会负责人修改.</p>
+			</div>
+			<div class="weui-form-preview">
+				<div class="weui-form-preview__hd">
+					<div class="weui-form-preview__item">
+						<label class="weui-form-preview__label">入队验证码</label> <em
+							class="weui-form-preview__value" id="vaildCode"></em>
+					</div>
+				</div>
+				<div class="weui-form-preview__bd">
+					<div class="weui-form-preview__item">
+						<label class="weui-form-preview__label">球队名称</label> <span
+							class="weui-form-preview__value" id="teamName"></span>
+					</div>
+					<div class="weui-form-preview__item">
+						<label class="weui-form-preview__label">姓名</label> <span
+							class="weui-form-preview__value" id="playerName"></span>
+					</div>
+					<div class="weui-form-preview__item">
+						<label class="weui-form-preview__label">球衣号码</label> <span
+							class="weui-form-preview__value" id="playerNum"></span>
+					</div>
+					<div class="weui-form-preview__item">
+						<label class="weui-form-preview__label">学号</label> <span
+							class="weui-form-preview__value" id="playerStuno"></span>
+					</div>
+					<div class="weui-form-preview__item">
+						<label class="weui-form-preview__label">学院</label> <span
+							class="weui-form-preview__value" id="playerDepart"></span>
+					</div>
+					<div class="weui-form-preview__item">
+						<label class="weui-form-preview__label">联系方式</label> <span
+							class="weui-form-preview__value" id="playerTel"></span>
+					</div>
+					
+					<div class="weui-form-preview__item">
+						<label class="weui-form-preview__label">球队介绍</label> <span
+							class="weui-form-preview__value" id="teamDesc"></span>
+					</div>
+
+				</div>
+
+			</div>
+			<br>
+			<br>
+			<br>
+		</div>
+		<!-- 内容END -->
+		<!-- 导航 -->
+		<div class="weui-tabbar">
+			<a
+				href="javascript:window.location.href='/FootballSystem/app/view/main';"
+				class="weui-tabbar__item "> <img
+				src="/FootballSystem/resources/image/soccer.png" alt=""
+				class="weui-tabbar__icon">
+				<p class="weui-tabbar__label">今日踢球</p>
+			</a> <a
+				href="javascript:window.location.href='/FootballSystem/app/view/insert';"
+				class="weui-tabbar__item weui-bar__item_on"> <img
+				src="/FootballSystem/resources/image/sign.png" alt=""
+				class="weui-tabbar__icon">
+				<p class="weui-tabbar__label">杯赛报名</p>
+			</a><a
+				href="javascript:window.location.href='/FootballSystem/app/view/paper';"
+				class="weui-tabbar__item"> <img
+				src="/FootballSystem/resources/image/cup.png" alt=""
+				class="weui-tabbar__icon">
+				<p class="weui-tabbar__label">赛事</p>
+			</a> <a
+				184: href="javascript:window.location.href='/FootballSystem/app/view/paper';"  
+				class="weui-tabbar__item"> <img
+				src="/FootballSystem/resources/image/paper.png" alt=""
+				class="weui-tabbar__icon">
+				<p class="weui-tabbar__label">赛程表</p>
+			</a> <a
+				href="javascript:window.location.href='/FootballSystem/app/view/rank';"
+				class="weui-tabbar__item"> <img
+				src="/FootballSystem/resources/image/rank.png" alt=""
+				class="weui-tabbar__icon">
+				<p class="weui-tabbar__label">排行榜</p>
+			</a>
+		</div>
+	</div>
+
+	<script src="/FootballSystem/resources/js/zepto.min.js"></script>
+	<script src="/FootballSystem/resources/js/app/created.js"></script>
+	<script type="text/javascript"
+		src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+
+	<!-- 此方法为单页面改变tabbar的显示 -->
+	<!-- <script type="text/javascript" class="tabbar js_show">
+		$(function() {
+			$('.weui-tabbar__item').on(
+					'click',
+					function() {
+						$(this).addClass('weui-bar__item_on').siblings(
+								'.weui-bar__item_on').removeClass(
+								'weui-bar__item_on');
+					});
+		});
+	</script>
+	 -->
+
+</body>
+
+</html>

@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -23,7 +24,8 @@ import club.pypzx.FootballSystem.interceptor.LoginInterceptor;
  *
  */
 @Configuration
-public class MvcConfiguration extends WebMvcConfigurationSupport implements ApplicationContextAware {
+public class MvcConfiguration extends WebMvcConfigurationSupport
+		implements ApplicationContextAware {
 	private ApplicationContext applicationContext;
 
 	@Override
@@ -65,21 +67,24 @@ public class MvcConfiguration extends WebMvcConfigurationSupport implements Appl
 	 * 配置拦截器
 	 */
 	public void addInterceptors(InterceptorRegistry registry) {
-		//拦截路径
-		String interceptPath = "/admin/**";
+		// 拦截路径
+		String interceptPath = "/admin/view/**";
 		// 注册拦截器
 		InterceptorRegistration loginIR = registry.addInterceptor(new LoginInterceptor());
 		// 配置拦截路径
 		loginIR.addPathPatterns(interceptPath);
 		// 配置不拦截路径
-		loginIR.excludePathPatterns("/admin/login");
-		loginIR.excludePathPatterns("/admin/logout");
-		loginIR.excludePathPatterns("/admin/loginCheck");
+		loginIR.excludePathPatterns("/admin/view/login");
+		loginIR.excludePathPatterns("/admin/service/logout");
+		loginIR.excludePathPatterns("/admin/service/loginCheck");
+
 	}
-	/**
-	 * 配置默认错误页面（仅用于内嵌tomcat启动时） 使用这种方式，在打包为war后不起作用
-	 *
-	 * @return
-	 */
+	@Override
+	protected void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/").setViewName("forward:/app/view/main");
+        super.addViewControllers(registry);
+
+	}
+
 
 }

@@ -38,10 +38,11 @@ public class UserExcution {
 		}
 
 	// 成功的构造器
-	public UserExcution(UserStateEnum stateEnum, List<User> userList) {
+	public UserExcution(UserStateEnum stateEnum, List<User> userList,int count) {
 			this.state = stateEnum.getState();
 			this.stateInfo = stateEnum.getStateInfo();
 			this.userList = userList;
+			this.count=count;
 		}
 
 	public int getState() {

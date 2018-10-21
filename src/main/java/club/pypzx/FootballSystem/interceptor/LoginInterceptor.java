@@ -37,7 +37,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			}
 		}
 		// 若不满足,则跳到帐号登录页面
-		response.sendRedirect("/FootballSystem/admin/login");
+		response.sendRedirect("/FootballSystem/admin/view/login");
 		return false;
 	}
 

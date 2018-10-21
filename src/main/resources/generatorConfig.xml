@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+
+	<context id="autoMapper" targetRuntime="MyBatis3Simple"
+		defaultModelType="flat">
+
+		<!-- 根据Mapper生成实体类,xml文件 -->
+		<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+			<!-- value为公用mapper接口 -->
+			<property name="mappers"
+				value="club.pypzx.FootballSystem.config.dao.BaseMapper" />
+		</plugin>
+
+		<!-- 连接字符串 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://119.29.35.133/FootballSystem"
+			userId="帐号" password="密码">
+		</jdbcConnection>
+
+		<!-- 生成entity实体类的位置,修改targetPackage为实体类包位置 -->
+		<javaModelGenerator
+			targetPackage="club.pypzx.FootballSystem.entity"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- 生成mybatis配置文件xml的位置,修改targetPackage为xml位置 -->
+		<sqlMapGenerator targetPackage="mapper"
+			targetProject="src/main/resources"><!-- 资源文件所在位置 -->
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- 生成mybatis接口的位置,修改targetPackage为接口包位置 -->
+		<javaClientGenerator
+			targetPackage="club.pypzx.FootballSystem.dao"
+			targetProject="src/main/java" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+
+		<!-- 具体要生成的表，如果有多个表，复制这一段，改下表名即可 -->
+		<table tableName="pypzx_cup" domainObjectName="Cup"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<generatedKey column="cup_id" sqlStatement="Mysql"
+				identity="true" />
+		</table>
+		<table tableName="pypzx_game" domainObjectName="Game"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<generatedKey column="game_id" sqlStatement="Mysql"
+				identity="true" />
+		</table>
+		<table tableName="pypzx_game_record"
+			domainObjectName="GameRecord" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		<table tableName="pypzx_player" domainObjectName="Player"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<generatedKey column="player_id" sqlStatement="Mysql"
+				identity="true" />
+		</table>
+		<table tableName="pypzx_team" domainObjectName="Team"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<generatedKey column="team_id" sqlStatement="Mysql"
+				identity="true" />
+		</table>
+		<table tableName="pypzx_player_rank"
+			domainObjectName="PlayerRank" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		<table tableName="pypzx_team_rank" domainObjectName="TeamRank"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+
+		</table>
+
+
+	</context>
+</generatorConfiguration>

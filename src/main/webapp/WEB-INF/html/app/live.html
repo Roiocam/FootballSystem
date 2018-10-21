@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=0">
+<title>番职足协网页系统</title>
+<link rel="stylesheet" href="/FootballSystem/resources/css/weui.css" />
+<link rel="stylesheet" href="/FootballSystem/resources/css/table.css" />
+</head>
+<body ontouchstart>
+	<div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
+
+	<div class="container" id="container">
+		<div class="page js_show">
+			<div class="weui-tab">
+				<div class="weui-tab__panel">
+
+					<!-- 直播 -->
+
+					<div class="page flex js_show">
+						<!-- 队伍数据 -->
+						<div
+							style="border: 1px solid #DCDCDC; width: 95%; background-color: white; height: 100px; margin: 0 auto; border-radius: 5px; margin-top: 10px; box-shadow: 3px 3px 10px #C0C0C0;">
+							<div id="left"
+								style="float: left; width: 45%; height: 100%; text-align: center;">
+								<h3 style="line-height: 100px; float: left; margin-left: 10px;">管理学院</h3>
+								<h1 style="float: right; line-height: 100px; font-size: 40px;">0</h1>
+							</div>
+							<h1
+								style="line-height: 100px; float: left; font-size: 40px; width: 10%; text-align: center;">:</h1>
+							<div id="right"
+								style="float: left; width: 45%; height: 100%; text-align: center;">
+								<h1 style="float: left; line-height: 100px; font-size: 40px;">0</h1>
+								<h3
+									style="float: right; line-height: 100px; margin-right: 10px;">信息工程学院</h3>
+
+
+							</div>
+						</div>
+						<!-- 直播时间轴 -->
+						<p style="text-align: center;">下面为直播数据</p>
+						<div
+							style="border: 1px solid #DCDCDC; width: 95%; background-color: white; height: 500px; margin: 0 auto; border-radius: 5px; margin-top: 10px; box-shadow: 3px 3px 10px #C0C0C0;">
+						</div>
+						<p style="text-align: center; color: #DCDCDC">--我是有底线的--</p>
+					</div>
+
+				</div>
+			</div>
+			<!-- 内容END -->
+			<!-- 导航 -->
+			<div class="weui-tabbar">
+				<a
+					href="javascript:window.location.href='/FootballSystem/app/view/main';"
+					class="weui-tabbar__item "> <img
+					src="/FootballSystem/resources/image/soccer.png" alt=""
+					class="weui-tabbar__icon">
+					<p class="weui-tabbar__label">今日踢球</p>
+				</a> <a
+					href="javascript:window.location.href='/FootballSystem/app/view/insert';"
+					class="weui-tabbar__item"> <img
+					src="/FootballSystem/resources/image/sign.png" alt=""
+					class="weui-tabbar__icon">
+					<p class="weui-tabbar__label">杯赛报名</p>
+				</a><a
+					href="javascript:window.location.href='/FootballSystem/app/view/paper';"
+					class="weui-tabbar__item"> <img
+					src="/FootballSystem/resources/image/cup.png" alt=""
+					class="weui-tabbar__icon">
+					<p class="weui-tabbar__label">赛事</p>
+				</a> <a
+					184: href="javascript:window.location.href='/FootballSystem/app/view/paper';"  
+					class="weui-tabbar__item weui-bar__item_on"> <img
+					src="/FootballSystem/resources/image/paper.png" alt=""
+					class="weui-tabbar__icon">
+					<p class="weui-tabbar__label">赛程表</p>
+				</a> <a
+					href="javascript:window.location.href='/FootballSystem/app/view/rank';"
+					class="weui-tabbar__item"> <img
+					src="/FootballSystem/resources/image/rank.png" alt=""
+					class="weui-tabbar__icon">
+					<p class="weui-tabbar__label">排行榜</p>
+				</a>
+			</div>
+		</div>
+
+	</div>
+
+
+	<script src="/FootballSystem/resources/js/zepto.min.js"></script>
+	<script type="text/javascript"
+		src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+	<!-- 此方法为单页面改变tabbar的显示 -->
+	<!-- <script type="text/javascript" class="tabbar js_show">
+		$(function() {
+			$('.weui-tabbar__item').on(
+					'click',
+					function() {
+						$(this).addClass('weui-bar__item_on').siblings(
+								'.weui-bar__item_on').removeClass(
+								'weui-bar__item_on');
+					});
+		});
+	</script>
+	 -->
+	<script type="text/javascript">
+		var socket;
+		if (typeof (WebSocket) == "undefined") {
+			console.log("您的浏览器不支持WebSocket");
+		} else {
+			console.log("您的浏览器支持WebSocket");
+			//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接  
+			//等同于socket = new WebSocket("ws://localhost:8083/checkcentersys/websocket/20");  
+			socket = new WebSocket(
+					"ws://localhost:8080/FootbalSystem/websocket/20".replace(
+							"http", "ws"));
+			//打开事件  
+			socket.onopen = function() {
+				console.log("Socket 已打开");
+				//socket.send("这是来自客户端的消息" + location.href + new Date());  
+			};
+			//获得消息事件  
+			socket.onmessage = function(msg) {
+				console.log(msg.data);
+				//发现消息进入    开始处理前端触发逻辑
+			};
+			//关闭事件  
+			socket.onclose = function() {
+				console.log("Socket已关闭");
+			};
+			//发生了错误事件  
+			socket.onerror = function() {
+				alert("Socket发生了错误");
+				//此时可以尝试刷新页面
+			}
+			//离开页面时，关闭socket
+			//jquery1.8中已经被废弃，3.0中已经移除
+			// $(window).unload(function(){  
+			//     socket.close();  
+			//});  
+		}
+	</script>
+</body>
+
+</html>

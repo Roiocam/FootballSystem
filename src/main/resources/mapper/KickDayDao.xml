@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.pypzx.FootballSystem.dao.KickDayDao">
+	<insert id="insertKickDay">
+		INSERT INTO pypzx_kick_day (date,
+		num)
+		VALUES(#{date},#{num})
+	</insert>
+	<select id="queryKickToday"
+		resultType="club.pypzx.FootballSystem.entity.KickDay">
+		select IFNULL(date,curdate()) date,IFNULL(num,0) num from
+		pypzx_kick_day where date=curdate()
+
+	</select>
+
+	<update id="updateKickDayPlus">
+		UPDATE pypzx_kick_day SET num = num + 1
+		WHERE
+		date=curdate()
+	</update>
+	<update id="updateKickDayReduce">
+		UPDATE pypzx_kick_day SET num = num - 1
+		WHERE
+		date=curdate()
+	</update>
+
+</mapper> 

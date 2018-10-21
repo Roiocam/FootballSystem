@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="club.pypzx.FootballSystem.dao.TeamMapper">
+	<resultMap id="teamMap"
+		type="club.pypzx.FootballSystem.dto.TeamVo">
+		<!-- WARNING - @mbg.generated -->
+		<id column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="team_name" property="teamName"
+			jdbcType="VARCHAR" />
+		<result column="vaild_code" property="vaildCode"
+			jdbcType="VARCHAR" />
+		<result column="leader_name" property="leaderName"
+			jdbcType="VARCHAR" />
+		<result column="team_desc" property="teamDesc"
+			jdbcType="VARCHAR" />
+		<association property="cup"
+			javaType="club.pypzx.FootballSystem.entity.Cup">
+			<id column="cup_id" property="cupId" jdbcType="VARCHAR" />
+			<result column="cup_name" property="cupName"
+				jdbcType="VARCHAR" />
+		</association>
+	</resultMap>
+	<resultMap id="BaseResultMap"
+		type="club.pypzx.FootballSystem.entity.Team">
+		<!-- WARNING - @mbg.generated -->
+		<id column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="team_name" property="teamName"
+			jdbcType="VARCHAR" />
+		<result column="cup_id" property="cupId" jdbcType="VARCHAR" />
+		<result column="leader_id" property="leaderId"
+			jdbcType="VARCHAR" />
+		<result column="vaild_code" property="vaildCode"
+			jdbcType="VARCHAR" />
+		<result column="team_desc" property="teamDesc"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="selectAllByPage" resultMap="teamMap">
+		SELECT c.*,t.team_id,t.team_name,IFNULL(player_name,'无') leader_name,t.vaild_code,t.team_desc  FROM pypzx_team t
+		LEFT JOIN pypzx_cup c ON t.cup_id=c.cup_id
+		LEFT JOIN pypzx_player p ON t.leader_id=p.player_id
+		<where>
+			<if test="example!=null and example.teamName!=null">
+				and t.team_name=#{example.teamName}
+			</if>
+			<if test="example!=null and example.cupId!=null">
+				and t.cup_id=#{example.cupId}
+			</if>
+			<if test="example!=null and example.leaderId!=null">
+				and t.leader_id=#{example.leaderId}
+			</if>
+		</where>
+		LIMIT
+		#{page.index},#{page.size}
+	</select>
+	<select id="selectDetailByPrimary" resultMap="teamMap">
+		SELECT c.*,t.team_id,t.team_name,IFNULL(player_name,'无') leader_name,t.vaild_code,t.team_desc  FROM pypzx_team t
+		LEFT JOIN pypzx_cup c ON t.cup_id=c.cup_id
+		LEFT JOIN pypzx_player p ON t.leader_id=p.player_id
+		WHERE t.team_id=#{value}
+		LIMIT 1
+	</select>
+	
+	<select id="selectByPrimary" resultMap="teamMap">
+		SELECT c.*,t.team_id,t.team_name,IFNULL(player_name,'无') leader_name,t.vaild_code,t.team_desc 
+		FROM pypzx_team t
+		LEFT JOIN pypzx_cup c ON t.cup_id=c.cup_id 
+		LEFT JOIN pypzx_player p ON t.leader_id=p.player_id WHERE t.team_id=#{value} LIMIT 1
+	</select>
+	<delete id="deletePlayerByTeam">
+		DELETE FROM pypzx_player WHERE team_id=#{value}
+	</delete>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="club.pypzx.FootballSystem.dao.PlayerMapper">
+	<resultMap id="BaseResultMap"
+		type="club.pypzx.FootballSystem.entity.Player">
+		<!-- WARNING - @mbg.generated -->
+		<id column="player_id" property="playerId" jdbcType="VARCHAR" />
+		<result column="player_name" property="playerName"
+			jdbcType="VARCHAR" />
+		<result column="player_num" property="playerNum"
+			jdbcType="INTEGER" />
+		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="playerMap"
+		type="club.pypzx.FootballSystem.dto.PlayerVo">
+		<!-- WARNING - @mbg.generated -->
+		<id column="player_id" property="playerId" jdbcType="VARCHAR" />
+		<result column="player_name" property="playerName"
+			jdbcType="VARCHAR" />
+		<result column="player_num" property="playerNum"
+			jdbcType="INTEGER" />
+		<association property="team"
+			javaType="club.pypzx.FootballSystem.entity.Team">
+			<id column="team_id" property="teamId" jdbcType="VARCHAR" />
+			<result column="team_name" property="teamName"
+				jdbcType="VARCHAR" />
+		</association>
+		<association property="info"
+			javaType="club.pypzx.FootballSystem.entity.PlayerInfo">
+			<id column="player_id" property="playerId" jdbcType="VARCHAR" />
+			<result column="player_stuno" property="playerStuno"
+				jdbcType="VARCHAR" />
+			<result column="player_depart" property="playerDepart"
+				jdbcType="VARCHAR" />
+			<result column="player_tel" property="playerTel"
+				jdbcType="VARCHAR" />
+		</association>
+	</resultMap>
+
+	<select id="selectAllByPage" resultMap="playerMap">
+		SELECT * FROM pypzx_player p
+		
+		LEFT JOIN pypzx_team t ON p.team_id=t.team_id
+		LEFT JOIN
+		pypzx_player_info i ON p.player_id=i.player_id
+		<where>
+			<if test="example!=null and example.playerName!=null">
+				and p.player_name=#{example.playerName}
+			</if>
+			<if test="example!=null and example.teamId!=null">
+				and p.team_id=#{example.teamId}
+			</if>
+		</where>
+		LIMIT
+		#{page.index},#{page.size}
+	</select>
+	<select id="selectByPrimary" resultMap="playerMap">
+		SELECT * FROM
+		pypzx_player p
+		LEFT JOIN pypzx_team t ON
+		t.team_id=p.team_id
+		LEFT JOIN pypzx_player_info i ON p.player_id=i.player_id
+		WHERE p.player_id=#{value} LIMIT 1
+	</select>
+	<select id="selectCountByPrimary" resultType="int">
+		SELECT COUNT(1)  FROM pypzx_player_info WHERE player_stuno=#{value}
+		LIMIT 1
+	</select>
+</mapper>

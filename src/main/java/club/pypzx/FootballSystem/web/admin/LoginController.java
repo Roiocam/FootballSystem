@@ -21,16 +21,12 @@ import club.pypzx.FootballSystem.utils.HttpServletRequestUtil;
 import club.pypzx.FootballSystem.utils.ModelMapUtil;
 
 @Controller
-@RequestMapping(value="/admin")
+@RequestMapping(value="admin/service")
 public class LoginController {
 
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-		return "login";
-	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
 	@ResponseBody

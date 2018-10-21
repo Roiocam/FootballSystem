@@ -1,6 +1,8 @@
 package club.pypzx.FootballSystem.service;
 
 
+import java.util.List;
+
 import club.pypzx.FootballSystem.dto.UserExcution;
 
 public interface UserService {
@@ -30,19 +32,20 @@ public interface UserService {
 //	 * @param newPassword  新密码
 //	 * @return  操作标识
 //	 */
-	public UserExcution editUserPassword(String username,String oldPassword,String newPassword);
+	public UserExcution editUser(String username,String password);
 	/**
 	 * 根据用户id删除该用户
 	 * @param userId  用户id
 	 * @return  操作标识
 	 */
-//	public UserExcution removeUser(long userId);
-//	/**
-//	 * 根据用户名和密码获取用户
-//	 * @param username  用户名
-//	 * @param password  密码
-//	 * @return  带用户信息的操作标识
-//	 */
+	public UserExcution removeUser(String username);
+	public UserExcution removeUserList(List<String> list);
+	/**
+	 * 根据用户名和密码获取用户
+	 * @param username  用户名
+	 * @param password  密码
+	 * @return  带用户信息的操作标识
+	 */
 	public UserExcution getUser(String username,String password);
 	/**
 	 * 分页获取用户列表

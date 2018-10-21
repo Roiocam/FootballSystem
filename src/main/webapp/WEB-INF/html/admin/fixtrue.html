@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<link href="/FootballSystem/resources/css/dashboard.css"
+	rel="stylesheet">
+<link href="/FootballSystem/resources/css/game.css" rel="stylesheet">
+
+<link href="/FootballSystem/resources/css/tab.css" rel="stylesheet">
+<title>足协后台管理系统</title>
+
+</head>
+
+<body>
+
+	<div class="container-fluid">
+
+		<div
+			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+			<div class="btn-toolbar mb-2 mb-md-0">
+				<div class="btn-group mr-2">
+					<select id="cupId" class="form-control" name="cupId">
+					</select>
+				</div>
+
+			</div>
+			<div class="btn-toolbar mb-2 mb-md-0">
+				<div class="btn-group mr-2">
+					<button class="btn btn-primary" type="button" id="groupBtn"
+						data-toggle="modal" data-target="#messageModal"
+						disabled="disabled">安排赛程</button>
+				</div>
+				<div class="btn-group mr-2">
+					<button class="btn btn-primary" type="button" id="delBtn"
+						data-toggle="modal" data-target="#deleteModal" disabled="disabled">删除赛程分配</button>
+				</div>
+				<div class="btn-group mr-2">
+					<button class="btn btn-primary" type="button" data-toggle="modal"
+						data-target="#messageModal" id="asd">安排赛程2</button>
+				</div>
+
+			</div>
+
+
+			<h2 class="header">赛程表</h2>
+			<div class="btn-toolbar mb-2 mb-md-0">
+				<div class="btn-group mr-2">
+					<button class="btn btn-sm btn-outline-secondary"
+						onclick="javascript:window.location.reload();">刷新</button>
+				</div>
+
+			</div>
+		</div>
+
+		<h2 class="header">赛程表</h2>
+		<div class="game-row-h105">
+			<div class="w85">
+				<div class="card-game-head">
+					<div class="card-game">机电学院 VS 管理学院 2018年10月11日 14:02:07</div>
+					<div class="card-game">艺术学院 VS 机电学院 2018年10月11日 14:02:07</div>
+					<div class="card-game">管理学院 VS 艺术学院 2018年10月11日 14:02:07</div>
+				</div>
+				<div class="card-game-head">
+					<div class="card-game">信工 VS 人文 2018年10月11日 14:02:07</div>
+					<div class="card-game">外语 VS 信工 2018年10月11日 14:02:07</div>
+					<div class="card-game">人文 VS外语 2018年10月11日 14:02:07</div>
+				</div>
+				<div class="card-game-head">
+					<div class="card-game">珠宝学院 VS 建筑学院 2018年10月11日 14:02:07</div>
+					<div class="card-game">建筑学院 VS 财经学院 2018年10月11日 14:02:07</div>
+					<div class="card-game">财经学院 VS 珠宝学院 2018年10月11日 14:02:07</div>
+				</div>
+				<div class="card-game-head">
+					<div class="card-game">珠宝学院 VS 建筑学院 2018年10月11日 14:02:07</div>
+					<div class="card-game">建筑学院 VS 财经学院 2018年10月11日 14:02:07</div>
+					<div class="card-game">财经学院 VS 珠宝学院 2018年10月11日 14:02:07</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+
+	<div class="modal fade" id="messageModal" tabindex="-1" role="dialog"
+		aria-labelledby="logoutModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="messageModal">安排赛程</h5>
+
+
+				</div>
+				<div class="modal-body" id="modalBody">正在随机分组中,请稍等...</div>
+
+				<div id="delMsg"></div>
+				<div class="modal-footer">
+
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						style="display: none;" id="closeBtn">取消</button>
+					<button type="button" class="btn btn-primary" id="messageBtn"
+						disabled>分配赛程表</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="errModal" tabindex="-1" role="dialog"
+		aria-labelledby="logoutModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">安排赛程</h5>
+				</div>
+				<div class="modal-body" id="modalBody">
+					<div class="p-3 mb-2 bg-danger text-white">该赛事暂无赛程表,请点击按钮安排赛程.</div>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+		aria-labelledby="logoutModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">确定删除？</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">你确定要删除该赛事的赛程分组及赛程表吗？</div>
+				<div id="delMsg"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" id="deleteObj">确认删除</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+	<script src="/FootballSystem/resources/js/admin/game.js"></script>
+	<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')
+	</script>
+
+
+
+</body>
+</html>

@@ -164,16 +164,16 @@
       });
 	 $('#logout').click(function(){
 		 $.ajax({
-			url : '/FootballSystem/admin/logout',
+			url : '/FootballSystem/admin/service/logout',
 			type : 'POST',
 			contentType : false,
 			processData : false,
 			cache : false,
 			success : function(data) {
-				if (data.success) {
-					window.location.href = '/FootballSystem/admin/login';
+				if (data.state==0) {
+					window.location.href = '/FootballSystem/admin/view/login';
 				} else {
-				alert('注销失败:'+data.errMsg)
+				alert('注销失败:'+data.message)
 						}
 								}
 								});

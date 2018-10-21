@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<title>足协后台管理系统</title>
+<style>
+.edit {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background: url('/FootballSystem/resources/image/icon-edit.png')
+}
+
+.delete {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background: url('/FootballSystem/resources/image/icon-delete.png')
+}
+</style>
+</head>
+
+<body>
+
+	<div class="container-fluid" style="height:auto;">
+		<div
+			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+			<h1 class="h2">管理员管理</h1>
+			<div class="btn-toolbar mb-2 mb-md-0">
+				<div class="btn-group mr-2">
+					<button class="btn btn-sm btn-outline-secondary"
+						onclick="javascript:window.location.reload();">刷新</button>
+				</div>
+
+			</div>
+		</div>
+		<div class="input-group mb-3">
+			<button type="button" class="btn btn-primary mr-3"
+				data-toggle="modal" data-target="#inputModal">新增</button>
+			<button type="button" class="btn btn-primary mr-3" data-type="list"
+				data-toggle="modal" data-target="#deleteModal">删除</button>
+		</div>
+		<div class="table-responsive">
+			<table class="table  table-hover table-bordered table-sm"
+				id="datalist" style="table-layout: fixed;">
+
+			</table>
+			<nav aria-label="Page navigation" id="page">
+				<div class="input-group" style="width: 100px; float: right;">
+					<input type="number" class="form-control " min="1" value="1" id="pageIndexInput">
+					<div class="input-group-append">
+						<span class="input-group-text">页</span>
+					</div>
+				</div>
+				<ul class="pagination justify-content-center" id="pageList">
+				</ul>
+			</nav>
+		</div>
+
+	</div>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="inputModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+
+			<div class="modal-content">
+
+				<div class="modal-header">
+
+					<h5 class="modal-title" id="exampleModalLabel">管理员信息</h5>
+
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form class="needs-validation was-validated" novalidate>
+						<div class="form-group">
+							<label for="username" class="col-form-label">用户名</label> <input
+								type="text" class="form-control" id="username" value=""  required readonly>
+								<div class="invalid-feedback">请输入用户名</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-form-label">密码</label> <input
+								type="text" class="form-control" id="password" required>
+							<div class="invalid-feedback">请输入密码</div>
+						</div>
+					</form>
+				</div>
+				<div id="errMsg"></div>
+				<div class="modal-footer">
+
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="submitData">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+		aria-labelledby="logoutModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">确定删除？</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">你确定要删除该管理员,若系统内缺乏管理员账号,将会导致无法登陆.此操作不可逆转。</div>
+				<div id="delMsg"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" id="deleteObj">确认删除</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+	<script src="/FootballSystem/resources/js/pageUtils.js"></script>
+	<script src="/FootballSystem/resources/js/admin/user.js"></script>
+	<script src="/FootballSystem/resources/js/tableutil.js"></script>
+	<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
+</body>
+</html>

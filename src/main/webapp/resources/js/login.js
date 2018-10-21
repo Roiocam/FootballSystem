@@ -16,7 +16,7 @@ $(function() {
 		userStr.username = $('#inputUser').val();
 		userStr.password = $('#inputPassword').val();
 		var formData = new FormData();
-		var loginUrl = '/FootballSystem/admin/loginCheck';
+		var loginUrl = '/FootballSystem/admin/service/loginCheck';
 		formData.append('userStr', JSON.stringify(userStr));
 		$.ajax({
 			url : loginUrl,
@@ -26,11 +26,11 @@ $(function() {
 			processData : false,
 			cache : false,
 			success : function(data) {
-										if (data.success) {
-											window.location.href = '/FootballSystem/admin/index';
+										if (data.state==0) {
+											window.location.href = '/FootballSystem/admin/view/index';
 										} else {
 											 errMsg = '<div class="alert alert-danger" role="alert">'
-													+ data.errMsg + '</div>';
+													+ data.message + '</div>';
 											$('#errMsg').html(errMsg);
 										}
 									}

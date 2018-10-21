@@ -45,6 +45,9 @@ public class HttpServletRequestUtil {
 			return null;
 		}
 	}
+//	public static List<String> getStringList(HttpServletRequest request,String key){
+//		List list=request.getParameter(key);
+//	}
 
 }
 	

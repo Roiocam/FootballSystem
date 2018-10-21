@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="club.pypzx.FootballSystem.dao.GroupMapper">
+	<resultMap id="BaseResultMap"
+		type="club.pypzx.FootballSystem.entity.Group">
+		<!-- WARNING - @mbg.generated -->
+		<result column="cup_id" property="cupId" jdbcType="VARCHAR" />
+		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="team_group" property="teamGroup"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="groupMap"
+		type="club.pypzx.FootballSystem.dto.GroupVo">
+		<!-- WARNING - @mbg.generated -->
+		<result column="team_name" property="teamName"
+			jdbcType="VARCHAR" />
+		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="team_group" property="teamGroup"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="queryTeamByGroup" resultMap="groupMap">
+		SELECT g.team_id,t.team_name,g.team_group FROM pypzx_group g  LEFT JOIN
+		pypzx_team t ON g.team_id=t.team_id
+		WHERE g.cup_id=#{value}
+	</select>
+</mapper>

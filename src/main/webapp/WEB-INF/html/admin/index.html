@@ -9,7 +9,7 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
-	href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
 	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
 	crossorigin="anonymous">
 <link href="/FootballSystem/resources/css/dashboard.css"
@@ -20,8 +20,8 @@
 
 <body>
 	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">足协后台管理系统</a> <div
-			class="form-control-dark w-100" ></div>
+		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">足协后台管理系统</a>
+		<div class="form-control-dark w-100"></div>
 		<ul class="navbar-nav px-3">
 			<li class="nav-item text-nowrap"><a class="nav-link" href="#"
 				data-toggle="modal" data-target="#logoutModal">退出登录</a></li>
@@ -45,25 +45,60 @@
 									<polyline points="9 22 9 12 15 12 15 22"></polyline></svg> 首页 <span
 								class="sr-only">(current)</span>
 						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#" onclick="addTab(3,'餐桌服务','desk.html');"> <svg
+						<li class="nav-item"><a class="nav-link" href="#"
+							onclick="addTab(3,'赛事管理','cup.html');"> <svg
 									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 									viewBox="0 0 24 24" fill="none" stroke="currentColor"
 									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
 									class="feather feather-file">
 									<path
 										d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-									<polyline points="13 2 13 9 20 9"></polyline></svg> 餐桌服务
+									<polyline points="13 2 13 9 20 9"></polyline></svg> 赛事管理
 						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#" onclick="addTab(4,'报表统计','desk.html');"> <svg
+						<li class="nav-item"><a class="nav-link" href="#"
+							onclick="addTab(4,'球队管理','team.html');"> <svg
+									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+									viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+									class="feather feather-file-text">
+									<path
+										d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+									<polyline points="14 2 14 8 20 8"></polyline>
+									<line x1="16" y1="13" x2="8" y2="13"></line>
+									<line x1="16" y1="17" x2="8" y2="17"></line>
+									<polyline points="10 9 9 9 8 9"></polyline></svg> 球队管理
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#"
+							onclick="addTab(5,'球员管理','player.html');"><svg
+									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+									viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+									class="feather feather-users">
+									<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+									<circle cx="9" cy="7" r="4"></circle>
+									<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+									<path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 球员管理 </a></li>
+						<li class="nav-item"><a class="nav-link" href="#"
+							onclick="addTab(7,'赛程安排','game.html');"> <svg
 									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 									viewBox="0 0 24 24" fill="none" stroke="currentColor"
 									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
 									class="feather feather-bar-chart-2">
 									<line x1="18" y1="20" x2="18" y2="10"></line>
 									<line x1="12" y1="20" x2="12" y2="4"></line>
-									<line x1="6" y1="20" x2="6" y2="14"></line></svg> 报表统计
+									<line x1="6" y1="20" x2="6" y2="14"></line></svg> 赛程安排
 						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#" id="second-bar-button"> <svg
+						<li class="nav-item"><a class="nav-link" href="#"
+							onclick="addTab(8,'管理员管理','user.html');"><svg
+									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+									viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+									class="feather feather-users">
+									<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+									<circle cx="9" cy="7" r="4"></circle>
+									<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+									<path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 管理员管理 </a></li>
+						<!-- <li class="nav-item"><a class="nav-link" href="#" id="second-bar-button"> <svg
 									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 									viewBox="0 0 24 24" fill="none" stroke="currentColor"
 									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -83,74 +118,21 @@
 						</div>
 						
 						</li>
+						 -->
 					</ul>
 
-					<h6
-						class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-						<span>打印报表</span>
 
-					</h6>
-					<ul class="nav flex-column mb-2">
-						<li class="nav-item"><a class="nav-link" href="#"> <svg
-									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-									viewBox="0 0 24 24" fill="none" stroke="currentColor"
-									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-									class="feather feather-file-text">
-									<path
-										d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-									<polyline points="14 2 14 8 20 8"></polyline>
-									<line x1="16" y1="13" x2="8" y2="13"></line>
-									<line x1="16" y1="17" x2="8" y2="17"></line>
-									<polyline points="10 9 9 9 8 9"></polyline></svg> 每日报表(00:00-至今)
-						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#"> <svg
-									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-									viewBox="0 0 24 24" fill="none" stroke="currentColor"
-									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-									class="feather feather-file-text">
-										<path
-										d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-										<polyline points="14 2 14 8 20 8"></polyline>
-										<line x1="16" y1="13" x2="8" y2="13"></line>
-										<line x1="16" y1="17" x2="8" y2="17"></line>
-										<polyline points="10 9 9 9 8 9"></polyline></svg> 本周报表
-						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#"> <svg
-									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-									viewBox="0 0 24 24" fill="none" stroke="currentColor"
-									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-									class="feather feather-file-text">
-									<path
-										d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-									<polyline points="14 2 14 8 20 8"></polyline>
-									<line x1="16" y1="13" x2="8" y2="13"></line>
-									<line x1="16" y1="17" x2="8" y2="17"></line>
-									<polyline points="10 9 9 9 8 9"></polyline></svg> 本月报表
-						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#"> <svg
-									xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-									viewBox="0 0 24 24" fill="none" stroke="currentColor"
-									stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-									class="feather feather-file-text">
-									<path
-										d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-									<polyline points="14 2 14 8 20 8"></polyline>
-									<line x1="16" y1="13" x2="8" y2="13"></line>
-									<line x1="16" y1="17" x2="8" y2="17"></line>
-									<polyline points="10 9 9 9 8 9"></polyline></svg> 年度报表
-						</a></li>
-					</ul>
 				</div>
 			</nav>
 
-			<main role="main" class="col-md-10 ml-sm-auto col-lg-10">
+			<main role="main" class="col-md-10 ml-sm-auto col-lg-10" style="padding-left:0;padding-right:0px;height: 800px;">
 			<div class="tabbable" id="tabs" style="border: none;">
 				<!-- 页面标签列表 -->
 				<ul class="nav nav-tabs" id="myTab">
 				</ul>
 				<!-- 页面内容列表，和页面标签列表对应 -->
 				<div class="tab-content"></div>
-				
+
 			</div>
 
 			</main>
@@ -185,13 +167,14 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="http://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
 		crossorigin="anonymous"></script>
 	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 	<script>
