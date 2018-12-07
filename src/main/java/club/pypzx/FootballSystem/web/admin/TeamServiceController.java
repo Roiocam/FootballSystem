@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.GroupVo;
+import club.pypzx.FootballSystem.dto.TeamPrint;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Team;
 import club.pypzx.FootballSystem.enums.BaseStateEnum;
@@ -150,4 +151,18 @@ public class TeamServiceController {
 		return ModelMapUtil.getSuccessMapWithObject("查询球队列表成功", queryTeamByGroup.getObjList());
 
 	}
+	@PostMapping("/getTeamById")
+	public Map<String, Object> getTeamById(HttpServletRequest request) {
+		String teamId = HttpServletRequestUtil.getString(request, "teamId");
+		if (ParamUtils.emptyString(teamId)) {
+			return ModelMapUtil.getErrorMap("请选择球队");
+		}
+		BaseExcution<TeamPrint> teamPrint = service.getTeamPrint(teamId);
+		if (ResultUtil.failResult(teamPrint)) {
+			return ModelMapUtil.getDtoMap(teamPrint, "查询球队详情失败！");
+		}
+		return ModelMapUtil.getSuccessMapWithObject("查询球队详情成功", teamPrint.getObj());
+
+	}
+	
 }

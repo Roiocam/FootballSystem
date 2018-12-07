@@ -9,6 +9,7 @@ var editUrl = '/FootballSystem/admin/service/player/editPlayer';
 var delOneUrl = '/FootballSystem/admin/service/player/deletePlayer';
 var delListUrl = '/FootballSystem/admin/service/player/deletePlayerList';
 var searchData = null;
+
 $(function() {
 	// var id = window.parent.getId(this);
 	var loading = new LoadingUtils();
@@ -102,8 +103,6 @@ $(function() {
 					'show.bs.modal',
 					function(event) {
 						var button = $(event.relatedTarget) // Button that
-						// triggered the
-						// modal
 						var modal = $(this)
 						var type = button.data('id');
 						var objId = button.data('objId');
@@ -143,7 +142,6 @@ $(function() {
 							modal.find('.modal-body #playerNum').val(null)
 							modal.find('.modal-body #teamId').val(null)
 							modal.find('.modal-body #playerStuno').val(null)
-							modal.find('.modal-body #playerDepart').val(null)
 							modal.find('.modal-body #playerTel').val(null)
 							$('#submitData').val('add');
 						}
@@ -197,7 +195,6 @@ $(function() {
 		searchData.playerName = $('#searchName').val();
 		searchData.teamId = $('#searchTeam').val();
 		initData();
-
 	});
 	function getTeamData() {
 		var formData = new FormData();
@@ -218,6 +215,7 @@ $(function() {
 								+ item.teamName + '</option>'
 					});
 					$('#searchTeam').html(html);
+					
 				} else {
 					alert(data.message)
 				}
@@ -327,6 +325,7 @@ function initData() {
 		}
 	});
 }
+
 function handlerList(data) {
 	var html = '';
 	html += '<thead>'
@@ -394,3 +393,11 @@ function handlerList(data) {
 	// 版本3,合并setHeight和setIframeHeight方法
 	//window.parent.setIframeHeight(id);
 }
+function tableToExcel(){
+	var teamId=$('#searchTeam').val();
+	if(teamId==''){
+		alert('请选择球队')
+		return
+	}
+	window.location.href='/FootballSystem/admin/view/word?teamId='+teamId;
+  }

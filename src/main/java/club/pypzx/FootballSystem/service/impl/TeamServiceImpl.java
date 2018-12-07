@@ -14,6 +14,8 @@ import club.pypzx.FootballSystem.dao.TeamMapper;
 import club.pypzx.FootballSystem.dao.TeamRankMapper;
 import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.GroupVo;
+import club.pypzx.FootballSystem.dto.PlayerVo;
+import club.pypzx.FootballSystem.dto.TeamPrint;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.entity.Page;
@@ -200,6 +202,12 @@ public class TeamServiceImpl implements TeamService {
 		if (null != mapper.selectOne(temp)) {
 			return new BaseExcution<>(BaseStateEnum.SAME_TEAMNAME);
 		}
+//		Team cupTeam=new Team();
+//		cupTeam.setCupId(obj.getTeamId());
+//		int selectCount = mapper.selectCount(cupTeam);
+//		if(selectCount>=16) {
+//			return new BaseExcution<>(BaseStateEnum.MAX_TEAM_COUNT);
+//		}
 		if (1 != mapper.insert(obj)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
@@ -213,17 +221,17 @@ public class TeamServiceImpl implements TeamService {
 			throws Exception {
 		BaseExcution<Team> createTeam = createTeam(cupId, teamName, vaildCode, teamDesc);
 		if (ResultUtil.failResult(createTeam)) {
-			throw new RuntimeException("创建球队异常");
+			throw new RuntimeException("创建球队异常：" + createTeam.getStateInfo());
 		}
 		BaseExcution<Player> insertObj = playerService.insertObject(createTeam.getObj().getTeamId(), playerName,
 				playerNum, playerStuno, playerDepart, playerTel);
 		if (ResultUtil.failResult(insertObj)) {
-			throw new RuntimeException("创建球员异常");
+			throw new RuntimeException("创建球员异常" + insertObj.getStateInfo());
 		}
 		BaseExcution<Team> updateTeamLeader = updateTeamLeader(createTeam.getObj().getTeamId(),
 				insertObj.getObj().getPlayerId());
 		if (ResultUtil.failResult(updateTeamLeader)) {
-			throw new RuntimeException("更新队长异常");
+			throw new RuntimeException("更新队长异常" + updateTeamLeader.getStateInfo());
 		}
 		return createTeam;
 	}
@@ -236,6 +244,29 @@ public class TeamServiceImpl implements TeamService {
 
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS, queryTeamByGroup, 0);
+	}
+
+	@Override
+	public BaseExcution<TeamPrint> getTeamPrint(String teamId) {
+		TeamPrint temp = new TeamPrint();
+		Team team = mapper.selectByPrimaryKey(teamId);
+		if (team == null) {
+			return new BaseExcution<>(BaseStateEnum.FAIL);
+		}
+		temp.setTeam(team);
+		PlayerVo leader = playerMapper.selectByPrimary(team.getLeaderId());
+		if (leader == null) {
+			return new BaseExcution<>(BaseStateEnum.FAIL);
+		}
+		temp.setLeader(leader);
+		Player condition = new Player();
+		condition.setTeamId(teamId);
+		List<PlayerVo> select = playerMapper.selectAllByPage(condition, Page.getInstance(1, 999));
+		if (select == null) {
+			return new BaseExcution<>(BaseStateEnum.FAIL);
+		}
+		temp.setPlayerList(select);
+		return new BaseExcution<TeamPrint>(BaseStateEnum.SUCCESS, temp);
 	}
 
 }

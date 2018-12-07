@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.entity.Cup;
+import club.pypzx.FootballSystem.entity.Game;
 import club.pypzx.FootballSystem.service.CupService;
+import club.pypzx.FootballSystem.service.GameService;
 import club.pypzx.FootballSystem.utils.HttpServletRequestUtil;
 import club.pypzx.FootballSystem.utils.ModelMapUtil;
 import club.pypzx.FootballSystem.utils.ParamUtils;
@@ -26,6 +28,8 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 public class CupServiceController {
 	@Autowired
 	private CupService service;
+	@Autowired
+	private GameService gameService;
 
 	@PostMapping("/getCups")
 	public Map<String, Object> getCups(HttpServletRequest request) {
@@ -35,7 +39,7 @@ public class CupServiceController {
 		if (ResultUtil.failResult(queryAll)) {
 			return ModelMapUtil.getDtoMap(queryAll, "查询赛事列表失败");
 		}
-		return ModelMapUtil.getSuccessMapWithList("查询赛事列表成功", queryAll.getObjList(),queryAll.getCount());
+		return ModelMapUtil.getSuccessMapWithList("查询赛事列表成功", queryAll.getObjList(), queryAll.getCount());
 
 	}
 
@@ -80,7 +84,7 @@ public class CupServiceController {
 		try {
 			BaseExcution<Cup> deleteObjByPrimaryKey = service.deleteObjByPrimaryKey(cupId);
 			if (ResultUtil.failResult(deleteObjByPrimaryKey)) {
-				return ModelMapUtil.getErrorMap("删除赛事失败:"+deleteObjByPrimaryKey.getStateInfo());
+				return ModelMapUtil.getErrorMap("删除赛事失败:" + deleteObjByPrimaryKey.getStateInfo());
 			}
 			return ModelMapUtil.getSuccessMap("删除赛事成功");
 		} catch (Exception e) {
@@ -121,5 +125,31 @@ public class CupServiceController {
 		} catch (Exception e) {
 			return ModelMapUtil.getErrorMap("分组失败!" + e.getMessage());
 		}
+	}
+
+	@PostMapping("/randomGameByGroup")
+	public Map<String, Object> randomGameByGroup(HttpServletRequest request) {
+		String cupId = HttpServletRequestUtil.getString(request, "cupId");
+		if (ParamUtils.emptyString(cupId)) {
+			return ModelMapUtil.getErrorMap("请选择赛事!");
+		}
+		try {
+			BaseExcution<Game> randomGameByGroup = gameService.randomGameByGroup(cupId);
+			if (ResultUtil.failResult(randomGameByGroup)) {
+				return ModelMapUtil.getErrorMap("安排赛程失败!" + randomGameByGroup.getStateInfo());
+			}
+			return ModelMapUtil.getSuccessMap("安排赛程成功");
+		} catch (Exception e) {
+			return ModelMapUtil.getErrorMap("安排赛程失败!" + e.getMessage());
+		}
+	}
+	@PostMapping("/removeGroupByCup")
+	public Map<String, Object> removeGroupByCup(HttpServletRequest request) {
+		String cupId = HttpServletRequestUtil.getString(request, "cupId");
+		if (ParamUtils.emptyString(cupId)) {
+			return ModelMapUtil.getErrorMap("请选择赛事!");
+		}
+		//编写删除赛程逻辑
+		return ModelMapUtil.getSuccessMap("删除分组及赛程安排成功");
 	}
 }

@@ -1,6 +1,13 @@
 /target/
 /src/main/resources/application.properties
-!.mvn/wrapper/maven-wrapper.jar
+!.mvn/
+.settings/
+.classpath
+.project
+mvnw
+mvnw.cmd
+.gitattributes
+/src/test/
 
 ### STS ###
 .apt_generated
@@ -29,3 +36,4 @@ src/main/resources/application.properties
 /LOG_PATH_IS_UNDEFINED/
 *.properties
 *.properties
+src/main/resources/application.properties

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>足球队word表</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:宋体;}
+h3
+	{mso-style-link:"标题 3 字符";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:13.5pt;
+	font-family:宋体;
+	font-weight:bold;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+p.msonormal0, li.msonormal0, div.msonormal0
+	{mso-style-name:msonormal;
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+span.3
+	{mso-style-name:"标题 3 字符";
+	mso-style-link:"标题 3";
+	font-family:宋体;
+	font-weight:bold;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+.MsoNormalTable{
+	margin:0 auto;
+}
+.print{
+	width:200px;
+	height:40px;
+	border-radius:20px;
+	background:#c8e4fe;
+	border:1px solid #eee;
+	display:inline-block;
+	box-shadow: 0px 10px 10px #eee;
+
+}
+.btn_group{
+	margin: 20px auto;
+	display: block;
+	text-align: center;
+	width: 100%;
+	height: 40px;
+
+}
+-->
+</style>
+
+</head>
+
+<body lang=ZH-CN>
+<div class="btn_group">
+	<button class="print" onClick="javascript:window.location.href='/FootballSystem/admin/view/player'">返回</button>  
+	<button class="print" id="download">下载Word文档</button>
+
+</div>
+
+<div class="WordSection1" id="WordSection1">
+
+<h3 align=center style='text-align:center'><span style='font-size:22.0pt'>广州番禺职业技术学院番职杯球队报名表</span></h3>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=579
+ style='width:434.25pt;border:solid windowtext 1.0pt' colspan=5 id=datalist>
+ <tr style='height:34.75pt'>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:34.75pt'>
+  <p class=MsoNormal align=center style='text-align:center'>球队名称</p>
+  </td>
+  <td colspan=4 style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:34.75pt' ><p class=MsoNormal align=center style='text-align:center' id="teamName"></p></td>
+ </tr>
+ <tr style='height:33.1pt'>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>领队</p>
+  </td>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt' ><p class=MsoNormal align=center style='text-align:center' id="leaderName"></p></td>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>联系方式</p>
+  </td>
+  <td colspan=2 style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt' ><p class=MsoNormal align=center style='text-align:center' id="leaderPhone"></p></td>
+ </tr>
+ <tr style='height:33.1pt'>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>参赛人数</p>
+  </td>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt' ><p class=MsoNormal align=center style='text-align:center' id="teamCount"></p></td>
+  <td colspan=3 style='border:solid windowtext 1.0pt;background:#EEEEEE;
+  padding:.75pt .75pt .75pt .75pt;height:33.1pt'></td>
+ </tr>
+ <tr style='height:33.1pt'>
+  <td colspan=5 style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>队员名单</p>
+  </td>
+ </tr>
+ <tr style='height:33.1pt'>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>姓名</p>
+  </td>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>球衣号码</p>
+  </td>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>学院</p>
+  </td>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>学号</p>
+  </td>
+  <td style='border:solid windowtext 1.0pt;padding:.75pt .75pt .75pt .75pt;
+  height:33.1pt'>
+  <p class=MsoNormal align=center style='text-align:center'>联系方式</p>
+  </td>
+ </tr>
+
+</table>
+
+<p align=center style='text-align:center;float:right'>领队签名<span lang=EN-US>:</span></p>
+
+</div>
+	<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/FootballSystem/resources/js/admin/FileSaver.js"></script>
+	<script src="/FootballSystem/resources/js/admin/jquery.wordexport.js"></script>
+<script src="/FootballSystem/resources/js/admin/word.js"></script>
+</body>
+</html>

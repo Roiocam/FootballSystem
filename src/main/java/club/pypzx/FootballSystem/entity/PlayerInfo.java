@@ -45,7 +45,7 @@ public class PlayerInfo {
 	}
 
 	public void setPlayerStuno(String playerStuno) {
-		this.playerStuno = playerStuno.substring(0, 10);
+		this.playerStuno = playerStuno == null ? null : playerStuno.trim();
 	}
 
 	public String getPlayerDepart() {
@@ -61,7 +61,7 @@ public class PlayerInfo {
 	}
 
 	public void setPlayerTel(String playerTel) {
-		this.playerTel = playerTel.substring(0, 11);
+		this.playerTel =playerTel;
 	}
 
 }

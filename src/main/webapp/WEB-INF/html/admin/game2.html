@@ -8,24 +8,31 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <!-- Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
-	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-	crossorigin="anonymous">
-<link href="/FootballSystem/resources/css/dashboard.css"
-	rel="stylesheet">
-<link href="/FootballSystem/resources/css/tab.css" rel="stylesheet">
+<link href="https://lib.baomitu.com/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 <title>足协后台管理系统</title>
+<style>
+.edit {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background: url('/FootballSystem/resources/image/icon-edit.png')
+}
 
+.delete {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background: url('/FootballSystem/resources/image/icon-delete.png')
+}
+</style>
 </head>
 
 <body>
 
-	<div class="container-fluid" style="background: url('/FootballSystem/resources/image/timg.jpg'); background-size: cover;"">
-
+	<div class="container-fluid" style="height: 800px;">
 		<div
 			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-			<h1 class="h2" style="text-align: center; margin: 0 auto;">赛程表</h1>
+			<h1 class="h2">赛程表管理</h1>
 			<div class="btn-toolbar mb-2 mb-md-0">
 				<div class="btn-group mr-2">
 					<button class="btn btn-sm btn-outline-secondary"
@@ -34,87 +41,162 @@
 
 			</div>
 		</div>
-		<div style="width: 100%;height: 60px; text-align: center;">
-			<div style="margin:0 auto; display: block; width: 70%;height: 100%;">
-				<div style="background-color:white;border-radius:2px; border: 1px solid #DCDCDC; width: 30%; height: 60px;   display: inline-block; float: left;  margin: 0 auto;line-height: 60px;">冠亚军</div>
-				<h1 style="width: 40%; height: 60px;display: inline-block; float: left;">决赛</h1>
-				<div style="background-color:white;border-radius:2px; border: 1px solid #DCDCDC;width: 30%; height: 60px; display: inline-block; float: left;  margin: 0 auto;line-height: 60px;">冠亚军</div>
+		<div class="form-row mb-2">
+			<div class="col-4">
+				<select class="form-control" id="cupId" name="cupId">
+				</select>
 			</div>
-		</div>
-		<br>
-		<br>
-		<div style="width: 100%;height: 50px; text-align: center;">
-			<div style="margin:0 auto; display: block; width: 85%;height: 100%;">
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 20%; height: 50px;   display: inline-block; float: left;  margin: 0 auto;line-height: 50px;">六进三</div>
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 20%; height: 50px;   display: inline-block; float: left;  margin: 0 auto;line-height: 50px;">六进三</div>
-				<div style="width: 20%; height: 50px; display: inline-block; float: left;  margin: 0 auto;line-height: 50px;"></div>
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC;width: 20%; height: 50px; display: inline-block; float: left;  margin: 0 auto;line-height: 50px;">六进三</div>
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; background-color:#dcdcdc;  width: 20%; height: 50px; display: inline-block; float: left;  margin: 0 auto;line-height: 50px;">复活队伍</div>
-			</div>
-		</div>
-		<br>
-		<br>
-		<div style="width: 100%;height: 42px; text-align: center;">
-			<div style="margin:0 auto; display: block; width: 95%;height: 100%;">
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 14%; height: 42px;   display: inline-block; float: left;  margin: 0 auto;line-height: 42px;">九进六</div>
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 14%; height: 42px;   display: inline-block; float: left;  margin: 0 auto;line-height: 42px;">九进六</div>
-				<div style="width: 8%; height: 42px; display: inline-block; float: left;  margin: 0 auto;line-height: 42px;"></div>
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC;width: 14%; height: 42px; display: inline-block; float: left;  margin: 0 auto;line-height: 42px;">九进六</div>
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC;width: 14%; height: 42px; display: inline-block; float: left;  margin: 0 auto;line-height: 42px;">九进六</div>
-				<div style="width: 8%; height: 42px; display: inline-block; float: left;  margin: 0 auto;line-height: 42px;"></div>
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC;width: 14%; height: 42px; display: inline-block; float: left;  margin: 0 auto;line-height: 42px;">九进六</div>
-				<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC;width: 14%; height: 42px; display: inline-block; float: left;  margin: 0 auto;line-height: 42px;">九进六</div>
+			<div class="col">
+
+				<button class="btn btn-outline-secondary" type="button"
+					id="searchBtn">查询</button>
+
 			</div>
 		</div>
 		
-		<br>
-		<br>
-		<div style="width: 100%;height: 105px; text-align: center;">
-			<div style="margin:0 auto; display: block; width: 95%;height: 100%;">
-				<div style="width: 26%;height: 100%; display: inline-block; float: left;">
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">机电学院   VS  管理学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">艺术学院   VS  机电学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">管理学院   VS  艺术学院</div>
+		<div class="table-responsive">
+			<table class="table  table-hover table-bordered table-sm"
+				id="datalist">
+
+			</table>
+			<nav aria-label="Page navigation" id="page">
+				<div class="input-group" style="width: 100px; float: right;">
+					<input type="number" class="form-control " min="1" value="1"
+						id="pageIndexInput">
+					<div class="input-group-append">
+						<span class="input-group-text">页</span>
+					</div>
 				</div>
-				<div style="width: 11%; height: 35px; display: inline-block; float: left;  margin: 0 auto;line-height: 35px;"></div>
-				<div style="width: 26%;height: 100%; display: inline-block; float: left;">
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">信工 VS  人文</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">外语 VS 信工</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">人文  VS外语</div>
+				<ul class="pagination justify-content-center" id="pageList">
+				</ul>
+			</nav>
+		</div>
+
+	</div>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="inputModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+
+			<div class="modal-content">
+
+				<div class="modal-header">
+
+					<h5 class="modal-title" id="exampleModalLabel">赛事信息</h5>
+
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
 				</div>
-				<div style="width: 11%; height: 35px; display: inline-block; float: left;  margin: 0 auto;line-height: 35px;"></div>
-				<div style="width: 26%;height: 100%; display: inline-block; float: left;">
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">珠宝学院 VS 建筑学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">建筑学院  VS 财经学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">财经学院  VS 珠宝学院</div>
+				<div class="modal-body">
+					<form class="needs-validation was-validated" novalidate>
+						<div class="form-group">
+							<label for="playerId" class="col-form-label">球员编号</label> <input
+								type="text" class="form-control" id="playerId" value=""
+								placeholder="系统随机生成，无需填写" readonly>
+						</div>
+						<div class="form-group"></div>
+
+						<div class="form-row">
+							<div class="form-group col-md-4">
+								<label for="playerName" class="col-form-label">球员姓名</label> <input
+									type="text" class="form-control" id="playerName" maxlength="4"
+									required>
+								<div class="invalid-feedback">请输入姓名</div>
+							</div>
+							<div class="form-group col-md-5">
+								<label for="playerStuno" class="col-form-label">学号</label> <input
+									type="number" class="form-control" id="playerStuno"
+									maxlength="10" required>
+								<div class="invalid-feedback">请输入学号</div>
+							</div>
+							<div class="form-group col-md-3">
+								<label for="playerNum" class="col-form-label">球衣号码</label> <input
+									type="number" class="form-control" id="playerNum" min="0"
+									maxlength="2" required>
+								<div class="invalid-feedback">请输入球衣号码</div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="playerDepart">学院</label> <select
+									class="form-control" id="playerDepart" name="playerDepart">
+									<option selected value="信息工程学院">信息工程学院</option>
+									<option value="管理学院">管理学院</option>
+									<option value="外语学院">外语学院</option>
+									<option value="建筑工程学院">建筑工程学院</option>
+									<option value="机电学院">机电学院</option>
+									<option value="艺术学院">艺术学院</option>
+									<option value="人文社科学院">人文社科学院</option>
+									<option value="财经学院">财经学院</option>
+								</select>
+
+
+							</div>
+							<div class="form-group col-md-6">
+								<label for="playerTel">联系方式</label> <input type="number"
+									class="form-control" id="playerTel" maxlength="13" required>
+								<div class="invalid-feedback">请输入联系方式</div>
+							</div>
+
+						</div>
+						<div class="form-group">
+							<label for="teamId" class="col-form-label">选择球队</label> <select
+								class="form-control" id="teamId" name="teamId">
+
+							</select>
+						</div>
+					</form>
+				</div>
+				<div id="errMsg"></div>
+				<div class="modal-footer">
+
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="submitData">确定</button>
 				</div>
 			</div>
 		</div>
-		<br>
-		<h1 class="h2" style="text-align: center; margin: 0 auto;">分组</h1>
-		<div style="width: 100%;height: 105px; text-align: center;">
-			<div style="margin:0 auto; display: block; width: 95%;height: 100%;">
-				<div style="width: 26%;height: 100%; display: inline-block; float: left;">
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">管理学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">艺术学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">机电学院</div>
+	</div>
+
+	<div class="modal fade" id="errModal" tabindex="-1" role="dialog"
+		aria-labelledby="logoutModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">安排赛程</h5>
 				</div>
-				<div style="width: 11%; height: 35px; display: inline-block; float: left;  margin: 0 auto;line-height: 35px;"></div>
-				<div style="width: 26%;height: 100%; display: inline-block; float: left;">
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">人文学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">信工学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">外语学院</div>
+				<div class="modal-body" id="modalBody">
+					<div class="p-3 mb-2 bg-danger text-white">该赛事暂无赛程表,请在赛程安排中安排赛事后查看赛程表.</div>
 				</div>
-				<div style="width: 11%; height: 35px; display: inline-block; float: left;  margin: 0 auto;line-height: 35px;"></div>
-				<div style="width: 26%;height: 100%; display: inline-block; float: left;">
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">建筑学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">财经学院</div>
-					<div style="background-color:white;border-radius:2px;border: 1px solid #DCDCDC; width: 100%; height: 35px;   display: inline-block; float: left;  margin: 0 auto;line-height: 35px;">珠宝学院</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+		aria-labelledby="logoutModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">确定删除？</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">你确定要删除此条记录?此操作不可逆转。</div>
+				<div id="delMsg"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" id="deleteObj">确认删除</button>
 				</div>
 			</div>
 		</div>
-
-
 	</div>
 
 
@@ -126,24 +208,10 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		crossorigin="anonymous"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')
-	</script>
-
-
-
+<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://lib.baomitu.com/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="/FootballSystem/resources/js/pageUtils.js"></script>
+	<script src="/FootballSystem/resources/js/admin/game2.js"></script>
+	<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
 </body>
 </html>

@@ -35,8 +35,8 @@
 							<label class="weui-label">球队名称</label>
 						</div>
 						<div class="weui-cell__bd">
-							<input class="weui-input" type="text" placeholder="请输入球队名称"
-								id="teamName" required>
+							<input class="weui-input" type="text" placeholder="请输入球队名称(最长10位)"
+								id="teamName" maxlength="10" required>
 						</div>
 					</div>
 					<div class="weui-cell weui-cell_warn">
@@ -44,8 +44,8 @@
 							<label class="weui-label">入队验证码</label>
 						</div>
 						<div class="weui-cell__bd">
-							<input class="weui-input" type="text" placeholder="请输入球队验证码"
-								id="vaildCode" required>
+							<input class="weui-input" type="text" placeholder="请输入球队验证码(4位数字/字母)"
+								id="vaildCode" maxlength="4" required>
 						</div>
 						<div class="weui-cell__ft">
 							<i class="weui-icon-warn"></i>
@@ -74,7 +74,7 @@
 						</div>
 						<div class="weui-cell__bd">
 							<input class="weui-input" type="text" placeholder="请输入姓名"
-								id="playerName" required>
+								id="playerName"  required>
 						</div>
 					</div>
 					<div class="weui-cell weui-cell_warn">
@@ -83,7 +83,7 @@
 						</div>
 						<div class="weui-cell__bd">
 							<input class="weui-input" type="number" pattern="[0-9]*"
-								placeholder="请输入学号" id="playerStuno" required>
+								placeholder="请输入学号" id="playerStuno" maxlength="10" required>
 						</div>
 						<div class="weui-cell__ft">
 							<i class="weui-icon-warn"></i>
@@ -95,7 +95,7 @@
 						</div>
 						<div class="weui-cell__bd">
 							<input class="weui-input" type="number" pattern="[0-9]*"
-								placeholder="请输入球衣号码" id="playerNum" required>
+								placeholder="请输入球衣号码" id="playerNum" maxlength="2"  required>
 						</div>
 					</div>
 					<div class="weui-cell">
@@ -127,13 +127,36 @@
 						</div>
 						<div class="weui-cell__bd">
 							<input class="weui-input" type="number" pattern="[0-9]*"
-								placeholder="请输入手机号码" id="playerTel" required>
+								placeholder="请输入手机号码" id="playerTel" maxlength="11" required>
 						</div>
 						<div class="weui-cell__ft">
 							<i class="weui-icon-warn"></i>
 						</div>
 					</div>
 				</div>
+				<!-- 
+				<div class="weui-cells weui-cells_form">
+					<div class="weui-cell">
+						<div class="weui-cell__bd">
+							<div class="weui-uploader">
+								<div class="weui-uploader__hd">
+									<p class="weui-uploader__title">队徽上传</p>
+									<div class="weui-uploader__info">0/1</div>
+								</div>
+								<div class="weui-uploader__bd">
+									<ul class="weui-uploader__files" id="uploaderFiles">
+
+									</ul>
+									<div class="weui-uploader__input-box">
+										<input id="uploaderInput" class="weui-uploader__input"
+											type="file" accept="image/*" multiple="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				 -->
 				<div class="weui-btn-area">
 					<button class="weui-btn weui-btn_primary weui-btn_disabled"
 						id="submitData" disabled="false">确定</button>
@@ -160,11 +183,11 @@
 					
 				</div>
 				-->
-				
+
 			</div>
-			
+
 		</div>
-		
+
 		<!-- 内容END -->
 		<!-- 导航 -->
 		<div class="weui-tabbar">
@@ -186,8 +209,8 @@
 				src="/FootballSystem/resources/image/cup.png" alt=""
 				class="weui-tabbar__icon">
 				<p class="weui-tabbar__label">赛事</p>
-			</a><a
-				184: href="javascript:window.location.href='/FootballSystem/app/view/paper';"  
+			</a><a 184:
+				href="javascript:window.location.href='/FootballSystem/app/view/paper';"
 				class="weui-tabbar__item"> <img
 				src="/FootballSystem/resources/image/paper.png" alt=""
 				class="weui-tabbar__icon">

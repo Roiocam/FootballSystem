@@ -16,13 +16,28 @@
 		<div class="page js_show">
 			<div class="weui-tab">
 				<div class="weui-tab__panel">
-					<iframe src="/FootballSystem/app/view/fixtrue" width="100%" height="100%"></iframe>
-					<!-- 赛程表 -->
+					<div class="weui-cells">
+						<div class="weui-cell weui-cell_select ">
 
-					
+							<div class="weui-cell__bd">
+								<select class="weui-select" id="cupId" name="cupId">
+
+								</select>
+							</div>
+						</div>
+					</div>
+					<!-- 赛程表 -->
+					<div class="weui-tab__panel" style="margin-top: 10px;"
+						id="datalist">
+						<br>
+						<h1 class="weui-media-box__title">选择赛事后则可查看赛程表</h1>
+
+					</div>
+
 				</div>
 			</div>
 			<!-- 内容END -->
+
 			<!-- 导航 -->
 			<div class="weui-tabbar">
 				<a
@@ -38,13 +53,13 @@
 					class="weui-tabbar__icon">
 					<p class="weui-tabbar__label">杯赛报名</p>
 				</a><a
-				href="javascript:window.location.href='/FootballSystem/app/view/paper';"
-				class="weui-tabbar__item "> <img
-				src="/FootballSystem/resources/image/cup.png" alt=""
-				class="weui-tabbar__icon">
-				<p class="weui-tabbar__label">赛事</p>
-			</a> <a
-					href="javascript:window.location.href='/FootballSystem/app/view/game';"  
+					href="javascript:window.location.href='/FootballSystem/app/view/paper';"
+					class="weui-tabbar__item "> <img
+					src="/FootballSystem/resources/image/cup.png" alt=""
+					class="weui-tabbar__icon">
+					<p class="weui-tabbar__label">赛事</p>
+				</a> <a
+					href="javascript:window.location.href='/FootballSystem/app/view/game';"
 					class="weui-tabbar__item weui-bar__item_on"> <img
 					src="/FootballSystem/resources/image/paper.png" alt=""
 					class="weui-tabbar__icon">
@@ -66,11 +81,8 @@
 	<script type="text/javascript"
 		src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 	<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
-	<script type="text/javascript">
-		$('.c-card').on('click', function() {
-			window.location.href = '/FootballSystem/app/view/live';
-		});
-	</script>
+	<script src="/FootballSystem/resources/js/app/game.js"></script>
+
 	<!-- 此方法为单页面改变tabbar的显示 -->
 	<!-- <script type="text/javascript" class="tabbar js_show">
 		$(function() {

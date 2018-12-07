@@ -47,10 +47,10 @@ public class PlayerServiceController {
 		}
 		// 条件查找
 		BaseExcution<PlayerVo> queryAllByPage = service.queryAllByPage(example, pageIndex, pageSize);
-		if(ResultUtil.failResult(queryAllByPage)) {
+		if (ResultUtil.failResult(queryAllByPage)) {
 			return ModelMapUtil.getDtoMap(queryAllByPage, "查询球员列表失败");
 		}
-		return ModelMapUtil.getSuccessMapWithList("查询球员列表成功", queryAllByPage.getObjList(),queryAllByPage.getCount());
+		return ModelMapUtil.getSuccessMapWithList("查询球员列表成功", queryAllByPage.getObjList(), queryAllByPage.getCount());
 
 	}
 
@@ -68,12 +68,12 @@ public class PlayerServiceController {
 		}
 		try {
 			BaseExcution<Player> insertObj = service.insertObject(teamId, playerName, playerNum, stuno, depart, tel);
-			if(ResultUtil.failResult(insertObj)) {
-				return ModelMapUtil.getErrorMap("新增球员失败:" + insertObj.getStateInfo());
+			if (ResultUtil.failResult(insertObj)) {
+				return ModelMapUtil.getErrorMap("加入球队失败:" + insertObj.getStateInfo());
 			}
 			return ModelMapUtil.getSuccessMap("新增成功");
 		} catch (Exception e) {
-			return ModelMapUtil.getErrorMap("新增球员错误，重复学号");
+			return ModelMapUtil.getErrorMap("加入球队错误，重复学号");
 		}
 	}
 
@@ -92,7 +92,7 @@ public class PlayerServiceController {
 		try {
 			BaseExcution<Player> updateObj = service.updateObject(playerId, teamId, playerName, playerNum, stuno,
 					depart, tel);
-			if(ResultUtil.failResult(updateObj)) {
+			if (ResultUtil.failResult(updateObj)) {
 				return ModelMapUtil.getErrorMap("编辑球员失败:" + updateObj.getStateInfo());
 			}
 			return ModelMapUtil.getSuccessMap("编辑成功");
@@ -126,7 +126,7 @@ public class PlayerServiceController {
 		}
 		try {
 			BaseExcution<Player> deleteObjectList = service.deleteObjectList(list);
-			if(ResultUtil.failResult(deleteObjectList)) {
+			if (ResultUtil.failResult(deleteObjectList)) {
 				return ModelMapUtil.getErrorMap("Oops!删除失败，请联系管理员");
 			}
 			return ModelMapUtil.getSuccessMap("删除成功");

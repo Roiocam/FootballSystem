@@ -81,10 +81,11 @@ public class MvcConfiguration extends WebMvcConfigurationSupport
 	}
 	@Override
 	protected void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("forward:/app/view/main");
+		registry.addViewController("/").setViewName("forward:/index");
         super.addViewControllers(registry);
 
 	}
+	
 
 
 }

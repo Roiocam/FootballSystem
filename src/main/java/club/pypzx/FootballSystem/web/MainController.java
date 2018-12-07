@@ -51,7 +51,10 @@ public class MainController {
 	public String game2() {
 		return "admin/game2";
 	}
-	
+	@GetMapping("/word")
+	public String word() {
+		return "admin/word";
+	}
 
 
 }

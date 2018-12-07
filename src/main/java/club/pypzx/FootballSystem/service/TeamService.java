@@ -2,6 +2,7 @@ package club.pypzx.FootballSystem.service;
 
 import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.GroupVo;
+import club.pypzx.FootballSystem.dto.TeamPrint;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Team;
 
@@ -24,4 +25,5 @@ public interface TeamService extends BaseService<Team> {
 			throws Exception;
 
 	public BaseExcution<GroupVo> queryTeamByGroup(String cupId);
+	public BaseExcution<TeamPrint> getTeamPrint(String teamId);
 }

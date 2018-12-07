@@ -101,7 +101,7 @@ public class AppServiceController {
 			BaseExcution<Player> insertObj = playerService.insertObject(teamId, playerName, playerNum, stuno, depart,
 					tel);
 			if (insertObj.getState() != BaseStateEnum.SUCCESS.getState()) {
-				return ModelMapUtil.getErrorMap("新增球员失败：" + insertObj.getStateInfo());
+				return ModelMapUtil.getErrorMap("加入球队失败：" + insertObj.getStateInfo());
 			}
 			if (insertObj.getObj() != null) {
 				request.getSession().setAttribute("signed", insertObj.getObj().getPlayerId());
@@ -109,7 +109,7 @@ public class AppServiceController {
 
 			return ModelMapUtil.getSuccessMap("新增成功");
 		} catch (Exception e) {
-			return ModelMapUtil.getErrorMap("新增球员错误，重复学号");
+			return ModelMapUtil.getErrorMap("加入球队错误，重复学号");
 		}
 	}
 

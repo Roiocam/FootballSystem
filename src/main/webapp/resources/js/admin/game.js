@@ -6,6 +6,8 @@ $(function() {
 	var getCupUrl = '/FootballSystem/admin/service/cup/getCups';
 	var randomUrl = '/FootballSystem/admin/service/cup/randomTeamToGroup';
 	var getGroupUrl = '/FootballSystem/admin/service/team/getTeamGroup';
+	var randomGameUrl = '/FootballSystem/admin/service/cup/randomGameByGroup';
+	var delUrl='/FootballSystem/admin/service/cup/removeGroupByCup';
 	var loading=new LoadingUtils();
 	loading.append();
 	getCupData();
@@ -129,6 +131,8 @@ $(function() {
 		
 		loading.show();
 		var cupId=$('#cupId');
+		var formData=new FormData();
+		formData.append('cupId',cupId)
 		$.ajax({
 			url : delUrl,
 			type : 'POST',
@@ -141,35 +145,56 @@ $(function() {
 				if (data.state==0) {
 					var success ='<div class="p-3 mb-2 bg-success text-white">删除成功</div>'
 					$('#delMsg').html(success);
-					initData();
 					setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
 						$("#deleteModal").modal('hide'); 
-					},500);
+						$('#delMsg').html('');
+						window.location.reload();
+					},1000);
 				} else {
 					var errMsg ='<div class="p-3 mb-2 bg-danger text-white">'+data.message+'</div>'
 					$('#delMsg').html(errMsg);
 					setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
 						$("#deleteModal").modal('hide'); 
+						$('#delMsg').html('');
 					},2000);
 				}
 				}
 			});
 		
 	});
-	$('#asd').click(function() {
+	$('#messageBtn').click(function() {
 		// 显示加载gif
 		
 		loading.show();
-		// 2秒后执行
-		setTimeout(() => {
-			$('#modalBody').html('分配成功');
-			$('#closeBtn').css('display','block');
-			$('#messageBtn').css('display','none');
-			loading.hide();
-		}, 2000);
+		$('#modalBody').html('正在安排赛程中,请稍等...');
+		var cupId = $('#cupId').val();
+		var formData = new FormData();
+		formData.append('cupId', cupId);
+		$.ajax({
+			url : randomGameUrl,
+			type : 'POST',
+			data : formData,
+			contentType : false,
+			processData : false,
+			cache : false,
+			success : function(data) {
+				if (data.state == 0) {
+					$('#modalBody').html(data.message);
+					$('#messageBtn').attr('disabled','true');
+					loading.hide();
+					setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+						$("#messageModal").modal('hide'); 
+					},2000);
+				} else {
+					loading.hide();
+					$('#modalBody').html(data.message);
+					setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+						$("#messageModal").modal('hide'); 
+					},2000);
+				}
+			}
+		});
 		
 	});
-	
-	
 
 });

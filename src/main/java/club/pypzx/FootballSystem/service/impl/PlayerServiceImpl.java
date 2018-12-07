@@ -159,17 +159,23 @@ public class PlayerServiceImpl implements PlayerService {
 		} catch (Exception e) {
 			return new BaseExcution<Player>(BaseStateEnum.EMPTY);
 		}
+		//球队人数限制
 		Player temp=new Player();
 		temp.setTeamId(teamId);
+		int selectCount = mapper.selectCount(temp);
+		if(selectCount>=14) {
+			return new BaseExcution<>(BaseStateEnum.TO_MANY_PLAYER);
+		}
+		
 		temp.setPlayerNum(num);
 		if(null!=mapper.selectOne(temp)) {
 			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYERNUM);
 		}
 		if (1 != mapper.insert(packagePlayer)) {
-			throw new Exception("新增球员失败");
+			throw new Exception("加入球队失败");
 		}
 		if (1 != infoMapper.insert(packagePlayerInfo)) {
-			throw new Exception("新增球员失败,请检查学号");
+			throw new Exception("加入球队失败,请检查学号");
 		}
 
 		return new BaseExcution<>(BaseStateEnum.SUCCESS, packagePlayer);
