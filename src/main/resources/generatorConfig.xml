@@ -14,9 +14,9 @@
 		</plugin>
 
 		<!-- 连接字符串 -->
-		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://119.29.35.133/FootballSystem"
-			userId="帐号" password="密码">
+		<jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+			connectionURL="jdbc:mysql://119.29.35.133:1306/FootballSystem"
+			userId="" password="">
 		</jdbcConnection>
 
 		<!-- 生成entity实体类的位置,修改targetPackage为实体类包位置 -->
@@ -82,9 +82,14 @@
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false">
-
 		</table>
-
+		<table tableName="pypzx_wechat_account"
+			domainObjectName="WechatAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+			<generatedKey column="openid" sqlStatement="Mysql"
+				identity="false" />
+		</table>
 
 	</context>
 </generatorConfiguration>
