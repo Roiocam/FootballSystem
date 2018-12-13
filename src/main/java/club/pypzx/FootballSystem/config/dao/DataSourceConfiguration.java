@@ -42,8 +42,8 @@ public class DataSourceConfiguration {
 		// !--每6个小时检查所有连接池中的空闲连接，这个值一定要小于MySQL的wait_timeout时间，默认为8小时。默认0 -->
 		dataSource.setIdleConnectionTestPeriod(21600);
 		// <!-- c3p0连接池的私有属性 -->
-		dataSource.setMaxPoolSize(20);
-		dataSource.setMinPoolSize(10);
+		dataSource.setMaxPoolSize(10);
+		dataSource.setMinPoolSize(5);
 		dataSource.setMaxIdleTime(21600);
 		// <!-- 关闭连接后不自动commit -->
 		dataSource.setAutoCommitOnClose(false);

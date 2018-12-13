@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!-- Bootstrap CSS -->
-<link href="https://lib.baomitu.com/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-<title>足协后台管理系统</title>
-<style>
-.edit {
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link href="https://lib.baomitu.com/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<title>足协后台管理系统</title>
+	<style>
+		.edit {
 	display: inline-block;
 	width: 32px;
 	height: 32px;
@@ -29,29 +28,49 @@
 
 <body>
 
-	<div class="container-fluid" style="height: 800px;">
-		<div
-			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+	<div class="container-fluid" style="height: 800px;" id="app">
+		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
 			<h1 class="h2">赛事管理</h1>
 			<div class="btn-toolbar mb-2 mb-md-0">
 				<div class="btn-group mr-2">
-					<button class="btn btn-sm btn-outline-secondary"
-						onclick="javascript:window.location.reload();">刷新</button>
+					<button class="btn btn-sm btn-outline-secondary" onclick="javascript:window.location.reload();">刷新</button>
 				</div>
 
 			</div>
 		</div>
 		<div class="input-group mb-3">
-			<button type="button" class="btn btn-primary mr-3"
-				data-toggle="modal" data-target="#inputModal">新增</button>
-			<button type="button" class="btn btn-primary mr-3" data-type="list"
-				data-toggle="modal" data-target="#deleteModal">删除</button>
+			<button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#inputModal">新增</button>
+			<button type="button" class="btn btn-primary mr-3" data-type="list" data-toggle="modal" data-target="#deleteModal">删除</button>
 		</div>
 
 		<div class="table-responsive">
-			<table class="table  table-hover table-bordered table-sm"
-				id="datalist" style="table-layout: fixed;">
-
+			<table class="table  table-hover table-bordered table-sm" id="datalist" style="table-layout: fixed;">
+				<thead>
+					<tr id="cboxhead">
+						<th>
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input"> <label class="custom-control-label" for="cboxhead">全选</label>
+							</div>
+						</th>
+						<th>赛事id</th>
+						<th>赛事名称</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="(item, index) in datalist">
+						<td>
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input cboxlist" :id="'checkbox'+index" :value="item.cupId">
+								<label class="custom-control-label" :for="'checkbox'+index">
+									<a href="#" data-toggle="modal" data-target="#inputModal" data-id="edit" :data-obj-id="item.cupId" class="edit"></a>
+									<a href="#" data-toggle="modal" data-target="#deleteModal" :data-id="item.cupId" class="delete"></a>
+								</label>
+							</div>
+						</td>
+						<td>{{item.cupId}}</td>
+						<td>{{item.cupName}}</td>
+					</tr>
+				</tbody>
 			</table>
 			<nav aria-label="Page navigation" id="page">
 				<div class="input-group" style="width: 100px; float: right;">
@@ -71,8 +90,7 @@
 
 
 	<!-- Modal -->
-	<div class="modal fade" id="inputModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 
 			<div class="modal-content">
@@ -81,20 +99,19 @@
 
 					<h5 class="modal-title" id="exampleModalLabel">赛事信息</h5>
 
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
 					<form class="needs-validation was-validated" novalidate>
 						<div class="form-group">
-							<label for="cupId" class="col-form-label">赛事编号</label> <input
-								type="text" class="form-control" id="cupId" value="" placeholder="系统随机生成，无需填写" readonly>
+							<label for="cupId" class="col-form-label">赛事编号</label> <input type="text" class="form-control" id="cupId" value=""
+							 placeholder="系统随机生成，无需填写" readonly>
 						</div>
 						<div class="form-group">
-							<label for="cupName" class="col-form-label">赛事名称(最大长度15位)</label> <input
-								type="text" class="form-control" id="cupName" maxlength="15" required>
+							<label for="cupName" class="col-form-label">赛事名称(最大长度15位)</label>
+							<input type="text" class="form-control" id="cupName" maxlength="15" required>
 							<div class="invalid-feedback">请输入赛事名称</div>
 						</div>
 					</form>
@@ -102,30 +119,26 @@
 				<div id="errMsg"></div>
 				<div class="modal-footer">
 
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
 					<button type="button" class="btn btn-primary" id="submitData">确定</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
-		aria-labelledby="logoutModalLabel" aria-hidden="true">
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="deleteModalLabel">确定删除？</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">你确定要删除该赛事?此操作将会同时删除赛事下球队记录和球队下球员信息，此操作不可逆转。</div>
 				<div id="delMsg"></div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
 					<button type="button" class="btn btn-primary" id="deleteObj">确认删除</button>
 				</div>
 			</div>
@@ -141,13 +154,17 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://lib.baomitu.com/popper.js/1.14.4/umd/popper.min.js"></script>
-<script src="https://lib.baomitu.com/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://lib.baomitu.com/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="/FootballSystem/resources/js/pageUtils.js"></script>
-	<script src="/FootballSystem/resources/js/admin/cup.js"></script>
+	<script src="/FootballSystem/resources/js/admin/cup.js"></script> 
 	<script src="/FootballSystem/resources/js/tableutil.js"></script>
 	<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
 
+	
+
 </body>
+
 </html>
