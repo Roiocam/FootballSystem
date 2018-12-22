@@ -9,10 +9,19 @@ var app = new Vue(
 	{
 		el: '#app',
 		data: {
-			'password': '',
-			username: '',
 			message: '',
-			datalist: []
+			datalist: [],
+			message: '',
+			err: false,
+			messageShow: false,
+		},
+		computed: {
+			msgClass: function () {
+				return {
+					'bg-success': !this.err,
+					'bg-danger': this.err,
+				}
+			}
 		},
 		methods: {
 			initData: function () {
@@ -93,23 +102,24 @@ function delOne() {
 			cache: false,
 			success: function (data) {
 				loading.hide();
+				app.messageShow = true;
+				app.message = data.message;
 				if (data.state == 0) {
-					var success = '<div class="p-3 mb-2 bg-success text-white">删除成功</div>'
-					$('#delMsg').html(success);
-					initData();
+					app.err = false;
+					app.initData();
 					setTimeout(function () { // 使用
 						// setTimeout（）方法设定定时2000毫秒
 						$("#deleteModal").modal('hide');
-						$("#delMsg").html('');
+						app.message = '';
+						app.messageShow = false;
 					}, 500);
 				} else {
-					var errMsg = '<div class="p-3 mb-2 bg-danger text-white">'
-						+ data.message + '</div>'
-					$('#delMsg').html(errMsg);
+					app.err = true;
 					setTimeout(function () { // 使用
 						// setTimeout（）方法设定定时2000毫秒
 						$("#deleteModal").modal('hide');
-						$('#delMsg').html('');
+						app.message = '';
+						app.messageShow = false;
 					}, 2000);
 				}
 			}
@@ -134,21 +144,22 @@ function delList() {
 			cache: false,
 			success: function (data) {
 				loading.hide();
+				app.messageShow = true;
+				app.message = data.message;
 				if (data.state == 0) {
-					var success = '<div class="p-3 mb-2 bg-success text-white">删除成功</div>'
-					$('#delMsg').html(success);
-					initData();
+					app.err = false;
+					app.initData();
 					setTimeout(function () { //使用  setTimeout（）方法设定定时2000毫秒
 						$("#deleteModal").modal('hide');
-						$("#delMsg").html('');
+						app.message = '';
+						app.messageShow = false;
 					}, 500);
 				} else {
-					var errMsg = '<div class="p-3 mb-2 bg-danger text-white">'
-						+ data.message + '</div>'
-					$('#delMsg').html(errMsg);
+					app.err = true;
 					setTimeout(function () { //使用  setTimeout（）方法设定定时2000毫秒
 						$("#deleteModal").modal('hide');
-						$('#delMsg').html('');
+						app.message = '';
+						app.messageShow = false;
 					}, 2000);
 				}
 			}
@@ -182,22 +193,22 @@ $('#submitData')
 					cache: false,
 					success: function (data) {
 						loading.hide();
+						app.messageShow = true;
+						app.message = data.message;
 						if (data.state == 0) {
-							var success = '<div class="p-3 mb-2 bg-success text-white">'
-								+ data.message + '</div>'
-							$('#errMsg').html(success);
-							initData();
+							app.err = false;
+							app.initData();
 							setTimeout(function () { // 使用
 								// setTimeout（）方法设定定时2000毫秒
 								$("#inputModal").modal('hide');
-								$("#errMsg").html('');
+								app.message = '';
+								app.messageShow = false;
 							}, 500);
 						} else {
-							var errMsg = '<div class="p-3 mb-2 bg-danger text-white">'
-								+ data.message + '</div>'
-							$('#errMsg').html(errMsg);
+							app.err = true;
 							setTimeout(function () { // 使用
-								$("#errMsg").html('');
+								app.message = '';
+								app.messageShow = false;
 							}, 5000);
 						}
 					}

@@ -202,12 +202,12 @@ public class TeamServiceImpl implements TeamService {
 		if (null != mapper.selectOne(temp)) {
 			return new BaseExcution<>(BaseStateEnum.SAME_TEAMNAME);
 		}
-//		Team cupTeam=new Team();
-//		cupTeam.setCupId(obj.getTeamId());
-//		int selectCount = mapper.selectCount(cupTeam);
-//		if(selectCount>=16) {
-//			return new BaseExcution<>(BaseStateEnum.MAX_TEAM_COUNT);
-//		}
+		Team cupTeam=new Team();
+		cupTeam.setCupId(obj.getTeamId());
+		int selectCount = mapper.selectCount(cupTeam);
+		if(selectCount>=9) {
+			return new BaseExcution<>(BaseStateEnum.MAX_TEAM_COUNT);
+		}
 		if (1 != mapper.insert(obj)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}

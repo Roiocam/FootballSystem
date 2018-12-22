@@ -1,28 +1,27 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!-- Bootstrap CSS -->
-<link href="https://lib.baomitu.com/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-<title>足协后台管理系统</title>
-<style>
-.edit {
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link href="https://lib.baomitu.com/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<title>足协后台管理系统</title>
+	<style>
+		.edit {
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-	background: url('/FootballSystem/resources/image/icon-edit.png')
+	background: url(/FootballSystem/resources/image/icon-edit.png)
 }
 
 .delete {
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-	background: url('/FootballSystem/resources/image/icon-delete.png')
+	background: url(/FootballSystem/resources/image/icon-delete.png)
 }
 
 td {
@@ -35,28 +34,59 @@ td {
 
 <body>
 
-	<div class="container-fluid" style="height: 800px;">
-		<div
-			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+	<div class="container-fluid" style="height: 800px;" id="app">
+		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
 			<h1 class="h2">球队管理</h1>
 			<div class="btn-toolbar mb-2 mb-md-0">
 				<div class="btn-group mr-2">
-					<button class="btn btn-sm btn-outline-secondary"
-						onclick="javascript:window.location.reload();">刷新</button>
+					<button class="btn btn-sm btn-outline-secondary" onclick="javascript:window.location.reload();">刷新</button>
 				</div>
 
 			</div>
 		</div>
 		<div class="input-group mb-3">
-			<button type="button" class="btn btn-primary mr-3"
-				data-toggle="modal" data-target="#inputModal">新增</button>
-			<button type="button" class="btn btn-primary mr-3" data-type="list"
-				data-toggle="modal" data-target="#deleteModal">删除</button>
+			<button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#inputModal">新增</button>
+			<button type="button" class="btn btn-primary mr-3" data-type="list" data-toggle="modal" data-target="#deleteModal">删除</button>
 		</div>
 		<div class="table-responsive">
-			<table class="table  table-hover table-bordered table-sm"
-				id="datalist"
-				style="table-layout: fixed; white-space: nowrap; display: table;">
+			<table class="table  table-hover table-bordered table-sm" id="datalist" style="table-layout: fixed; white-space: nowrap; display: table;">
+				<thead>
+					<tr id="cboxhead">
+						<th colspan="1">
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input">
+								<label class="custom-control-label" for="cboxhead">全选</label></div>
+						</th>
+						<th colspan="2">球队编号</th>
+						<th colspan="1">球队名称</th>
+						<th colspan="1">所属赛事</th>
+						<th colspan="1">入队验证码</th>
+						<th colspan="1">队长</th>
+						<th colspan="2">球队介绍</th>
+						<th colspan="1">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="(item, index) in datalist">
+						<td colspan="1">
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input cboxlist" :id="'checkbox'+index" :value="item.teamId">
+								<label class="custom-control-label" :for="'checkbox'+index"> <a href="#" data-toggle="modal" data-target="#inputModal"
+									 data-id="edit" :data-obj-id="item.teamId" class="edit"></a> <a href="#" data-toggle="modal" data-target="#deleteModal"
+									 :data-id="item.teamId" class="delete"></a>
+								</label>
+							</div>
+						</td>
+						<td colspan="2">{{item.teamId}}</td>
+						<td colspan="1">{{item.teamName}}</td>
+						<td :value="item.cup.cupId">{{item.cup.cupName}} </td>
+						<td colspan="1">{{item.vaildCode}}</td>
+						<td colspan="1">{{item.leaderName}}</td>
+						<td colspan="2">{{item.teamDesc}}</td>
+						<td colspan="1"><a href="#" data-toggle="modal" data-target="#leaderModal" class="btn btn-primary mr-3" id="cleaderModal">{{item.leaderName=='无'?'选择队长':'更改队长'}}</a></td>
+					</tr>
+				</tbody>
+
 			</table>
 			<nav aria-label="Page navigation" id="page">
 				<div class="input-group" style="width: 100px; float: right;">
@@ -70,132 +100,129 @@ td {
 			</nav>
 		</div>
 
-	</div>
 
 
-	<!-- Modal -->
-	<div class="modal fade bd-example-modal-lg" id="inputModal"
-		tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
+		<!-- Modal -->
+		<div class="modal fade bd-example-modal-lg" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		 aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
 
-			<div class="modal-content">
+				<div class="modal-content">
 
-				<div class="modal-header">
+					<div class="modal-header">
 
-					<h5 class="modal-title" id="exampleModalLabel">球队信息</h5>
+						<h5 class="modal-title" id="exampleModalLabel">球队信息</h5>
 
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form class="needs-validation was-validated" novalidate>
-						<div class="form-group">
-							<label for="teamId" class="col-form-label">球队编号</label> <input
-								type="text" class="form-control" id="teamId" value="" placeholder="系统随机生成，无需填写"  readonly>
-						</div>
-
-						<div class="form-row">
-							<div class="form-group col-md-6">
-								<label for="teamName">球队名称（最大长度10位）</label> <input type="text"
-									class="form-control" id="teamName" placeholder="请输入球队名称"  maxlength="10"
-									required>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form class="needs-validation was-validated" novalidate>
+							<div class="form-group">
+								<label for="teamId" class="col-form-label">球队编号</label> <input type="text" class="form-control" id="teamId"
+								 value="" placeholder="系统随机生成，无需填写" readonly>
 							</div>
-							<div class="form-group col-md-6">
-								<label for="vaildCode">入队验证码(4位汉字/字母/数字)</label> <input type="text"
-									class="form-control" id="vaildCode" placeholder="请输入验证码" maxlength="4"
-									required>
+
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="teamName">球队名称（最大长度10位）</label> <input type="text" class="form-control" id="teamName" placeholder="请输入球队名称"
+									 maxlength="10" required>
+								</div>
+								<div class="form-group col-md-6">
+									<label for="vaildCode">入队验证码(4位汉字/字母/数字)</label> <input type="text" class="form-control" id="vaildCode"
+									 placeholder="请输入验证码" maxlength="4" required>
+								</div>
 							</div>
-						</div>
 
-						<div class="form-group">
-							<label for="cupId" class="col-form-label">选择赛事</label> <select
-								class="form-control" id="cupId" name="cupId">
+							<div class="form-group">
+								<label for="cupId" class="col-form-label">选择赛事</label>
+								<select class="form-control" id="cupId" name="cupId">
+									<option v-for="(item, index) in cuplist" :value="item.cupId" :selected="item.cupId==cupId">{{item.cupName}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="teamDesc">球队介绍 <span><span id="teamDescCount">0</span>/255</span>
+								</label>
+								<textarea class="form-control" id="teamDesc" rows="3" maxlength="255" required></textarea>
+							</div>
+						</form>
+					</div>
+					<div v-bind:style="{ display: messageShow?'inline':'none' }">
+						<div class="p-3 mb-2  text-white" v-bind:class="msgClass">{{message}}</div>
+					</div>
+					<div class="modal-footer">
 
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="teamDesc">球队介绍 <span><span
-									id="teamDescCount">0</span>/255</span>
-							</label>
-							<textarea class="form-control" id="teamDesc" rows="3"
-								maxlength="255" required></textarea>
-						</div>
-					</form>
-				</div>
-				<div id="errMsg"></div>
-				<div class="modal-footer">
-
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">关闭</button>
-					<button type="submit" class="btn btn-primary" id="submitData">确定</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="modal fade" id="leaderModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-
-			<div class="modal-content">
-
-				<div class="modal-header">
-
-					<h5 class="modal-title" id="exampleModalLabel">球队队长设置</h5>
-
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form>
-						<div class="form-group">
-							<label for="lteamId" class="col-form-label">球队编号</label> <input
-								type="text" class="form-control" id="lteamId" value="" readonly>
-						</div>
-						<div class="form-group">
-							<label for="leaderId" class="col-form-label">选择队长</label> <select
-								class="form-control" id="leaderId" name="leaderId">
-
-							</select>
-						</div>
-					</form>
-				</div>
-				<div id="leaderMsg"></div>
-				<div class="modal-footer">
-
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" id="submitLeader">确定</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+						<button type="submit" class="btn btn-primary" id="submitData">确定</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+		<div class="modal fade" id="leaderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
 
-	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
-		aria-labelledby="logoutModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="deleteModalLabel">确定删除？</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">你确定要删除此球队?该操作将同时删除球队和球队下所有球员信息，此操作不可逆转。</div>
-				<div id="delMsg"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" id="deleteObj">确认删除</button>
+				<div class="modal-content">
+
+					<div class="modal-header">
+
+						<h5 class="modal-title" id="exampleModalLabel">球队队长设置</h5>
+
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="lteamId" class="col-form-label">球队编号</label> <input type="text" class="form-control" id="lteamId"
+								 value="" readonly>
+							</div>
+							<div class="form-group">
+								<label for="leaderId" class="col-form-label">选择队长</label> <select class="form-control" id="leaderId" name="leaderId">
+									<option v-if="playerlist.length==0" value="0">该球队下暂无球员，请新增球员后重试</option>
+									<option v-if="playerlist.length!=0" v-for="(item, index) in playerlist" :value="item.playerId">{{item.playerName+'[号码]:'+item.playerNum}}</option>
+
+								</select>
+							</div>
+						</form>
+					</div>
+					<div v-bind:style="{ display: messageShow?'inline':'none' }">
+						<div class="p-3 mb-2  text-white" v-bind:class="msgClass">{{message}}</div>
+					</div>
+					<div class="modal-footer">
+
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" id="submitLeader">确定</button>
+					</div>
 				</div>
 			</div>
 		</div>
+
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deleteModalLabel">确定删除？</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">你确定要删除此球队?该操作将同时删除球队和球队下所有球员信息，此操作不可逆转。</div>
+					<div v-bind:style="{ display: messageShow?'inline':'none' }">
+						<div class="p-3 mb-2  text-white" v-bind:class="msgClass">{{message}}</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-primary" id="deleteObj">确认删除</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
+
+
 
 
 
@@ -206,11 +233,14 @@ td {
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://lib.baomitu.com/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://lib.baomitu.com/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="/FootballSystem/resources/js/pageUtils.js"></script>
+	<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
 	<script src="/FootballSystem/resources/js/admin/team.js"></script>
 	<script src="/FootballSystem/resources/js/tableutil.js"></script>
-	<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
 </body>
+
 </html>

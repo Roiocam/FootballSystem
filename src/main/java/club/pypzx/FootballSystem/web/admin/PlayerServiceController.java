@@ -73,7 +73,7 @@ public class PlayerServiceController {
 			}
 			return ModelMapUtil.getSuccessMap("新增成功");
 		} catch (Exception e) {
-			return ModelMapUtil.getErrorMap("加入球队错误，重复学号");
+			return ModelMapUtil.getErrorMap(e.getMessage());
 		}
 	}
 

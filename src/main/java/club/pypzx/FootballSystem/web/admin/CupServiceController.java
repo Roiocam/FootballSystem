@@ -88,7 +88,7 @@ public class CupServiceController {
 			}
 			return ModelMapUtil.getSuccessMap("删除赛事成功");
 		} catch (Exception e) {
-			return ModelMapUtil.getErrorMap("删除赛事时出现异常，数据库错误.");
+			return ModelMapUtil.getErrorMap("删除赛事时出现异常，数据库错误."+e.getMessage());
 		}
 
 	}
