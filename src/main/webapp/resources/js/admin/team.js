@@ -235,6 +235,7 @@ $(function () {
 					app.err = true
 					return
 				}
+				console.log(leaderId);
 				var formData = new FormData();
 				formData.append('teamId', teamId);
 				formData.append('leaderId', leaderId);

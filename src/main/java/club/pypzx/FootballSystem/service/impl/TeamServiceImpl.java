@@ -203,7 +203,7 @@ public class TeamServiceImpl implements TeamService {
 			return new BaseExcution<>(BaseStateEnum.SAME_TEAMNAME);
 		}
 		Team cupTeam=new Team();
-		cupTeam.setCupId(obj.getTeamId());
+		cupTeam.setCupId(obj.getCupId());
 		int selectCount = mapper.selectCount(cupTeam);
 		if(selectCount>=9) {
 			return new BaseExcution<>(BaseStateEnum.MAX_TEAM_COUNT);

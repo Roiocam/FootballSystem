@@ -68,7 +68,7 @@ function printData(teamId) {
 			if (data.state == 0) {
 				handlerList(data.result);
 			} else {
-				alert(data.message)
+				alert('球队信息不完整，请先指定球队队长。')
 			}
 		}
 	});
