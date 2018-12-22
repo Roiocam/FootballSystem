@@ -228,14 +228,13 @@ $(function () {
 				loading.show();
 				var teamId = $('#lteamId').val();
 				var leaderId = $('#leaderId').val();
-				if (leaderId == '该球队下暂无球员，请新增球员后重试') {
+				if (leaderId == 0||leaderId=='0') {
 					loading.hide();
 					app.messageShow = true
 					app.message = '请先为球队新增球员';
 					app.err = true
 					return
 				}
-				console.log(leaderId);
 				var formData = new FormData();
 				formData.append('teamId', teamId);
 				formData.append('leaderId', leaderId);
