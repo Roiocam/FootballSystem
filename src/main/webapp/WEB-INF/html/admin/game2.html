@@ -1,42 +1,39 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!-- Bootstrap CSS -->
-<link href="https://lib.baomitu.com/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-<title>足协后台管理系统</title>
-<style>
-.edit {
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link href="https://lib.baomitu.com/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<title>足协后台管理系统</title>
+	<style>
+		.edit {
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-	background: url('/FootballSystem/resources/image/icon-edit.png')
+	background: url(/FootballSystem/resources/image/icon-edit.png)
 }
 
 .delete {
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-	background: url('/FootballSystem/resources/image/icon-delete.png')
+	background: url(/FootballSystem/resources/image/icon-delete.png)
 }
 </style>
 </head>
 
 <body>
 
-	<div class="container-fluid" style="height: 800px;">
-		<div
-			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+	<div class="container-fluid" style="height: 800px;" id="app">
+		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-{{items-center pb-2 mb-3 border-bottom">
 			<h1 class="h2">赛程表管理</h1>
 			<div class="btn-toolbar mb-2 mb-md-0">
 				<div class="btn-group mr-2">
-					<button class="btn btn-sm btn-outline-secondary"
-						onclick="javascript:window.location.reload();">刷新</button>
+					<button class="btn btn-sm btn-outline-secondary" onclick="javascript:window.location.reload();">刷新</button>
 				</div>
 
 			</div>
@@ -44,126 +41,57 @@
 		<div class="form-row mb-2">
 			<div class="col-4">
 				<select class="form-control" id="cupId" name="cupId">
+					<option value="" id="chooseSelect">选择赛事</option>
+					<option v-if="cuplist.length!=0" v-for="(item, index) in cuplist" :value="item.cupId" :grouped="item.isGroup">{{item.cupName}}</option>
 				</select>
 			</div>
-			<div class="col">
+			<div class="
+		 col">
+			<button class="btn btn-outline-secondary" type="button" id="searchBtn">查询</button>
 
-				<button class="btn btn-outline-secondary" type="button"
-					id="searchBtn">查询</button>
-
-			</div>
-		</div>
-		
-		<div class="table-responsive">
-			<table class="table  table-hover table-bordered table-sm"
-				id="datalist">
-
-			</table>
-			<nav aria-label="Page navigation" id="page">
-				<div class="input-group" style="width: 100px; float: right;">
-					<input type="number" class="form-control " min="1" value="1"
-						id="pageIndexInput">
-					<div class="input-group-append">
-						<span class="input-group-text">页</span>
-					</div>
-				</div>
-				<ul class="pagination justify-content-center" id="pageList">
-				</ul>
-			</nav>
-		</div>
-
-	</div>
-
-
-	<!-- Modal -->
-	<div class="modal fade" id="inputModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-
-			<div class="modal-content">
-
-				<div class="modal-header">
-
-					<h5 class="modal-title" id="exampleModalLabel">赛事信息</h5>
-
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form class="needs-validation was-validated" novalidate>
-						<div class="form-group">
-							<label for="playerId" class="col-form-label">球员编号</label> <input
-								type="text" class="form-control" id="playerId" value=""
-								placeholder="系统随机生成，无需填写" readonly>
-						</div>
-						<div class="form-group"></div>
-
-						<div class="form-row">
-							<div class="form-group col-md-4">
-								<label for="playerName" class="col-form-label">球员姓名</label> <input
-									type="text" class="form-control" id="playerName" maxlength="4"
-									required>
-								<div class="invalid-feedback">请输入姓名</div>
-							</div>
-							<div class="form-group col-md-5">
-								<label for="playerStuno" class="col-form-label">学号</label> <input
-									type="number" class="form-control" id="playerStuno"
-									maxlength="10" required>
-								<div class="invalid-feedback">请输入学号</div>
-							</div>
-							<div class="form-group col-md-3">
-								<label for="playerNum" class="col-form-label">球衣号码</label> <input
-									type="number" class="form-control" id="playerNum" min="0"
-									maxlength="2" required>
-								<div class="invalid-feedback">请输入球衣号码</div>
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="form-group col-md-6">
-								<label for="playerDepart">学院</label> <select
-									class="form-control" id="playerDepart" name="playerDepart">
-									<option selected value="信息工程学院">信息工程学院</option>
-									<option value="管理学院">管理学院</option>
-									<option value="外语学院">外语学院</option>
-									<option value="建筑工程学院">建筑工程学院</option>
-									<option value="机电学院">机电学院</option>
-									<option value="艺术学院">艺术学院</option>
-									<option value="人文社科学院">人文社科学院</option>
-									<option value="财经学院">财经学院</option>
-								</select>
-
-
-							</div>
-							<div class="form-group col-md-6">
-								<label for="playerTel">联系方式</label> <input type="number"
-									class="form-control" id="playerTel" maxlength="13" required>
-								<div class="invalid-feedback">请输入联系方式</div>
-							</div>
-
-						</div>
-						<div class="form-group">
-							<label for="teamId" class="col-form-label">选择球队</label> <select
-								class="form-control" id="teamId" name="teamId">
-
-							</select>
-						</div>
-					</form>
-				</div>
-				<div id="errMsg"></div>
-				<div class="modal-footer">
-
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" id="submitData">确定</button>
-				</div>
-			</div>
 		</div>
 	</div>
 
-	<div class="modal fade" id="errModal" tabindex="-1" role="dialog"
-		aria-labelledby="logoutModalLabel" aria-hidden="true">
+	<div class="table-responsive">
+		<table class="table  table-hover table-bordered table-sm" id="datalist">
+			<thead>
+				<tr id="cboxhead">
+					<th>比赛编号</th>
+					<th>比赛日期</th>
+					<th>主队</th>
+					<th>客队</th>
+					<th>所属赛事</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(item, index) in datalist" v-if="datalist.length!=0">
+					<td>{{item.gameId}}</td>
+					<td>({{item.gameDate).substring(0, 16)}}</td>
+					<td>{{item.teamHome}}</td>
+					<td>{{item.teamAway}}</td>
+					<td>{{item.cupName}}</td>
+				</tr>
+			</tbody>
+
+
+		</table>
+		<nav aria-label="
+		 Page navigation" id="page">
+			<div class="input-group" style="width: 100px; float: right;">
+				<input type="number" class="form-control " min="1" value="1" id="pageIndexInput">
+				<div class="input-group-append">
+					<span class="input-group-text">页</span>
+				</div>
+			</div>
+			<ul class="pagination justify-content-center" id="pageList">
+
+			</ul>
+		</nav>
+	</div>
+
+	</div>
+
+	<div class="modal fade" id="errModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -175,43 +103,21 @@
 				<div class="modal-footer"></div>
 			</div>
 		</div>
-	</div>
-
-	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
-		aria-labelledby="logoutModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="deleteModalLabel">确定删除？</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">你确定要删除此条记录?此操作不可逆转。</div>
-				<div id="delMsg"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" id="deleteObj">确认删除</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
 
 
-
-
-
-	<!-- Bootstrap core JavaScript
+		<!-- Bootstrap core JavaScript
     ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://lib.baomitu.com/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
-	<script src="/FootballSystem/resources/js/pageUtils.js"></script>
-	<script src="/FootballSystem/resources/js/admin/game2.js"></script>
-	<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
+		<!-- Placed at the end of the document so the pages load faster -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://lib.baomitu.com/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="/FootballSystem/resources/js/pageUtils.js"></script>
+		<script src="/FootballSystem/resources/js/tableutil.js"></script>
+		<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
+		<script src="/FootballSystem/resources/js/admin/game2.js"></script>
 </body>
+
 </html>

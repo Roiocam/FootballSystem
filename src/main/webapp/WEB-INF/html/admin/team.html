@@ -67,7 +67,7 @@ td {
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(item, index) in datalist">
+					<tr v-for="(item, index) in datalist" v-if="datalist.length!=0">
 						<td colspan="1">
 							<div class="custom-control custom-checkbox">
 								<input type="checkbox" class="custom-control-input cboxlist" :id="'checkbox'+index" :value="item.teamId">
@@ -240,7 +240,7 @@ td {
 	<script src="/FootballSystem/resources/js/loadingUtils.js"></script>
 	<script src="/FootballSystem/resources/js/pageUtils.js"></script>
 	<script src="/FootballSystem/resources/js/admin/team.js"></script>
-	
+
 	<script src="/FootballSystem/resources/js/tableutil.js"></script>
 </body>
 

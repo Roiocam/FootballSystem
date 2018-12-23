@@ -88,7 +88,7 @@ public class CupServiceController {
 			}
 			return ModelMapUtil.getSuccessMap("删除赛事成功");
 		} catch (Exception e) {
-			return ModelMapUtil.getErrorMap("删除赛事时出现异常，数据库错误."+e.getMessage());
+			return ModelMapUtil.getErrorMap("删除赛事时出现异常，数据库错误." + e.getMessage());
 		}
 
 	}
@@ -143,13 +143,23 @@ public class CupServiceController {
 			return ModelMapUtil.getErrorMap("安排赛程失败!" + e.getMessage());
 		}
 	}
+
 	@PostMapping("/removeGroupByCup")
 	public Map<String, Object> removeGroupByCup(HttpServletRequest request) {
 		String cupId = HttpServletRequestUtil.getString(request, "cupId");
 		if (ParamUtils.emptyString(cupId)) {
 			return ModelMapUtil.getErrorMap("请选择赛事!");
 		}
-		//编写删除赛程逻辑
-		return ModelMapUtil.getSuccessMap("删除分组及赛程安排成功");
+		// 编写删除赛程逻辑
+
+		try {
+			BaseExcution<Game> removeGroupByCup = gameService.removeGroupByCup(cupId);
+			if (ResultUtil.failResult(removeGroupByCup)) {
+				return ModelMapUtil.getErrorMap("删除赛程失败!" + removeGroupByCup.getStateInfo());
+			}
+			return ModelMapUtil.getSuccessMap("删除赛程分组和安排成功");
+		} catch (Exception e) {
+			return ModelMapUtil.getErrorMap("删除赛程分组和安排失败!" + e.getMessage());
+		}
 	}
 }

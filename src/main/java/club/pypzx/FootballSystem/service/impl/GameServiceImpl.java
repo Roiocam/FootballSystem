@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import club.pypzx.FootballSystem.dao.CupMapper;
 import club.pypzx.FootballSystem.dao.GameMapper;
 import club.pypzx.FootballSystem.dao.GroupMapper;
 import club.pypzx.FootballSystem.dto.BaseExcution;
@@ -28,6 +29,8 @@ public class GameServiceImpl implements GameService {
 	private GroupMapper groupMapper;
 	@Autowired
 	private GameMapper mapper;
+	@Autowired
+	private CupMapper cupMapper;
 
 	@Override
 	public BaseExcution<Game> insertObj(Game obj) {
@@ -89,6 +92,22 @@ public class GameServiceImpl implements GameService {
 	@Deprecated
 	public BaseExcution<Game> deleteObjectList(List<String> list) throws Exception {
 		return null;
+	}
+
+	@Override
+	@Transactional
+	public BaseExcution<Game> removeGroupByCup(String cupId) throws Exception {
+		Game record = new Game();
+		record.setCupId(cupId);
+		Group group = new Group();
+		group.setCupId(cupId);
+		if (0 == mapper.delete(record) || 0 == groupMapper.delete(group)) {
+			throw new RuntimeException("删除赛程表和分组时出错");
+		}
+		if (1 != cupMapper.updateCupNotGroup(cupId)) {
+			throw new Exception("更新赛事分组状态失败");
+		}
+		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override

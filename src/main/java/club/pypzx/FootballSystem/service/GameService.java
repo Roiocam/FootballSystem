@@ -8,5 +8,6 @@ public interface GameService extends BaseService<Game> {
 
 	BaseExcution<Game> randomGameByGroup(String cupId) throws Exception;
 	BaseExcution<GameVo> queryAll(String cupId,int pageIndex, int pageSize);
+	BaseExcution<Game> removeGroupByCup(String cupId) throws Exception;
 
 }
