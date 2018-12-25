@@ -17,13 +17,16 @@ import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.KickDay;
 import club.pypzx.FootballSystem.entity.Player;
 import club.pypzx.FootballSystem.entity.Team;
+import club.pypzx.FootballSystem.entity.WechatAccount;
 import club.pypzx.FootballSystem.enums.BaseStateEnum;
 import club.pypzx.FootballSystem.service.KickDayService;
 import club.pypzx.FootballSystem.service.PlayerService;
 import club.pypzx.FootballSystem.service.TeamService;
+import club.pypzx.FootballSystem.service.WechatAccountService;
 import club.pypzx.FootballSystem.utils.HttpServletRequestUtil;
 import club.pypzx.FootballSystem.utils.ModelMapUtil;
 import club.pypzx.FootballSystem.utils.ParamUtils;
+import club.pypzx.FootballSystem.utils.ResultUtil;
 
 @Controller
 @RequestMapping(value = "app/service")
@@ -35,6 +38,8 @@ public class AppServiceController {
 	private PlayerService playerService;
 	@Autowired
 	private TeamService teamService;
+	@Autowired
+	private WechatAccountService wechatService;
 
 	@RequestMapping(value = "plusKick", method = RequestMethod.POST)
 	@ResponseBody
@@ -81,6 +86,7 @@ public class AppServiceController {
 	public Map<String, Object> addPlayers(HttpServletRequest request) {
 		String vaildCode = HttpServletRequestUtil.getString(request, "vaildCode");
 		String teamId = HttpServletRequestUtil.getString(request, "teamId");
+		String openid = HttpServletRequestUtil.getString(request, "openid");
 		if (ParamUtils.emptyString(vaildCode) || ParamUtils.emptyString(teamId)) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
@@ -103,10 +109,14 @@ public class AppServiceController {
 			if (insertObj.getState() != BaseStateEnum.SUCCESS.getState()) {
 				return ModelMapUtil.getErrorMap("加入球队失败：" + insertObj.getStateInfo());
 			}
-			if (insertObj.getObj() != null) {
-				request.getSession().setAttribute("signed", insertObj.getObj().getPlayerId());
+			String playerId = insertObj.getObj().getPlayerId();
+			request.getSession().setAttribute("signed", playerId);
+			if (ParamUtils.validString(openid)) {
+				WechatAccount wechat = new WechatAccount();
+				wechat.setOpenid(openid);
+				wechat.setPlayerId(playerId);
+				wechatService.insertObj(wechat);
 			}
-
 			return ModelMapUtil.getSuccessMap("新增成功");
 		} catch (Exception e) {
 			return ModelMapUtil.getErrorMap("加入球队错误，重复学号");
@@ -116,6 +126,8 @@ public class AppServiceController {
 	@PostMapping("/createTeam")
 	@ResponseBody
 	public Map<String, Object> createTeam(HttpServletRequest request) {
+		String openid = HttpServletRequestUtil.getString(request, "openid");
+
 		String cupId = HttpServletRequestUtil.getString(request, "cupId");
 		String vaildCode = HttpServletRequestUtil.getString(request, "vaildCode");
 		String teamName = HttpServletRequestUtil.getString(request, "teamName");
@@ -136,17 +148,52 @@ public class AppServiceController {
 		try {
 			BaseExcution<Team> createTeamAddPlayer = teamService.createTeamAddPlayer(cupId, teamName, vaildCode,
 					teamDesc, playerName, playerNum, stuno, depart, tel);
-			request.getSession().setAttribute("created", createTeamAddPlayer.getObj().getTeamId());
+			String teamId = createTeamAddPlayer.getObj().getTeamId();
+			request.getSession().setAttribute("created", teamId);
+			if (ParamUtils.validString(openid)) {
+				WechatAccount wechat = new WechatAccount();
+				wechat.setOpenid(openid);
+				wechat.setTeamId(teamId);
+				wechatService.insertObj(wechat);
+			}
 			return ModelMapUtil.getSuccessMap("创建球队成功");
 		} catch (Exception e) {
 			return ModelMapUtil.getErrorMap("创建球队失败;" + e.getMessage());
 		}
 	}
 
+	@PostMapping("/getByOpenid")
+	@ResponseBody
+	public Map<String, Object> getByOpenid(HttpServletRequest request) {
+		String openid = HttpServletRequestUtil.getString(request, "openid");
+		BaseExcution<WechatAccount> queryObjOneByPrimaryKey = null;
+		if (ParamUtils.emptyString(openid)) {
+			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:a]");
+		}
+		queryObjOneByPrimaryKey = wechatService.queryObjOneByPrimaryKey(openid);
+		if (ResultUtil.failResult(queryObjOneByPrimaryKey)) {
+			return ModelMapUtil.getErrorMap("该微信用户下无创建信息");
+		}
+		String teamId = queryObjOneByPrimaryKey.getObj().getTeamId();
+		if (teamId != null && teamId != "") {
+			BaseExcution<Team> queryObjOne = teamService.queryObjOne(new Team(teamId));
+			BaseExcution<PlayerVo> playerDto = playerService.selectByPrimary(queryObjOne.getObj().getLeaderId());
+			return ModelMapUtil.getSuccessMapWithDuals("查询成功", queryObjOne.getObj(), playerDto.getObj());
+		}
+		String playerId = queryObjOneByPrimaryKey.getObj().getPlayerId();
+		if (playerId != null && playerId != "") {
+			BaseExcution<PlayerVo> selectByPrimary = playerService.selectByPrimary(playerId);
+			return ModelMapUtil.getSuccessMapWithObject("查询成功", selectByPrimary.getObj());
+		}
+		return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:b]");
+
+	}
+
 	@PostMapping("/getSigned")
 	@ResponseBody
 	public Map<String, Object> getSigned(HttpServletRequest request) {
 		String playerId = (String) request.getSession().getAttribute("signed");
+
 		if (ParamUtils.emptyString(playerId)) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:a]");
 		}
@@ -155,7 +202,6 @@ public class AppServiceController {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:b]");
 		}
 		return ModelMapUtil.getSuccessMapWithObject("查询成功", selectByPrimary.getObj());
-
 	}
 
 	@PostMapping("/getCreated")
