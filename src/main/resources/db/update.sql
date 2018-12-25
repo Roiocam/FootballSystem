@@ -34,3 +34,8 @@ CREATE TABLE `pypzx_wechat_account` (
 ALTER TABLE `pypzx_cup` 
 CHANGE COLUMN `cup_name` `cup_name` VARCHAR(64) NOT NULL ,
 ADD COLUMN `is_group` TINYINT(4) NOT NULL DEFAULT '0' AFTER `cup_name`;
+
+
+ALTER TABLE `pypzx_wechat_account` 
+ADD COLUMN `team_id` VARCHAR(32) NULL AFTER `img`,
+ADD COLUMN `player_id` VARCHAR(32) NULL AFTER `team_id`;
