@@ -11,6 +11,7 @@ var app = new Vue(
 		el: '#app',
 		data: {
 			datalist: [],
+			cuplist:[],
 			message: '',
 			err: false,
 			messageShow: false,
