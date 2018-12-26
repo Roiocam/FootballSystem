@@ -103,7 +103,7 @@ $(function () {
 				var playerStuno = $('#playerStuno').val();
 				var playerDepart = $('#playerDepart').val();
 				var playerTel = $('#playerTel').val();
-				if (playerStuno.length != 10 || playerStuno.length != 11) {
+				if (playerStuno.length != 10 && playerStuno.length != 11) {
 					app.message = '请正确输入学号，纯数字10或11位';
 					app.err = true;
 					app.messageShow = true;
