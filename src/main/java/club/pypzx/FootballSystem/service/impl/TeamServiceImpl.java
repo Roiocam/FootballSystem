@@ -94,8 +94,9 @@ public class TeamServiceImpl implements TeamService {
 	public BaseExcution<Team> createTeam(String cupId, String teamName, String vaildCode, String teamDesc) {
 		Team packageTeam;
 		packageTeam = packageTeam(cupId, teamName, vaildCode, teamDesc);
-		if (ResultUtil.failResult(insertObj(packageTeam))) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		BaseExcution<Team> insertObj = insertObj(packageTeam);
+		if (ResultUtil.failResult(insertObj)) {
+			return insertObj;
 		}
 		return new BaseExcution<Team>(BaseStateEnum.SUCCESS, packageTeam);
 
@@ -221,17 +222,17 @@ public class TeamServiceImpl implements TeamService {
 			throws Exception {
 		BaseExcution<Team> createTeam = createTeam(cupId, teamName, vaildCode, teamDesc);
 		if (ResultUtil.failResult(createTeam)) {
-			throw new RuntimeException("创建球队异常：" + createTeam.getStateInfo());
+			throw new RuntimeException("创建球队失败：" + createTeam.getStateInfo());
 		}
 		BaseExcution<Player> insertObj = playerService.insertObject(createTeam.getObj().getTeamId(), playerName,
 				playerNum, playerStuno, playerDepart, playerTel);
 		if (ResultUtil.failResult(insertObj)) {
-			throw new RuntimeException("创建球员异常" + insertObj.getStateInfo());
+			throw new RuntimeException("创建球员失败" + insertObj.getStateInfo());
 		}
 		BaseExcution<Team> updateTeamLeader = updateTeamLeader(createTeam.getObj().getTeamId(),
 				insertObj.getObj().getPlayerId());
 		if (ResultUtil.failResult(updateTeamLeader)) {
-			throw new RuntimeException("更新队长异常" + updateTeamLeader.getStateInfo());
+			throw new RuntimeException("更新队长失败" + updateTeamLeader.getStateInfo());
 		}
 		return createTeam;
 	}

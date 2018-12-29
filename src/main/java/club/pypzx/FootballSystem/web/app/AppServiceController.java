@@ -158,7 +158,7 @@ public class AppServiceController {
 			}
 			return ModelMapUtil.getSuccessMap("创建球队成功");
 		} catch (Exception e) {
-			return ModelMapUtil.getErrorMap("创建球队失败;" + e.getMessage());
+			return ModelMapUtil.getErrorMap("异常" + e.getMessage());
 		}
 	}
 

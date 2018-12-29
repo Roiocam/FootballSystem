@@ -21,7 +21,13 @@ public class WxchatAccountServiceImpl implements WechatAccountService {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.insert(obj)) {
+		int count = 0;
+		if (mapper.selectByPrimary(obj.getOpenid()) != null) {
+			count = mapper.updateByPrimaryKeySelective(obj);
+		} else {
+			count = mapper.insert(obj);
+		}
+		if (1 != count) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
@@ -35,7 +41,7 @@ public class WxchatAccountServiceImpl implements WechatAccountService {
 
 	@Override
 	public BaseExcution<WechatAccount> queryObjOneByPrimaryKey(String objId) {
-		WechatAccount selectByPrimaryKey = mapper.selectByPrimaryKey(objId);
+		WechatAccount selectByPrimaryKey = mapper.selectByPrimary(objId);
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<WechatAccount>(BaseStateEnum.QUERY_ERROR);
 		}

@@ -13,4 +13,10 @@
 			property="playerId" />
 		<result column="team_id" jdbcType="VARCHAR" property="teamId" />
 	</resultMap>
+	<select id="selectByPrimary" resultMap="BaseResultMap">
+		SELECT * FROM
+		pypzx_wechat_account
+		WHERE
+		openid=#{value} LIMIT 1
+	</select>
 </mapper>
