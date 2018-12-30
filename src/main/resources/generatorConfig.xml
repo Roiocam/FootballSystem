@@ -7,7 +7,7 @@
 		<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
 			<!-- value为公用mapper接口 -->
 			<property name="mappers"
-				value="club.pypzx.FootballSystem.config.dao.BaseMapper" />
+				value="club.pypzx.FootballSystem.template.BaseMapper" />
 		</plugin>
 		<!-- 连接字符串 -->
 		<jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
@@ -28,7 +28,7 @@
 		</sqlMapGenerator>
 		<!-- 生成mybatis接口的位置,修改targetPackage为接口包位置 -->
 		<javaClientGenerator
-			targetPackage="club.pypzx.FootballSystem.dao"
+			targetPackage="club.pypzx.FootballSystem.dao.mybatis"
 			targetProject="src/main/java" type="XMLMAPPER">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
@@ -83,6 +83,13 @@
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<generatedKey column="openid" sqlStatement="Mysql"
+				identity="false" />
+		</table>
+		<table tableName="pypzx_user" domainObjectName="User"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<generatedKey column="username" sqlStatement="Mysql"
 				identity="false" />
 		</table>
 	</context>

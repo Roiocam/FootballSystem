@@ -6,7 +6,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import club.pypzx.FootballSystem.dao.GroupMapper;
+import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.service.GroupService;
 import club.pypzx.FootballSystem.template.BaseExcution;

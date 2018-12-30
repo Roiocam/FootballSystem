@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import club.pypzx.FootballSystem.dao.KickDayDao;
+import club.pypzx.FootballSystem.dao.mybatis.KickDayDao;
 import club.pypzx.FootballSystem.entity.KickDay;
 import club.pypzx.FootballSystem.service.KickDayService;
 import club.pypzx.FootballSystem.template.BaseExcution;

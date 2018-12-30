@@ -1,7 +1,7 @@
 package club.pypzx.FootballSystem.entity;
 
 import javax.persistence.*;
-
+@Entity
 @Table(name = "pypzx_player_info")
 public class PlayerInfo {
 	@Id

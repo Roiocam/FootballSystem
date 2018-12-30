@@ -20,7 +20,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @date 2018年12月30日 下午2:36:36
  */
 @Configuration
-@MapperScan("club.pypzx.FootballSystem.dao") // 配置mybatis的mapper的扫描路径
+@MapperScan("club.pypzx.FootballSystem.dao.mybatis") // 配置mybatis的mapper的扫描路径
 public class DataSourceConfiguration {
 
 	/**

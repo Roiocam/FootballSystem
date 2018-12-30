@@ -2,9 +2,13 @@ package club.pypzx.FootballSystem.entity;
 
 import javax.persistence.*;
 
+import org.springframework.data.annotation.Id;
+@Entity
 @Table(name = "pypzx_wechat_account")
 public class WechatAccount {
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+	@Id
+	@Column(name = "openid")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String openid;
 
 	@Column(name = "nick_name")

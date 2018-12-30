@@ -2,9 +2,10 @@ package club.pypzx.FootballSystem.entity;
 
 import java.util.Date;
 import javax.persistence.*;
-
+@Entity
 @Table(name = "pypzx_game_record")
 public class GameRecord {
+	@Id
     @Column(name = "game_id")
     private String gameId;
 

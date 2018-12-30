@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import club.pypzx.FootballSystem.dao.PlayerInfoMapper;
-import club.pypzx.FootballSystem.dao.PlayerMapper;
-import club.pypzx.FootballSystem.dao.PlayerRankMapper;
-import club.pypzx.FootballSystem.dao.TeamMapper;
+import club.pypzx.FootballSystem.dao.mybatis.PlayerInfoMapper;
+import club.pypzx.FootballSystem.dao.mybatis.PlayerMapper;
+import club.pypzx.FootballSystem.dao.mybatis.PlayerRankMapper;
+import club.pypzx.FootballSystem.dao.mybatis.TeamMapper;
 import club.pypzx.FootballSystem.dto.PlayerVo;
 import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.Player;

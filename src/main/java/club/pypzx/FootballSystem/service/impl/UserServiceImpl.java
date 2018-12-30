@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import club.pypzx.FootballSystem.dao.UserDao;
+import club.pypzx.FootballSystem.dao.mybatis.UserMapper;
 import club.pypzx.FootballSystem.dto.UserExcution;
 import club.pypzx.FootballSystem.entity.User;
 import club.pypzx.FootballSystem.enums.UserStateEnum;
@@ -20,7 +20,7 @@ import club.pypzx.FootballSystem.utils.ParamUtils;
 public class UserServiceImpl implements UserService {
 	private static final String EMPTY_STRING = "";
 	@Autowired
-	private UserDao userDao;
+	private UserMapper userDao;
 
 	@Override
 	@Transactional

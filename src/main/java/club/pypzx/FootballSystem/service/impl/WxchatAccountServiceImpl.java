@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import club.pypzx.FootballSystem.dao.WechatAccountMapper;
+import club.pypzx.FootballSystem.dao.mybatis.WechatAccountMapper;
 import club.pypzx.FootballSystem.entity.WechatAccount;
 import club.pypzx.FootballSystem.service.WechatAccountService;
 import club.pypzx.FootballSystem.template.BaseExcution;
