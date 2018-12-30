@@ -29,28 +29,32 @@ public class DataSourceConfiguration {
 	 * @return 数据源
 	 */
 	@Bean(name = "dataSource")
-		ComboPooledDataSource dataSource = new ComboPooledDataSource();
-		// 和spring-dao一样做相同配置
-		dataSource.setDriverClass(jdbcDriver);
-		dataSource.setJdbcUrl(jdbcUrl);
-		dataSource.setUser(DESUtil.getDecryptString(jdbcUsername));
-		dataSource.setPassword(DESUtil.getDecryptString(jdbcPassword));
-		// !--每6个小时检查所有连接池中的空闲连接，这个值一定要小于MySQL的wait_timeout时间，默认为8小时。默认0 -->
-		dataSource.setIdleConnectionTestPeriod(21600);
-		// <!-- c3p0连接池的私有属性 -->
-		dataSource.setMaxPoolSize(10);
-		dataSource.setMinPoolSize(5);
-		dataSource.setMaxIdleTime(21600);
-		// <!-- 关闭连接后不自动commit -->
-		dataSource.setAutoCommitOnClose(false);
-		// <!-- 获取连接超时时间 -->
-		dataSource.setCheckoutTimeout(10000);
-		// <!-- 获取连接失败后重试次数 -->
-		dataSource.setAcquireRetryAttempts(2);
-		return dataSource;
+	@ConfigurationProperties(prefix = "spring.datasource")
+	public DataSource getDataSource() {
+		/*
+		 * Spring Boot还提供了一个名为的实用程序构建器类，DataSourceBuilder可用于创建其中一个标准数据源（如果它位于类路径中）。
+		 * 构建器可以根据类路径上的可用内容检测要使用的那个。它还会根据JDBC URL自动检测驱动程序。
+		 * 
+		 * @Bean
+		 * 
+		 * @ConfigurationProperties("app.datasource") public DataSource dataSource() {
+		 * return DataSourceBuilder.create().build(); }
+		 * 
+		 * Spring boot
+		 * 文档:https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/htmlsingle
+		 * /#howto-configure-a-datasource 另有其他两种方式，在本文件夹的Markdown文件中
+		 */
+		DataSourceBuilder builder = DataSourceBuilder.create();
+		builder.type(DynamicDataSource.class);
+		// 使用Spring
+		// Boot自动生成一个dataSource对象(已写好的参数为url,username,password,driver-class-name)
+
 		return builder.build();
 	}
 
+	/**
+	 * 创建会话工厂。
+	 * 
 	 * @param dataSource 数据源
 	 * @return 会话工厂
 	 */
