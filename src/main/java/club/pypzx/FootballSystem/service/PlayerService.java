@@ -1,8 +1,9 @@
 package club.pypzx.FootballSystem.service;
 
-import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.PlayerVo;
 import club.pypzx.FootballSystem.entity.Player;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseService;
 
 public interface PlayerService extends BaseService<Player>{
 	public  Player packagePlayer(String teamId, String name, int num) throws Exception;

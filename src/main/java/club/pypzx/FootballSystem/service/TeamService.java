@@ -1,10 +1,11 @@
 package club.pypzx.FootballSystem.service;
 
-import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.GroupVo;
 import club.pypzx.FootballSystem.dto.TeamPrint;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Team;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseService;
 
 public interface TeamService extends BaseService<Team> {
 	public Team packageTeam(String cupId, String name, String code, String desc) throws Exception;

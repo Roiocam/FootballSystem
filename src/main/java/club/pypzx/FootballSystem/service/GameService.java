@@ -1,8 +1,9 @@
 package club.pypzx.FootballSystem.service;
 
-import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.GameVo;
 import club.pypzx.FootballSystem.entity.Game;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseService;
 
 public interface GameService extends BaseService<Game> {
 

@@ -1,8 +1,6 @@
-package club.pypzx.FootballSystem.service;
+package club.pypzx.FootballSystem.template;
 
 import java.util.List;
-
-import club.pypzx.FootballSystem.dto.BaseExcution;
 
 public interface BaseService<T> {
 	public BaseExcution<T> insertObj(T obj);

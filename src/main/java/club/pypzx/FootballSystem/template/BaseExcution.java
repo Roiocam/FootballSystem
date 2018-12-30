@@ -1,8 +1,6 @@
-package club.pypzx.FootballSystem.dto;
+package club.pypzx.FootballSystem.template;
 
 import java.util.List;
-
-import club.pypzx.FootballSystem.enums.BaseStateEnum;
 
 public class BaseExcution<T> {
 	// 结果状态

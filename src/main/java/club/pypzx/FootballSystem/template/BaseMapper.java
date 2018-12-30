@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.config.dao;
+package club.pypzx.FootballSystem.template;
 
 
 import tk.mybatis.mapper.common.Mapper;

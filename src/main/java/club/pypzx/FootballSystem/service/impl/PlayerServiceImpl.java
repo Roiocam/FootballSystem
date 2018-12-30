@@ -12,15 +12,15 @@ import club.pypzx.FootballSystem.dao.PlayerInfoMapper;
 import club.pypzx.FootballSystem.dao.PlayerMapper;
 import club.pypzx.FootballSystem.dao.PlayerRankMapper;
 import club.pypzx.FootballSystem.dao.TeamMapper;
-import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.PlayerVo;
 import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.Player;
 import club.pypzx.FootballSystem.entity.PlayerInfo;
 import club.pypzx.FootballSystem.entity.PlayerRank;
 import club.pypzx.FootballSystem.entity.Team;
-import club.pypzx.FootballSystem.enums.BaseStateEnum;
 import club.pypzx.FootballSystem.service.PlayerService;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.IDUtils;
 import club.pypzx.FootballSystem.utils.ParamUtils;
 

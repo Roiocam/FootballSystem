@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import club.pypzx.FootballSystem.interceptor.DataSourceInterceptor;
 import club.pypzx.FootballSystem.interceptor.LoginInterceptor;
 
 /**
@@ -24,8 +25,7 @@ import club.pypzx.FootballSystem.interceptor.LoginInterceptor;
  *
  */
 @Configuration
-public class MvcConfiguration extends WebMvcConfigurationSupport
-		implements ApplicationContextAware {
+public class MvcConfiguration extends WebMvcConfigurationSupport implements ApplicationContextAware {
 	private ApplicationContext applicationContext;
 
 	@Override
@@ -77,15 +77,20 @@ public class MvcConfiguration extends WebMvcConfigurationSupport
 		loginIR.excludePathPatterns("/admin/view/login");
 		loginIR.excludePathPatterns("/admin/service/logout");
 		loginIR.excludePathPatterns("/admin/service/loginCheck");
-
+		String adminServicePath = "/admin/service/**";
+		String appServicePath = "/app/service/**";
+		// 注册拦截器
+		InterceptorRegistration dataSourceInterceptor = registry.addInterceptor(new DataSourceInterceptor());
+		// 配置拦截路径
+		dataSourceInterceptor.addPathPatterns(adminServicePath);
+		dataSourceInterceptor.addPathPatterns(appServicePath);
 	}
+
 	@Override
 	protected void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("forward:/index");
-        super.addViewControllers(registry);
+		super.addViewControllers(registry);
 
 	}
-	
-
 
 }

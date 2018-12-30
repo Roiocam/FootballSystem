@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import club.pypzx.FootballSystem.dao.CupMapper;
 import club.pypzx.FootballSystem.dao.GameMapper;
 import club.pypzx.FootballSystem.dao.GroupMapper;
-import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.GameVo;
 import club.pypzx.FootballSystem.entity.Game;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.entity.Page;
-import club.pypzx.FootballSystem.enums.BaseStateEnum;
 import club.pypzx.FootballSystem.service.GameService;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.GameDayUtils;
 import club.pypzx.FootballSystem.utils.IDUtils;
 

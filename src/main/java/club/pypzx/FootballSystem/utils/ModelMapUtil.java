@@ -3,8 +3,8 @@ package club.pypzx.FootballSystem.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import club.pypzx.FootballSystem.dto.BaseExcution;
-import club.pypzx.FootballSystem.enums.BaseStateEnum;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseStateEnum;
 
 public class ModelMapUtil {
 	public static Map<String, Object> getErrorMap(String message) {

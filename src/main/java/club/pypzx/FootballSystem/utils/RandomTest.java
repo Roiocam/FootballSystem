@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.enums.GroupEnum;
+import club.pypzx.FootballSystem.template.BaseExcution;
 
 /**
  * 测试生成4位随机数方法最优性能

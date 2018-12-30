@@ -1,7 +1,7 @@
 package club.pypzx.FootballSystem.utils;
 
-import club.pypzx.FootballSystem.dto.BaseExcution;
-import club.pypzx.FootballSystem.enums.BaseStateEnum;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseStateEnum;
 
 public class ResultUtil {
 	public static <T> boolean failResult(BaseExcution<T> obj) {

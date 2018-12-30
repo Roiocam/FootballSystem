@@ -10,13 +10,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import club.pypzx.FootballSystem.dto.BaseExcution;
+import club.pypzx.FootballSystem.datasource.DBIdentifier;
 import club.pypzx.FootballSystem.entity.Cup;
 import club.pypzx.FootballSystem.entity.Game;
 import club.pypzx.FootballSystem.service.CupService;
 import club.pypzx.FootballSystem.service.GameService;
+import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.utils.HttpServletRequestUtil;
 import club.pypzx.FootballSystem.utils.ModelMapUtil;
 import club.pypzx.FootballSystem.utils.ParamUtils;
@@ -33,6 +35,7 @@ public class CupServiceController {
 
 	@PostMapping("/getCups")
 	public Map<String, Object> getCups(HttpServletRequest request) {
+		
 		int pageIndex = HttpServletRequestUtil.getInt(request, "pageIndex");
 		int pageSize = HttpServletRequestUtil.getInt(request, "pageSize");
 		BaseExcution<Cup> queryAll = service.queryAll(pageIndex, pageSize);

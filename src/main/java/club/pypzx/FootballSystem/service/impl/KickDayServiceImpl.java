@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import club.pypzx.FootballSystem.dao.KickDayDao;
-import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.entity.KickDay;
-import club.pypzx.FootballSystem.enums.BaseStateEnum;
 import club.pypzx.FootballSystem.service.KickDayService;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseStateEnum;
 
 @Service
 public class KickDayServiceImpl implements KickDayService {

@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.enums;
+package club.pypzx.FootballSystem.template;
 
 public enum BaseStateEnum {
 	SUCCESS(0, "操作成功"), INNER_ERROR(-1004, "新增失败"), EMPTY(-1001, "存在必填项未填写,对象为空!"), QUERY_ERROR(-1003, "查询失败"),

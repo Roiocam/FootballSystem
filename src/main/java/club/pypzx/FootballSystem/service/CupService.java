@@ -1,7 +1,8 @@
 package club.pypzx.FootballSystem.service;
 
-import club.pypzx.FootballSystem.dto.BaseExcution;
 import club.pypzx.FootballSystem.entity.Cup;
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseService;
 
 public interface CupService extends BaseService<Cup> {
 	public Cup packageCup(String name);
