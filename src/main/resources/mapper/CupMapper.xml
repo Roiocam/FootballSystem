@@ -17,8 +17,8 @@
 
 	</update>
 	<update id="updateCupNotGroup">
-		UPDATE pypzx_cup SET is_group = 0
-		WHERE cup_id=#{value}
+		UPDATE pypzx_cup SET is_group = 0 WHERE cup_id=#{value}
+		
 
 	</update>
 </mapper>

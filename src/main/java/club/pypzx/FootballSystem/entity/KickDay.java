@@ -2,9 +2,8 @@ package club.pypzx.FootballSystem.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 
 /**
  *   每日踢球人数

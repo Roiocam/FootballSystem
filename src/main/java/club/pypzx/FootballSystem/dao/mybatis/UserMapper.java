@@ -5,9 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import club.pypzx.FootballSystem.entity.User;
-import club.pypzx.FootballSystem.template.BaseMapper;
 
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper  {
 	/**
 	 * 新增用户（注册）
 	 * 

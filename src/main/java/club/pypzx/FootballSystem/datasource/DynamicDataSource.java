@@ -1,15 +1,14 @@
 package club.pypzx.FootballSystem.datasource;
 
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.SQLException;
-
+import club.pypzx.FootballSystem.dbmgr.ProjectDBMgr;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
-import club.pypzx.FootballSystem.dbmgr.ProjectDBMgr;
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * 动态数据源派生类。从基础的DataSource派生,实现数据库连接的动态切换

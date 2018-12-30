@@ -18,7 +18,6 @@ public enum DecideEnum {
 	public String getValue() {
 		return value;
 	}
-
 	public static DecideEnum stringOf(int index) {
 		for (DecideEnum string : values()) {
 			if (string.getState() == index) {

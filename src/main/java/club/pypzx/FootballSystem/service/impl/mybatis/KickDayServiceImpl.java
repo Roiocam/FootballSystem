@@ -1,11 +1,11 @@
-package club.pypzx.FootballSystem.service.impl;
+package club.pypzx.FootballSystem.service.impl.mybatis;
 
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import club.pypzx.FootballSystem.dao.mybatis.KickDayDao;
+import club.pypzx.FootballSystem.dao.mybatis.KickDayMapper;
 import club.pypzx.FootballSystem.entity.KickDay;
 import club.pypzx.FootballSystem.service.KickDayService;
 import club.pypzx.FootballSystem.template.BaseExcution;
@@ -14,7 +14,7 @@ import club.pypzx.FootballSystem.template.BaseStateEnum;
 @Service
 public class KickDayServiceImpl implements KickDayService {
 	@Autowired
-	private KickDayDao kickDAO;
+	private KickDayMapper kickDAO;
 
 	@Override
 	public BaseExcution<KickDay> newDay() {

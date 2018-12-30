@@ -1,17 +1,16 @@
 package club.pypzx.FootballSystem.config.dao;
 
-import javax.sql.DataSource;
-
+import club.pypzx.FootballSystem.datasource.DynamicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import club.pypzx.FootballSystem.datasource.DynamicDataSource;
-import tk.mybatis.spring.annotation.MapperScan;
+import javax.sql.DataSource;
 
 /**
  * 数据源的配置管理
@@ -20,7 +19,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @date 2018年12月30日 下午2:36:36
  */
 @Configuration
-@MapperScan("club.pypzx.FootballSystem.dao.mybatis") // 配置mybatis的mapper的扫描路径
+@MapperScan("club.pypzx.FootballSystem.dao.mybatis") //配置mybatis的mapper的扫描路径
 public class DataSourceConfiguration {
 
 	/**

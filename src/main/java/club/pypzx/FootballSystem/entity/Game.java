@@ -7,7 +7,6 @@ import javax.persistence.*;
 public class Game {
     @Id
     @Column(name = "game_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String gameId;
 
     @Column(name = "game_date")

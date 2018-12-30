@@ -1,13 +1,4 @@
-package club.pypzx.FootballSystem.service.impl;
-
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+package club.pypzx.FootballSystem.service.impl.mybatis;
 
 import club.pypzx.FootballSystem.dao.mybatis.CupMapper;
 import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
@@ -25,6 +16,14 @@ import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.IDUtils;
 import club.pypzx.FootballSystem.utils.ResultUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class CupServiceImpl implements CupService {

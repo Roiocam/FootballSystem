@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.service.impl;
+package club.pypzx.FootballSystem.service.impl.mybatis;
 
 import java.util.Iterator;
 import java.util.List;

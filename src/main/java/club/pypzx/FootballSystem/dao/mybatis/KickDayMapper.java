@@ -8,7 +8,7 @@ import club.pypzx.FootballSystem.entity.KickDay;
  * @author Roiocam
  * @date 2018年9月15日 下午8:57:35
  */
-public interface KickDayDao {
+public interface KickDayMapper {
 	public KickDay queryKickToday();
 
 	public int insertKickDay(KickDay kickDay);

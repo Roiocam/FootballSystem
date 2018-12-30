@@ -1,12 +1,8 @@
 package club.pypzx.FootballSystem.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import org.springframework.data.annotation.Id;
+
 
 /**
  * 管理员类
@@ -19,7 +15,6 @@ import org.springframework.data.annotation.Id;
 public class User {
 	@Id
 	@Column(name = "username")
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String username;
 	
 	@Column(name = "password")
