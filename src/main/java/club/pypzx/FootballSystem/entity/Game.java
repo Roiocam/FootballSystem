@@ -1,11 +1,23 @@
 package club.pypzx.FootballSystem.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
+/**
+ *   
+ * @author Roiocam
+ * @date 2018年12月31日 下午4:57:29
+ */
 @Entity
 @Table(name = "pypzx_game")
-public class Game {
-    @Id
+public class Game implements Serializable{
+	
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6372492907950646175L;
+
+	@Id
     @Column(name = "game_id")
     private String gameId;
 

@@ -15,17 +15,17 @@ import javax.persistence.*;
 public class KickDay {
 	@Id
 	private Date date;
-	private int num;
+	private Integer num;
 	public Date getDate() {
 		return date;
 	}
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public int getNum() {
+	public Integer getNum() {
 		return num;
 	}
-	public void setNum(int num) {
+	public void setNum(Integer num) {
 		this.num = num;
 	}
 }

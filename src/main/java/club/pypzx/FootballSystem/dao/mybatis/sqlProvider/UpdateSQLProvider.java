@@ -1,25 +1,14 @@
 package club.pypzx.FootballSystem.dao.mybatis.sqlProvider;
 
-import java.lang.reflect.Field;
-
-import org.apache.ibatis.jdbc.SQL;
-
-import club.pypzx.FootballSystem.entity.Cup;
-import club.pypzx.FootballSystem.entity.Game;
-import club.pypzx.FootballSystem.entity.GameRecord;
-import club.pypzx.FootballSystem.entity.Group;
-import club.pypzx.FootballSystem.entity.KickDay;
-import club.pypzx.FootballSystem.entity.Player;
-import club.pypzx.FootballSystem.entity.PlayerInfo;
-import club.pypzx.FootballSystem.entity.PlayerRank;
-import club.pypzx.FootballSystem.entity.Team;
-import club.pypzx.FootballSystem.entity.User;
-import club.pypzx.FootballSystem.entity.WechatAccount;
+import club.pypzx.FootballSystem.entity.*;
 import club.pypzx.FootballSystem.enums.TableEnum;
 import club.pypzx.FootballSystem.utils.StringUtil;
+import org.apache.ibatis.jdbc.SQL;
+
+import java.lang.reflect.Field;
 
 /**
- * 更新SQL生成器
+ * 更新SQL语句构建器类
  * 
  * @author Roiocam
  * @date 2018年12月31日 上午3:08:03

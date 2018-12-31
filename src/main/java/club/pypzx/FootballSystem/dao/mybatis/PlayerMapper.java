@@ -2,33 +2,25 @@ package club.pypzx.FootballSystem.dao.mybatis;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.session.RowBounds;
 
+import club.pypzx.FootballSystem.dao.mybatis.sqlProvider.SelectSQLProvider;
 import club.pypzx.FootballSystem.dto.PlayerVo;
-import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.Player;
+import club.pypzx.FootballSystem.template.BaseMapper;
 
-public interface PlayerMapper {
-	public List<PlayerVo> selectAllByPage(@Param("example") Player example, @Param("page") Page page);
+public interface PlayerMapper extends BaseMapper<Player> {
+	@Results({ @Result(column = "player_id", property = "playerId"),
+			@Result(column = "player_name", property = "playerName"),
+			@Result(column = "player_num", property = "playerNum"),
+			@Result(property = "info", column = "player_id", one = @One(select = "club.pypzx.FootballSystem.dao.mybatis.PlayerInfoMapper.selectPrimary")),
+			@Result(property = "team", column = "teamId", one = @One(select = "club.pypzx.FootballSystem.dao.mybatis.TeamMapper.selectPrimary")) })
+	@SelectProvider(type = SelectSQLProvider.class, method = "selectRowBounds")
+	public List<PlayerVo> selectMoreRowBounds(Player example, RowBounds rowBounds);
 
-	public PlayerVo selectByPrimary(String playerId);
-
-	public int selectCountByPrimary(String playerId);
-
-	public int insert(Player obj);
-
-	public int delete(Player player);
-
-	public int updateByPrimaryKey(Player obj);
-
-	public Player selectByPrimaryKey(String objId);
-
-	public Player selectOne(Player obj);
-
-	public List<Player> selectByRowBounds(Object object, RowBounds rowBounds);
-
-	public int selectCount(Object object);
-
-	public List<Player> select(Player p);
+	
 }

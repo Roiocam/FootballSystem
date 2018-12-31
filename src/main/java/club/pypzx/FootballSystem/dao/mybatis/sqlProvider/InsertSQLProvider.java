@@ -8,7 +8,7 @@ import org.apache.ibatis.jdbc.SQL;
 import java.lang.reflect.Field;
 
 /**
- *   插入SQL语句生成器
+ *   插入SQL语句构建器类
  * @author Roiocam
  * @date 2018年12月31日 上午3:04:48
  */

@@ -1,6 +1,7 @@
 package club.pypzx.FootballSystem.entity;
 
 import javax.persistence.*;
+
 @Entity
 @Table(name = "pypzx_cup")
 public class Cup {
@@ -11,7 +12,7 @@ public class Cup {
 	@Column(name = "cup_name")
 	private String cupName;
 	@Column(name = "is_group")
-	private int isGroup;
+	private Integer isGroup;
 
 	public Cup() {
 
@@ -49,15 +50,12 @@ public class Cup {
 		this.cupName = cupName == null ? null : cupName.trim();
 	}
 
-	public int getIsGroup() {
+	public Integer getIsGroup() {
 		return isGroup;
 	}
 
-	public void setIsGroup(int isGroup) {
+	public void setIsGroup(Integer isGroup) {
 		this.isGroup = isGroup;
 	}
-
-	
-
 
 }

@@ -1,6 +1,7 @@
 package club.pypzx.FootballSystem.config.dao;
 
-import club.pypzx.FootballSystem.datasource.DynamicDataSource;
+import javax.sql.DataSource;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -10,7 +11,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
+import club.pypzx.FootballSystem.datasource.DynamicDataSource;
 
 /**
  * 数据源的配置管理
@@ -58,10 +59,10 @@ public class DataSourceConfiguration {
 	 * @return 会话工厂
 	 */
 	@Bean(name = "sqlSessionFactory")
-	public SqlSessionFactory getSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) {
+	public SqlSessionFactory getSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource,org.apache.ibatis.session.Configuration config) {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(dataSource);
-
+		bean.setConfiguration(config);
 		try {
 			return bean.getObject();
 		} catch (Exception e) {
@@ -69,26 +70,10 @@ public class DataSourceConfiguration {
 			return null;
 		}
 	}
-
-	/*
-	 * 原数据源配置
-	 * 
-	 * @Bean(name = "dataSource")
-	 * 
-	 * @Primary public ComboPooledDataSource createDataSourcepPrimary() throws
-	 * PropertyVetoException { // 生成dataSource实例 ComboPooledDataSource dataSource =
-	 * new ComboPooledDataSource(); // 和spring-dao一样做相同配置
-	 * dataSource.setDriverClass(primaryJdbcDriver);
-	 * dataSource.setJdbcUrl(primaryJdbcUrl);
-	 * dataSource.setUser(DESUtil.getDecryptString(primaryJdbcUsername));
-	 * dataSource.setPassword(DESUtil.getDecryptString(primaryJdbcPassword)); //
-	 * !--每6个小时检查所有连接池中的空闲连接，这个值一定要小于MySQL的wait_timeout时间，默认为8小时。默认0 -->
-	 * dataSource.setIdleConnectionTestPeriod(21600); // <!-- c3p0连接池的私有属性 -->
-	 * dataSource.setMaxPoolSize(10); dataSource.setMinPoolSize(5);
-	 * dataSource.setMaxIdleTime(21600); // <!-- 关闭连接后不自动commit -->
-	 * dataSource.setAutoCommitOnClose(false); // <!-- 获取连接超时时间 -->
-	 * dataSource.setCheckoutTimeout(10000); // <!-- 获取连接失败后重试次数 -->
-	 * dataSource.setAcquireRetryAttempts(2); return dataSource; }
-	 */
-
+	@Bean
+	@ConfigurationProperties("mybatis.configuration")
+	public org.apache.ibatis.session.Configuration globalConfig(){
+		return new org.apache.ibatis.session.Configuration();
+	}
+	
 }
