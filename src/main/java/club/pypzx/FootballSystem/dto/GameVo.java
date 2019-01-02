@@ -1,13 +1,14 @@
 package club.pypzx.FootballSystem.dto;
 
-import java.util.Date;
+import club.pypzx.FootballSystem.entity.Cup;
+import club.pypzx.FootballSystem.entity.Team;
 
 public class GameVo {
 	private String gameId;
 	private String gameDate;
-	private String teamHome;
-	private String teamAway;
-	private String cupName;
+	private Team home;
+	private Team away;
+	private Cup cup;
 	public String getGameId() {
 		return gameId;
 	}
@@ -20,24 +21,23 @@ public class GameVo {
 	public void setGameDate(String gameDate) {
 		this.gameDate = gameDate;
 	}
-	public String getTeamHome() {
-		return teamHome;
+	public Team getHome() {
+		return home;
 	}
-	public void setTeamHome(String teamHome) {
-		this.teamHome = teamHome;
+	public void setHome(Team home) {
+		this.home = home;
 	}
-	public String getTeamAway() {
-		return teamAway;
+	public Team getAway() {
+		return away;
 	}
-	public void setTeamAway(String teamAway) {
-		this.teamAway = teamAway;
+	public void setAway(Team away) {
+		this.away = away;
 	}
-	public String getCupName() {
-		return cupName;
+	public Cup getCup() {
+		return cup;
 	}
-	public void setCupName(String cupName) {
-		this.cupName = cupName;
+	public void setCup(Cup cup) {
+		this.cup = cup;
 	}
-
 	
 }

@@ -38,8 +38,8 @@ public class PlayerServiceController {
 		String playerName = HttpServletRequestUtil.getString(request, "playerName");
 		String teamId = HttpServletRequestUtil.getString(request, "teamId");
 		// 参数验证
+		example = new Player();
 		if (ParamUtils.validString(playerName) || ParamUtils.validString(teamId)) {
-			example = new Player();
 			example.setPlayerName(playerName);
 			example.setTeamId(teamId);
 		}
@@ -91,8 +91,7 @@ public class PlayerServiceController {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
 		try {
-			BaseExcution<Player> updateObj = service.edit(playerId, teamId, playerName, playerNum, stuno,
-					depart, tel);
+			BaseExcution<Player> updateObj = service.edit(playerId, teamId, playerName, playerNum, stuno, depart, tel);
 			if (ResultUtil.failResult(updateObj)) {
 				return ModelMapUtil.getErrorMap("编辑球员失败:" + updateObj.getStateInfo());
 			}

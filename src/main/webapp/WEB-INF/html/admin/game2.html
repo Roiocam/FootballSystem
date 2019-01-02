@@ -75,9 +75,9 @@
 					<tr v-for="(item, index) in datalist" v-if="datalist.length!=0">
 						<td>{{item.gameId}}</td>
 						<td>{{(item.gameDate).substring(0, 16)}}</td>
-						<td>{{item.teamHome}}</td>
-						<td>{{item.teamAway}}</td>
-						<td>{{item.cupName}}</td>
+						<td>{{item.home.teamName}}</td>
+						<td>{{item.away.teamName}}</td>
+						<td>{{item.cup.cupName}}</td>
 					</tr>
 				</tbody>
 

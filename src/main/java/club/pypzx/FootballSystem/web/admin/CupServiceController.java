@@ -29,6 +29,7 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 public class CupServiceController {
 	@Autowired
 	private CupService service;
+	
 	@Autowired
 	private GameService gameService;
 

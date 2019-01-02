@@ -74,6 +74,7 @@ public class CupServiceImpl implements CupService {
 		if (1 != mapper.delete(new Cup(objId))) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
+
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 
 	}

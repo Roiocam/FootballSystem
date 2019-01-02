@@ -39,7 +39,7 @@ public class TeamServiceController {
 		if (ParamUtils.wrongPage(pageIndex, pageSize)) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.PAGE_ERROR.getStateInfo());
 		}
-		BaseExcution<TeamVo> queryAllByPage = service.findAllMore(null, pageIndex, pageSize);
+		BaseExcution<TeamVo> queryAllByPage = service.findAllMore(new Team(), pageIndex, pageSize);
 		if (ResultUtil.failResult(queryAllByPage)) {
 			return ModelMapUtil.getDtoMap(queryAllByPage, "查询球队列表失败");
 		}

@@ -22,21 +22,14 @@ public interface TeamMapper extends BaseMapper<Team> {
 	@Results(id = "selectMore", value = { @Result(column = "team_id", property = "teamId"),
 			@Result(column = "team_name", property = "teamName"),
 			@Result(column = "vaild_code", property = "vaildCode"),
-			@Result(column = "playerName", property = "leaderName"),
 			@Result(column = "team_desc", property = "teamDesc"),
-			@Result(property = "cup", column = "cup_id", one = @One(select = "club.pypzx.FootballSystem.dao.mybatis.CupMapper.selectPrimary")),
-			@Result(property = "leader", column = "leader_id", one = @One(select = "club.pypzx.FootballSystem.dao.mybatis.PlayerMapper.selectPrimary")) })
-	// @Select("SELECT t.team_id,t.team_name,IFNULL(player_name,'无')
-	// leader_name,t.vaild_code,t.team_desc FROM pypzx_team t "
-//			+ "		LEFT JOIN pypzx_player p ON t.leader_id=p.player_id")
+			@Result(property = "cup", column = "cup_id", one = @One(select = "club.pypzx.FootballSystem.dao.mybatis.CupMapper.selectByPrimary")),
+			@Result(property = "leader", column = "leader_id", one = @One(select = "club.pypzx.FootballSystem.dao.mybatis.PlayerMapper.selectByPrimary")) })
 	@SelectProvider(type = SelectSQLProvider.class, method = "selectRowBounds")
 	public List<TeamVo> selectMoreRowBounds(Team obj, RowBounds rowBounds);
 
-//	@ResultMap("selectMore")
-//	@Select("SELECT t.team_id,t.team_name,IFNULL(player_name,'无') leader_name,t.vaild_code,t.team_desc  FROM pypzx_team t "
-//			+ "		LEFT JOIN pypzx_player p ON t.leader_id=p.player_id WHERE t.team_id=#{value} LIMIT 1")
 	@ResultMap("selectMore")
-	@SelectProvider(type = SelectSQLProvider.class, method = "selectPrimary")
+	@Select("SELECT * FROM pypzx_team  WHERE team_id=#{value} LIMIT 1")
 	public TeamVo selectMorePrimary(String teamId);
 
 }
