@@ -3,7 +3,7 @@ package club.pypzx.FootballSystem.datasource;
 import club.pypzx.FootballSystem.dbmgr.ProjectDBMgr;
 
 /**
- * 数据库标识管理类。用于区分数据源连接的不同数据库和编码
+ * 数据库标识管理类。用于区分数据源连接的不同数据库和数据访问对象
  * 
  * @author Roiocam
  * @date 2018年12月30日 下午1:58:14
@@ -39,7 +39,7 @@ public class DBIdentifier {
 	 */
 	public static boolean setDbType(String type) {
 		if ("MyBatis".equals(type) || "JPA".equals(type)) {
-			dbCode.set(type);
+			dbType.set(type);
 			return true;
 		}
 		return false;
