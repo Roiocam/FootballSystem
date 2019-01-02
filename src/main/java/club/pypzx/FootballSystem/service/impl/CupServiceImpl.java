@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import club.pypzx.FootballSystem.dao.jpa.CupRepository;
 import club.pypzx.FootballSystem.dao.mybatis.CupMapper;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Cup;
@@ -20,7 +21,6 @@ import club.pypzx.FootballSystem.enums.GroupEnum;
 import club.pypzx.FootballSystem.service.CupService;
 import club.pypzx.FootballSystem.service.GroupService;
 import club.pypzx.FootballSystem.service.TeamService;
-import club.pypzx.FootballSystem.template.BaseDao;
 import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.IDUtils;
@@ -31,9 +31,8 @@ public class CupServiceImpl implements CupService {
 
 	@Autowired
 	private CupMapper mapper;
-
-	private BaseDao<Cup> dao;
-
+	@Autowired
+	private CupRepository dao;
 	@Autowired
 	private TeamService teamSerivce;
 	@Autowired
@@ -58,7 +57,7 @@ public class CupServiceImpl implements CupService {
 	public BaseExcution<Cup> removeById(String objId) throws Exception {
 		// 先查询是否存在赛程分配
 		BaseExcution<Group> exist = groupService.findByCondition(new Group(objId));
-		if (!ResultUtil.failListResult(exist)) {
+		if (ResultUtil.failListResult(exist)) {
 			return new BaseExcution<>(BaseStateEnum.NEED_DELETE_GROUP);
 		}
 

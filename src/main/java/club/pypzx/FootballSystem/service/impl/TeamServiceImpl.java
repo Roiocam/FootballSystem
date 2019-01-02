@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
-import club.pypzx.FootballSystem.dao.mybatis.PlayerMapper;
 import club.pypzx.FootballSystem.dao.mybatis.TeamMapper;
 import club.pypzx.FootballSystem.dao.mybatis.TeamRankMapper;
 import club.pypzx.FootballSystem.dto.GroupVo;
@@ -21,6 +19,7 @@ import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.Player;
 import club.pypzx.FootballSystem.entity.Team;
 import club.pypzx.FootballSystem.entity.TeamRank;
+import club.pypzx.FootballSystem.service.GroupService;
 import club.pypzx.FootballSystem.service.PlayerService;
 import club.pypzx.FootballSystem.service.TeamService;
 import club.pypzx.FootballSystem.template.BaseExcution;
@@ -36,11 +35,9 @@ public class TeamServiceImpl implements TeamService {
 	@Autowired
 	private PlayerService playerService;
 	@Autowired
-	private PlayerMapper playerMapper;
-	@Autowired
 	private TeamRankMapper rankMapper;
 	@Autowired
-	private GroupMapper groupMapper;
+	private GroupService groupService;
 
 	public Team packageTeam(String cupId, String name, String code, String desc) {
 		Team obj = new Team();
@@ -70,14 +67,18 @@ public class TeamServiceImpl implements TeamService {
 		if (selectByPrimaryKey == null || selectByPrimaryKey.getCupId() == null) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
-		if (0 < groupMapper.selectCount(new Group(selectByPrimaryKey.getCupId()))) {
+		BaseExcution<Group> findByCondition = groupService.findByCondition(new Group(selectByPrimaryKey.getCupId()));
+		if (!ResultUtil.failListResult(findByCondition) && findByCondition.getCount() > 0) {
 			return new BaseExcution<>(BaseStateEnum.NEED_DELETE_GROUP);
 		}
 
 		Player p = new Player();
 		p.setTeamId(objId);
-
-		List<Player> selectByExample = playerMapper.selectRowBounds(p, new RowBounds(0, playerMapper.selectCount(p)));
+		BaseExcution<Player> findByCondition2 = playerService.findByCondition(p);
+		if (ResultUtil.failListResult(findByCondition2)) {
+			return new BaseExcution<>(BaseStateEnum.QUERY_ERROR);
+		}
+		List<Player> selectByExample = findByCondition2.getObjList();
 		if (selectByExample != null && selectByExample.size() > 0) {
 			Iterator<Player> iterator = selectByExample.iterator();
 			while (iterator.hasNext()) {
@@ -241,12 +242,11 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public BaseExcution<GroupVo> findTeamByGroup(String cupId) {
-		List<GroupVo> queryTeamByGroup = groupMapper.queryTeamByGroup(cupId);
-		if (queryTeamByGroup == null || queryTeamByGroup.size() < 0) {
+		BaseExcution<GroupVo> queryTeamByGroup = groupService.queryTeamByGroup(cupId);
+		if (ResultUtil.failListResult(queryTeamByGroup)) {
 			return new BaseExcution<>(BaseStateEnum.QUERY_ERROR);
-
 		}
-		return new BaseExcution<>(BaseStateEnum.SUCCESS, queryTeamByGroup, 0);
+		return queryTeamByGroup;
 	}
 
 	@Override
@@ -257,18 +257,18 @@ public class TeamServiceImpl implements TeamService {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		temp.setTeam(team);
-		PlayerVo leader = playerMapper.selectPrimaryVo(new Player(team.getLeaderId()));
-		if (leader == null) {
+		BaseExcution<PlayerVo> findByIdMore = playerService.findByIdMore(team.getLeaderId());
+		if (ResultUtil.failResult(findByIdMore)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
-		temp.setLeader(leader);
+		temp.setLeader(findByIdMore.getObj());
 		Player condition = new Player();
 		condition.setTeamId(teamId);
-		List<PlayerVo> select = playerMapper.selectMoreRowBounds(condition, Page.getInstance(1, 999));
-		if (select == null) {
+		BaseExcution<PlayerVo> findAllMore = playerService.findAllMore(condition, 1, 999);
+		if (ResultUtil.failListResult(findAllMore)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
-		temp.setPlayerList(select);
+		temp.setPlayerList(findAllMore.getObjList());
 		return new BaseExcution<TeamPrint>(BaseStateEnum.SUCCESS, temp);
 	}
 

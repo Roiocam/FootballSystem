@@ -11,28 +11,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import club.pypzx.FootballSystem.dao.mybatis.CupMapper;
 import club.pypzx.FootballSystem.dao.mybatis.GameMapper;
-import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
 import club.pypzx.FootballSystem.dto.GameVo;
 import club.pypzx.FootballSystem.entity.Cup;
 import club.pypzx.FootballSystem.entity.Game;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.entity.Page;
+import club.pypzx.FootballSystem.service.CupService;
 import club.pypzx.FootballSystem.service.GameService;
+import club.pypzx.FootballSystem.service.GroupService;
 import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.GameDayUtils;
 import club.pypzx.FootballSystem.utils.IDUtils;
+import club.pypzx.FootballSystem.utils.ResultUtil;
 
 @Service
 public class GameServiceImpl implements GameService {
 	@Autowired
-	private GroupMapper groupMapper;
+	private GroupService groupService;
 	@Autowired
 	private GameMapper mapper;
 	@Autowired
-	private CupMapper cupMapper;
+	private CupService cupService;
 
 	@Override
 	public BaseExcution<Game> add(Game obj) {
@@ -106,13 +107,14 @@ public class GameServiceImpl implements GameService {
 		record.setCupId(cupId);
 		Group group = new Group();
 		group.setCupId(cupId);
-		if (0 == mapper.delete(record) || 0 == groupMapper.delete(group)) {
+		if (0 == mapper.delete(record)
+				|| BaseStateEnum.SUCCESS.getState() != groupService.removeById(cupId).getState()) {
 			throw new RuntimeException("删除赛程表和分组时出错");
 		}
 		Cup cup = new Cup();
 		cup.setCupId(cupId);
 		cup.setIsGroup(0);
-		if (1 != cupMapper.update(cup)) {
+		if (BaseStateEnum.SUCCESS.getState() != cupService.edit(cup).getState()) {
 			throw new Exception("更新赛事分组状态失败");
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
@@ -121,9 +123,11 @@ public class GameServiceImpl implements GameService {
 	@Override
 	@Transactional
 	public BaseExcution<Game> randomGameByGroup(String cupId) throws Exception {
-		int selectCount = groupMapper.selectCount(new Group(cupId));
-		List<Group> select = groupMapper.selectRowBounds(new Group(cupId), new RowBounds(0, selectCount));
-		Iterator<Group> iterator = select.iterator();
+		BaseExcution<Group> findByCondition = groupService.findByCondition(new Group(cupId));
+		if (ResultUtil.failListResult(findByCondition)) {
+			throw new RuntimeException("查询分组失败");
+		}
+		Iterator<Group> iterator = findByCondition.getObjList().iterator();
 		List<Group> A = new ArrayList<Group>();
 		List<Group> B = new ArrayList<Group>();
 		List<Group> C = new ArrayList<Group>();

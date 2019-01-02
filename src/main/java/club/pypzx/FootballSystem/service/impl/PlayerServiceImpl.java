@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import club.pypzx.FootballSystem.dao.mybatis.PlayerInfoMapper;
 import club.pypzx.FootballSystem.dao.mybatis.PlayerMapper;
 import club.pypzx.FootballSystem.dao.mybatis.PlayerRankMapper;
-import club.pypzx.FootballSystem.dao.mybatis.TeamMapper;
 import club.pypzx.FootballSystem.dto.PlayerVo;
 import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.Player;
@@ -19,10 +18,12 @@ import club.pypzx.FootballSystem.entity.PlayerInfo;
 import club.pypzx.FootballSystem.entity.PlayerRank;
 import club.pypzx.FootballSystem.entity.Team;
 import club.pypzx.FootballSystem.service.PlayerService;
+import club.pypzx.FootballSystem.service.TeamService;
 import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.IDUtils;
 import club.pypzx.FootballSystem.utils.ParamUtils;
+import club.pypzx.FootballSystem.utils.ResultUtil;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -34,7 +35,7 @@ public class PlayerServiceImpl implements PlayerService {
 	@Autowired
 	private PlayerInfoMapper infoMapper;
 	@Autowired
-	private TeamMapper teamMapper;
+	private TeamService teamService;
 
 	public Player packagePlayer(String teamId, String name, int num) throws Exception {
 		Player obj = new Player();
@@ -120,8 +121,7 @@ public class PlayerServiceImpl implements PlayerService {
 	@Override
 	public BaseExcution<Player> findAll(int pageIndex, int pageSize) {
 
-		List<Player> selectAll = mapper.selectRowBounds(new Player(),
-				Page.getInstance(pageIndex, pageSize));
+		List<Player> selectAll = mapper.selectRowBounds(new Player(), Page.getInstance(pageIndex, pageSize));
 		if (selectAll == null) {
 			return new BaseExcution<Player>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -140,7 +140,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public BaseExcution<PlayerVo> findAllMore(Player example, int pageIndex, int pageSize) {
-		List<PlayerVo> selectAllByPage = mapper.selectMoreRowBounds(example,Page.getInstance(pageIndex, pageSize));
+		List<PlayerVo> selectAllByPage = mapper.selectMoreRowBounds(example, Page.getInstance(pageIndex, pageSize));
 		if (selectAllByPage == null) {
 			return new BaseExcution<PlayerVo>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -150,8 +150,8 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	@Transactional
-	public BaseExcution<Player> add(String teamId, String name, int num, String stuno, String depart,
-			String tel) throws Exception {
+	public BaseExcution<Player> add(String teamId, String name, int num, String stuno, String depart, String tel)
+			throws Exception {
 		Player packagePlayer = null;
 		PlayerInfo packagePlayerInfo = null;
 		try {
@@ -184,8 +184,8 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	@Transactional
-	public BaseExcution<Player> edit(String id, String teamId, String name, int num, String stuno,
-			String depart, String tel) throws Exception {
+	public BaseExcution<Player> edit(String id, String teamId, String name, int num, String stuno, String depart,
+			String tel) throws Exception {
 		Player packagePlayer = null;
 		PlayerInfo packagePlayerInfo = null;
 		try {
@@ -206,11 +206,14 @@ public class PlayerServiceImpl implements PlayerService {
 	@Override
 	public boolean checkValidCode(String validCode, String teamId) {
 
-		Team selectOne = teamMapper.selectByPrimary(teamId);
-		if (selectOne == null | ParamUtils.emptyString(selectOne.getVaildCode())) {
+		BaseExcution<Team> findById = teamService.findById(teamId);
+		if (ResultUtil.failResult(findById)) {
 			return false;
 		}
-		if (!validCode.equals(selectOne.getVaildCode())) {
+		if (ParamUtils.emptyString(findById.getObj().getVaildCode())) {
+			return false;
+		}
+		if (!validCode.equals(findById.getObj().getVaildCode())) {
 			return false;
 		}
 		return true;

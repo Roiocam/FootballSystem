@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
+import club.pypzx.FootballSystem.dto.GroupVo;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.service.GroupService;
@@ -64,11 +65,12 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	public BaseExcution<Group> findAll(int pageIndex, int pageSize) {
 		List<Group> selectAll = mapper.selectRowBounds(new Group(), Page.getInstance(pageIndex, pageSize));
-		if (selectAll == null) {
-			return new BaseExcution<Group>(BaseStateEnum.QUERY_ERROR);
+		if (selectAll != null && selectAll.size() > -1) {
+			int selectCount = mapper.selectCount(new Group());
+			return new BaseExcution<Group>(BaseStateEnum.SUCCESS, selectAll, selectCount);
 		}
-		int selectCount = mapper.selectCount(new Group());
-		return new BaseExcution<Group>(BaseStateEnum.SUCCESS, selectAll, selectCount);
+		return new BaseExcution<Group>(BaseStateEnum.QUERY_ERROR);
+
 	}
 
 	@Override
@@ -81,6 +83,15 @@ public class GroupServiceImpl implements GroupService {
 	@Deprecated
 	public BaseExcution<Group> removeByIdList(List<String> list) throws Exception {
 		return null;
+	}
+
+	@Override
+	public BaseExcution<GroupVo> queryTeamByGroup(String cupId) {
+		List<GroupVo> queryTeamByGroup = mapper.queryTeamByGroup(cupId);
+		if (queryTeamByGroup != null && queryTeamByGroup.size() > -1) {
+			return new BaseExcution<GroupVo>(BaseStateEnum.SUCCESS, queryTeamByGroup, queryTeamByGroup.size());
+		}
+		return new BaseExcution<GroupVo>(BaseStateEnum.QUERY_ERROR);
 	}
 
 }
