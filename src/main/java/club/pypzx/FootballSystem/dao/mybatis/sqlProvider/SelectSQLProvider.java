@@ -60,7 +60,7 @@ public class SelectSQLProvider {
 						field.setAccessible(true);
 						if (field.get(obj) != null && !"serialVersionUID".equals(field.getName())
 								&& !"".equals(field.get(obj))) {
-							WHERE(StringUtil.underscoreName(field.getName()) + " = #{obj." + field.getName() + "}");
+							WHERE(StringUtil.underscoreName(field.getName()) + " = #{" + field.getName() + "}");
 						}
 					}
 				}

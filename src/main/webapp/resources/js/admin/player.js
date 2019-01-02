@@ -41,6 +41,8 @@ var app = new Vue(
 				var formData = new FormData();
 				formData.append('pageIndex', pageIndex);
 				formData.append('pageSize', pageSize);
+				formData.append('dbCode', 'FootballSystem');
+				formData.append('dbType', 'MyBatis');
 				if (searchData != null) {
 					formData.append('teamId', searchData.teamId);
 					formData.append('playerName', searchData.playerName);
@@ -65,6 +67,8 @@ var app = new Vue(
 				var formData = new FormData();
 				formData.append('pageIndex', 1);
 				formData.append('pageSize', 50);
+				formData.append('dbCode', 'FootballSystem');
+				formData.append('dbType', 'MyBatis');
 				const that = this
 				axios
 					.post(
@@ -141,6 +145,8 @@ $(function () {
 				formData.append('playerStuno', playerStuno);
 				formData.append('playerDepart', playerDepart);
 				formData.append('playerTel', playerTel);
+				formData.append('dbCode', 'FootballSystem');
+				formData.append('dbType', 'MyBatis');
 				$
 					.ajax({
 						url: urlStr,
@@ -185,6 +191,8 @@ $(function () {
 				var formData = new FormData();
 				formData.append('pageIndex', 1);
 				formData.append('pageSize', 50);
+				formData.append('dbCode', 'FootballSystem');
+				formData.append('dbType', 'MyBatis');
 
 				if (type == 'edit') {
 					var playerId = button.closest('tr').find('td')
@@ -252,6 +260,8 @@ $(function () {
 		var objId = $('#deleteObj').val();
 		var formData = new FormData();
 		formData.append('playerId', objId);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 		$
 			.ajax({
 				url: delOneUrl,
@@ -292,15 +302,18 @@ $(function () {
 				list.push(element.value);
 			}
 		})
+	var formData = new FormData();
+	formData.append('dbCode', 'FootballSystem');
+	formData.append('dbType', 'MyBatis');
+	formData.append('list', JSON.stringify(list));
 		$
 			.ajax({
 				url: delListUrl,
-				type: 'POST',
-				dataType: "json",
-				contentType: "application/json",
-				data: JSON.stringify(list),
-				processData: false,
-				cache: false,
+				type : 'POST',
+				data : formData,
+				contentType : false,
+				processData : false,
+				cache : false,
 				success: function (data) {
 					loading.hide();
 					app.message = data.message;

@@ -29,7 +29,7 @@ public class GameController {
 		int pageIndex = HttpServletRequestUtil.getInt(request, "pageIndex");
 		int pageSize = HttpServletRequestUtil.getInt(request, "pageSize");
 		String cupId = HttpServletRequestUtil.getString(request, "cupId");
-		BaseExcution<GameVo> queryAll = service.queryAll(cupId, pageIndex, pageSize);
+		BaseExcution<GameVo> queryAll = service.findAll(cupId, pageIndex, pageSize);
 		if (ResultUtil.failResult(queryAll)) {
 			return ModelMapUtil.getDtoMap(queryAll, "查询赛事列表失败");
 		}

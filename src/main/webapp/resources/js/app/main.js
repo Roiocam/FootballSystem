@@ -7,9 +7,13 @@ $(function() {
 	var reduceDataUrl = '/FootballSystem/app/service/reduceKick';
 	getData();
 	$('#sumbitKick').on("click", function() {
+		var formData=new FormData();
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 		$.ajax({
 			url : addDataUrl,
 			type : 'POST',
+			data:formData,
 			contentType : false,
 			processData : false,
 			cache : false,
@@ -25,9 +29,13 @@ $(function() {
 		});
 	});
 	$('#cancelKick').on("click", function() {
+		var formData=new FormData();
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 		$.ajax({
 			url : reduceDataUrl,
 			type : 'POST',
+			data:formData,
 			contentType : false,
 			processData : false,
 			cache : false,
@@ -44,8 +52,9 @@ $(function() {
 		});
 	});
 	function getData() {
+		
 		$.ajax({
-			url : getDataUrl,
+			url : getDataUrl+"?dbCode=FootballSystem&dbType=MyBatis",
 			type : 'GET',
 			contentType : false,
 			processData : false,

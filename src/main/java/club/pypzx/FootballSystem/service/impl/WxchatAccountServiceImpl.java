@@ -1,7 +1,8 @@
-package club.pypzx.FootballSystem.service.impl.mybatis;
+package club.pypzx.FootballSystem.service.impl;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,13 @@ public class WxchatAccountServiceImpl implements WechatAccountService {
 	private WechatAccountMapper mapper;
 
 	@Override
-	public BaseExcution<WechatAccount> insertObj(WechatAccount obj) {
+	public BaseExcution<WechatAccount> add(WechatAccount obj) {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
 		int count = 0;
-		if (mapper.selectByPrimary(obj.getOpenid()) != null) {
-			count = mapper.updateByPrimaryKeySelective(obj);
+		if (mapper.selectPrimary(obj) != null) {
+			count = mapper.update(obj);
 		} else {
 			count = mapper.insert(obj);
 		}
@@ -34,14 +35,16 @@ public class WxchatAccountServiceImpl implements WechatAccountService {
 	}
 
 	@Override
-	public BaseExcution<WechatAccount> updateObjByPrimaryKey(WechatAccount obj) throws Exception {
+	public BaseExcution<WechatAccount> edit(WechatAccount obj) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public BaseExcution<WechatAccount> queryObjOneByPrimaryKey(String objId) {
-		WechatAccount selectByPrimaryKey = mapper.selectByPrimary(objId);
+	public BaseExcution<WechatAccount> findById(String objId) {
+		WechatAccount obj = new WechatAccount();
+		obj.setOpenid(objId);
+		WechatAccount selectByPrimaryKey = mapper.selectPrimary(obj);
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<WechatAccount>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -49,25 +52,29 @@ public class WxchatAccountServiceImpl implements WechatAccountService {
 	}
 
 	@Override
-	public BaseExcution<WechatAccount> queryObjOne(WechatAccount obj) {
+	public BaseExcution<WechatAccount> findByCondition(WechatAccount obj) {
+		int selectCount = mapper.selectCount(obj);
+		List<WechatAccount> selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		if (selectRowBounds != null && selectRowBounds.size() > -1) {
+			return new BaseExcution<WechatAccount>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
+		}
+		return new BaseExcution<WechatAccount>(BaseStateEnum.QUERY_ERROR);
+	}
+
+	@Override
+	public BaseExcution<WechatAccount> findAll(int pageIndex, int pageSize) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public BaseExcution<WechatAccount> queryAll(int pageIndex, int pageSize) {
+	public BaseExcution<WechatAccount> removeById(String objId) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public BaseExcution<WechatAccount> deleteObjByPrimaryKey(String objId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public BaseExcution<WechatAccount> deleteObjectList(List<String> list) throws Exception {
+	public BaseExcution<WechatAccount> removeByIdList(List<String> list) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

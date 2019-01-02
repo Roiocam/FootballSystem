@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
 
 import club.pypzx.FootballSystem.dto.UserExcution;
 import club.pypzx.FootballSystem.enums.UserStateEnum;
@@ -92,7 +93,9 @@ public class UserServiceController {
 	}
 
 	@PostMapping("/deleteUserList")
-	public Map<String, Object> deleteCupList(@RequestBody List<String> list) {
+	public Map<String, Object> deleteCupList(HttpServletRequest request) {
+		String str = HttpServletRequestUtil.getString(request, "list");
+		List<String> list = (List<String>) JSON.parseArray(str, String.class);
 		try {
 			if (list == null || list.size() <= 0) {
 				return ModelMapUtil.getErrorMap("删除失败,请选择管理员后删除!");

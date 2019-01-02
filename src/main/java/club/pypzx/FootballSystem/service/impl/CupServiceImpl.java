@@ -1,43 +1,43 @@
-package club.pypzx.FootballSystem.service.impl.mybatis;
+package club.pypzx.FootballSystem.service.impl;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import club.pypzx.FootballSystem.dao.mybatis.CupMapper;
-import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
-import club.pypzx.FootballSystem.dao.mybatis.TeamMapper;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Cup;
 import club.pypzx.FootballSystem.entity.Group;
+import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.Team;
 import club.pypzx.FootballSystem.enums.DecideEnum;
 import club.pypzx.FootballSystem.enums.GroupEnum;
 import club.pypzx.FootballSystem.service.CupService;
 import club.pypzx.FootballSystem.service.GroupService;
 import club.pypzx.FootballSystem.service.TeamService;
+import club.pypzx.FootballSystem.template.BaseDao;
 import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.IDUtils;
 import club.pypzx.FootballSystem.utils.ResultUtil;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 @Service
 public class CupServiceImpl implements CupService {
 
 	@Autowired
 	private CupMapper mapper;
+
+	private BaseDao<Cup> dao;
+
 	@Autowired
 	private TeamService teamSerivce;
 	@Autowired
-	private TeamMapper teamMapper;
-	@Autowired
 	private GroupService groupService;
-	@Autowired
-	private GroupMapper groupMapper;
 
 	public Cup packageCup(String name) {
 		Cup obj = new Cup();
@@ -55,21 +55,24 @@ public class CupServiceImpl implements CupService {
 
 	@Override
 	@Transactional
-	public BaseExcution<Cup> deleteObjByPrimaryKey(String objId) throws Exception {
+	public BaseExcution<Cup> removeById(String objId) throws Exception {
 		// 先查询是否存在赛程分配
-		if (0 < groupMapper.selectCount(new Group(objId))) {
+		BaseExcution<Group> exist = groupService.findByCondition(new Group(objId));
+		if (!ResultUtil.failListResult(exist)) {
 			return new BaseExcution<>(BaseStateEnum.NEED_DELETE_GROUP);
 		}
+
 		// 先删除比赛记录,再删除球员,再删除球队,再删除赛程安排表
 		// --查询赛事下是否有球队
 		Team t = new Team();
 		t.setCupId(objId);
-		List<Team> selectByExample = teamMapper.select(t);
-		if (selectByExample != null && selectByExample.size() > 0) {
+		BaseExcution<Team> findByCondition = teamSerivce.findByCondition(t);
+		if (!ResultUtil.failListResult(findByCondition)) {
+			List<Team> objList = findByCondition.getObjList();
 			// 遍历赛事下球队，删除球队下球员，
-			Iterator<Team> iterator = selectByExample.iterator();
+			Iterator<Team> iterator = objList.iterator();
 			while (iterator.hasNext()) {
-				teamSerivce.deleteObjByPrimaryKey(iterator.next().getTeamId());
+				teamSerivce.removeById(iterator.next().getTeamId());
 			}
 		}
 		if (1 != mapper.delete(new Cup(objId))) {
@@ -80,7 +83,7 @@ public class CupServiceImpl implements CupService {
 	}
 
 	@Override
-	public BaseExcution<Cup> insertObj(Cup obj) {
+	public BaseExcution<Cup> add(Cup obj) {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
@@ -92,19 +95,19 @@ public class CupServiceImpl implements CupService {
 	}
 
 	@Override
-	public BaseExcution<Cup> updateObjByPrimaryKey(Cup obj) {
+	public BaseExcution<Cup> edit(Cup obj) {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.updateByPrimaryKey(obj)) {
+		if (1 != mapper.update(obj)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
-	public BaseExcution<Cup> queryObjOneByPrimaryKey(String objId) {
-		Cup selectByPrimaryKey = mapper.selectByPrimaryKey(objId);
+	public BaseExcution<Cup> findById(String objId) {
+		Cup selectByPrimaryKey = mapper.selectByPrimary(objId);
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Cup>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -112,33 +115,35 @@ public class CupServiceImpl implements CupService {
 	}
 
 	@Override
-	public BaseExcution<Cup> queryObjOne(Cup obj) {
-		Cup selectOne = mapper.selectOne(obj);
-		if (selectOne == null) {
-			return new BaseExcution<Cup>(BaseStateEnum.QUERY_ERROR);
+	public BaseExcution<Cup> findByCondition(Cup obj) {
+		int selectCount = mapper.selectCount(obj);
+		List<Cup> selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		if (selectRowBounds != null && selectRowBounds.size() > -1) {
+			return new BaseExcution<Cup>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
 		}
-		return new BaseExcution<Cup>(BaseStateEnum.SUCCESS, selectOne);
+		return new BaseExcution<Cup>(BaseStateEnum.QUERY_ERROR);
+
 	}
 
 	@Override
-	public BaseExcution<Cup> queryAll(int pageIndex, int pageSize) {
-		List<Cup> selectAll = mapper.selectByRowBounds(null, new RowBounds((pageIndex - 1) * pageSize, pageSize));
+	public BaseExcution<Cup> findAll(int pageIndex, int pageSize) {
+		List<Cup> selectAll = mapper.selectRowBounds(new Cup(), Page.getInstance(pageIndex, pageSize));
 		if (selectAll == null) {
 			return new BaseExcution<Cup>(BaseStateEnum.QUERY_ERROR);
 		}
-		int selectCount = mapper.selectCount(null);
+		int selectCount = mapper.selectCount(new Cup());
 		return new BaseExcution<Cup>(BaseStateEnum.SUCCESS, selectAll, selectCount);
 	}
 
 	@Override
 	@Transactional
-	public BaseExcution<Cup> deleteObjectList(List<String> list) throws Exception {
+	public BaseExcution<Cup> removeByIdList(List<String> list) throws Exception {
 		Iterator<?> iterator = list.iterator();
 		if (iterator == null) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		while (iterator.hasNext()) {
-			deleteObjByPrimaryKey((String) iterator.next());
+			removeById((String) iterator.next());
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
@@ -148,7 +153,7 @@ public class CupServiceImpl implements CupService {
 	public BaseExcution<Cup> randomTeamToGroup(String cupId) throws Exception {
 		Team t = new Team();
 		t.setCupId(cupId);
-		BaseExcution<TeamVo> queryAllByPage = teamSerivce.queryAllByPage(t, 1, 9);
+		BaseExcution<TeamVo> queryAllByPage = teamSerivce.findAllMore(t, 1, 9);
 		if (ResultUtil.failListResult(queryAllByPage)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
@@ -168,18 +173,20 @@ public class CupServiceImpl implements CupService {
 				g.setCupId(cupId);
 				g.setTeam_id(teamVo.getTeamId());
 				g.setTeamGroup(stringOf.getGroup_string());
-				BaseExcution<Group> insertObj = groupService.insertObj(g);
+				BaseExcution<Group> insertObj = groupService.add(g);
 				if (ResultUtil.failResult(insertObj)) {
 					throw new Exception("分组失败");
 				}
 				count++;
 			}
 		}
-		if (1 != mapper.updateCupGrouped(cupId)) {
+		Cup cup = new Cup();
+		cup.setCupId(cupId);
+		cup.setIsGroup(1);
+		if (1 != mapper.update(cup)) {
 			throw new Exception("更新赛事分组状态失败");
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
-	
 
 }

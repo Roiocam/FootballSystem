@@ -57,6 +57,8 @@ function getUrlParam(name) {
 function printData(teamId) {
 	var formData = new FormData();
 	formData.append('teamId', teamId);
+	formData.append('dbCode', 'FootballSystem');
+	formData.append('dbType', 'MyBatis');
 	$.ajax({
 		url : getUrl,
 		type : 'POST',

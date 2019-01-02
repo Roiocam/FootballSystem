@@ -78,6 +78,8 @@ $(function() {
 		formData.append('playerStuno', playerStuno);
 		formData.append('playerDepart', playerDepart);
 		formData.append('playerTel', playerTel);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 
 		$.ajax({
 			url : addDataUrl,
@@ -113,6 +115,8 @@ $(function() {
 		var formData = new FormData();
 		formData.append('pageIndex', 1);
 		formData.append('pageSize', 50);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 		$.ajax({
 			url : getDepartUrl,
 			type : 'POST',
@@ -137,6 +141,8 @@ $(function() {
 	function checkId(id) {
 		 var formData = new FormData();
 			formData.append('playerId', id);
+			formData.append('dbCode', 'FootballSystem');
+			formData.append('dbType', 'MyBatis');
 		$.ajax({
 			url : checkIdUrl,
 			type : 'POST',

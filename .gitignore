@@ -39,3 +39,4 @@ src/main/resources/application.properties
 src/main/resources/application.properties
 src/main/resources/application.properties
 src/main/java/club/pypzx/FootballSystem/dbmgr/ProjectDBMgr.java
+*.jar

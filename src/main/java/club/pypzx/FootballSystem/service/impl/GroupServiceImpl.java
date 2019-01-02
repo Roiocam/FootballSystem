@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.service.impl.mybatis;
+package club.pypzx.FootballSystem.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
 import club.pypzx.FootballSystem.entity.Group;
+import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.service.GroupService;
 import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseStateEnum;
@@ -18,7 +19,7 @@ public class GroupServiceImpl implements GroupService {
 	private GroupMapper mapper;
 
 	@Override
-	public BaseExcution<Group> insertObj(Group obj) {
+	public BaseExcution<Group> add(Group obj) {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
@@ -29,19 +30,20 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public BaseExcution<Group> updateObjByPrimaryKey(Group obj) throws Exception {
+	public BaseExcution<Group> edit(Group obj) throws Exception {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.updateByPrimaryKey(obj)) {
+		if (1 != mapper.update(obj)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
-	public BaseExcution<Group> queryObjOneByPrimaryKey(String objId) {
-		Group selectByPrimaryKey = mapper.selectByPrimaryKey(objId);
+	public BaseExcution<Group> findById(String objId) {
+		Group group = new Group(objId);
+		Group selectByPrimaryKey = mapper.selectPrimary(group);
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Group>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -49,33 +51,35 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public BaseExcution<Group> queryObjOne(Group obj) {
-		Group selectOne = mapper.selectOne(obj);
-		if (selectOne == null) {
-			return new BaseExcution<Group>(BaseStateEnum.QUERY_ERROR);
+	public BaseExcution<Group> findByCondition(Group obj) {
+		int selectCount = mapper.selectCount(obj);
+		List<Group> selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		if (selectRowBounds != null && selectRowBounds.size() >= -1) {
+			return new BaseExcution<Group>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
 		}
-		return new BaseExcution<Group>(BaseStateEnum.SUCCESS, selectOne);
+		return new BaseExcution<Group>(BaseStateEnum.QUERY_ERROR);
+
 	}
 
 	@Override
-	public BaseExcution<Group> queryAll(int pageIndex, int pageSize) {
-		List<Group> selectAll = mapper.selectByRowBounds(null, new RowBounds((pageIndex - 1) * pageSize, pageSize));
+	public BaseExcution<Group> findAll(int pageIndex, int pageSize) {
+		List<Group> selectAll = mapper.selectRowBounds(new Group(), Page.getInstance(pageIndex, pageSize));
 		if (selectAll == null) {
 			return new BaseExcution<Group>(BaseStateEnum.QUERY_ERROR);
 		}
-		int selectCount = mapper.selectCount(null);
+		int selectCount = mapper.selectCount(new Group());
 		return new BaseExcution<Group>(BaseStateEnum.SUCCESS, selectAll, selectCount);
 	}
 
 	@Override
 	@Deprecated
-	public BaseExcution<Group> deleteObjByPrimaryKey(String objId) throws Exception {
+	public BaseExcution<Group> removeById(String objId) throws Exception {
 		return null;
 	}
 
 	@Override
 	@Deprecated
-	public BaseExcution<Group> deleteObjectList(List<String> list) throws Exception {
+	public BaseExcution<Group> removeByIdList(List<String> list) throws Exception {
 		return null;
 	}
 

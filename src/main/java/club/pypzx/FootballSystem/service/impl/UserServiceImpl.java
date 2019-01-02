@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.service.impl.mybatis;
+package club.pypzx.FootballSystem.service.impl;
 
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import club.pypzx.FootballSystem.dao.mybatis.UserMapper;
 import club.pypzx.FootballSystem.dto.UserExcution;
+import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.User;
 import club.pypzx.FootballSystem.enums.UserStateEnum;
 import club.pypzx.FootballSystem.exception.UserException;
@@ -27,15 +28,15 @@ public class UserServiceImpl implements UserService {
 	public UserExcution addUser(String username, String password) {
 		if (username == null || password == null || EMPTY_STRING.equals(username) || EMPTY_STRING.equals(password))
 			throw new UserException("用户信息不完整");
-		boolean queryUserByName = userDao.queryUserByName(username);
-		if (queryUserByName) {
+		User user = new User();
+		user.setUsername(username);
+		User selectPrimary = userDao.selectPrimary(user);
+		if (null != selectPrimary && null != selectPrimary.getUsername()) {
 			throw new UserException("用户名已存在");
 		}
-		User user = new User();
 		// 对密码进行DES加密
 		user.setPassword(DESUtil.getEncryptStrig(password));
-		user.setUsername(username);
-		int insertUser = userDao.insertUser(user);
+		int insertUser = userDao.insert(user);
 		if (insertUser > 0) {
 			return new UserExcution(UserStateEnum.SUCCESS, user);
 		} else {
@@ -50,9 +51,9 @@ public class UserServiceImpl implements UserService {
 			throw new UserException("用户id为空");
 		User user = new User();
 		user.setUsername(username);
-		User queryUserById = userDao.queryUser(user);
+		User queryUserById = userDao.selectPrimary(user);
 		if (queryUserById != null) {
-			userDao.deleteUser(queryUserById.getUsername());
+			userDao.delete(queryUserById);
 			return new UserExcution(UserStateEnum.SUCCESS);
 		} else {
 			return new UserExcution(UserStateEnum.DELETE_ERROR);
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService {
 		User temp = new User();
 		temp.setUsername(username);
 		temp.setPassword(DESUtil.getEncryptStrig(password));
-		User queryUser = userDao.queryUser(temp);
+		User queryUser = userDao.selectPrimary(temp);
 		if (queryUser != null) {
 			return new UserExcution(UserStateEnum.SUCCESS, queryUser);
 		} else {
@@ -77,14 +78,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserExcution getUserList(int pageIndex, int pageSize) {
-		List<User> queryUserList = userDao.queryUserList(pageIndex - 1, pageSize);
+		List<User> queryUserList = userDao.selectRowBounds(new User(), Page.getInstance(pageIndex, pageSize));
 		if (queryUserList.size() > 0) {
 			Iterator<User> iterator = queryUserList.iterator();
 			while (iterator.hasNext()) {
 				User next = iterator.next();
 				next.setPassword(DESUtil.getDecryptString(next.getPassword()));
 			}
-			int queryUserListCount = userDao.queryUserListCount();
+			int queryUserListCount = userDao.selectCount(new User());
 			return new UserExcution(UserStateEnum.SUCCESS, queryUserList, queryUserListCount);
 		} else {
 			return new UserExcution(UserStateEnum.QUERY_ERROR);
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(DESUtil.getEncryptStrig(password));
-		int updateUser = userDao.updateUser(user);
+		int updateUser = userDao.update(user);
 		if (updateUser > 0) {
 			return new UserExcution(UserStateEnum.SUCCESS);
 		} else {

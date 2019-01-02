@@ -32,6 +32,8 @@ var app = new Vue(
 				var formData = new FormData();
 				formData.append('pageIndex', pageIndex);
 				formData.append('pageSize', pageSize);
+				formData.append('dbCode', 'FootballSystem');
+				formData.append('dbType', 'MyBatis');
 				const that = this
 				axios
 					.post(
@@ -71,6 +73,8 @@ $(function () {
 				var formData = new FormData();
 				formData.append('username', username);
 				formData.append('password', password);
+				formData.append('dbCode', 'FootballSystem');
+				formData.append('dbType', 'MyBatis');
 				$
 					.ajax({
 						url: urlStr,
@@ -148,6 +152,8 @@ $(function () {
 		var objId = $('#deleteObj').val();
 		var formData = new FormData();
 		formData.append('username', objId);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 		$
 			.ajax({
 				url: delOneUrl,
@@ -188,15 +194,18 @@ $(function () {
 				list.push(element.value);
 			}
 		})
+	var formData = new FormData();
+	formData.append('dbCode', 'FootballSystem');
+	formData.append('dbType', 'MyBatis');
+	formData.append('list', JSON.stringify(list));
 		$
 			.ajax({
 				url: delListUrl,
-				type: 'POST',
-				dataType: "json",
-				contentType: "application/json",
-				data: JSON.stringify(list),
-				processData: false,
-				cache: false,
+				type : 'POST',
+				data : formData,
+				contentType : false,
+				processData : false,
+				cache : false,
 				success: function (data) {
 					loading.hide();
 					app.messageShow = true;

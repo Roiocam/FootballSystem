@@ -12,6 +12,8 @@ $(function() {
 		var formData = new FormData();
 		formData.append('pageIndex', 1);
 		formData.append('pageSize', 10);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 
 		$
 				.ajax({
@@ -46,6 +48,8 @@ $(function() {
 		var cupId = $('#cupId').val();
 		var formData = new FormData();
 		formData.append('cupId', cupId);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 		$.ajax({
 			url : getGroupUrl,
 			type : 'POST',

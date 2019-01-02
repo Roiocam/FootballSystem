@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.service.impl.mybatis;
+package club.pypzx.FootballSystem.service.impl;
 
 import java.util.Iterator;
 import java.util.List;
@@ -65,7 +65,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	@Transactional
-	public BaseExcution<Player> deleteObjByPrimaryKey(String objId) throws Exception {
+	public BaseExcution<Player> removeById(String objId) throws Exception {
 		infoMapper.delete(new PlayerInfo(objId));
 		rankMapper.delete(new PlayerRank(objId));
 		if (1 != mapper.delete(new Player(objId))) {
@@ -76,7 +76,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	@Deprecated
-	public BaseExcution<Player> insertObj(Player obj) {
+	public BaseExcution<Player> add(Player obj) {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
@@ -88,19 +88,19 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	@Deprecated
-	public BaseExcution<Player> updateObjByPrimaryKey(Player obj) {
+	public BaseExcution<Player> edit(Player obj) {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.updateByPrimaryKey(obj)) {
+		if (1 != mapper.update(obj)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
-	public BaseExcution<Player> queryObjOneByPrimaryKey(String objId) {
-		Player selectByPrimaryKey = mapper.selectByPrimaryKey(objId);
+	public BaseExcution<Player> findById(String objId) {
+		Player selectByPrimaryKey = mapper.selectPrimary(new Player(objId));
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Player>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -108,28 +108,30 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public BaseExcution<Player> queryObjOne(Player obj) {
-		Player selectOne = mapper.selectOne(obj);
-		if (selectOne == null) {
-			return new BaseExcution<Player>(BaseStateEnum.QUERY_ERROR);
+	public BaseExcution<Player> findByCondition(Player obj) {
+		int selectCount = mapper.selectCount(obj);
+		List<Player> selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		if (selectRowBounds != null && selectRowBounds.size() > -1) {
+			return new BaseExcution<Player>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
 		}
-		return new BaseExcution<Player>(BaseStateEnum.SUCCESS, selectOne);
+		return new BaseExcution<Player>(BaseStateEnum.QUERY_ERROR);
 	}
 
 	@Override
-	public BaseExcution<Player> queryAll(int pageIndex, int pageSize) {
+	public BaseExcution<Player> findAll(int pageIndex, int pageSize) {
 
-		List<Player> selectAll = mapper.selectByRowBounds(null, new RowBounds((pageIndex - 1) * pageSize, pageSize));
+		List<Player> selectAll = mapper.selectRowBounds(new Player(),
+				Page.getInstance(pageIndex, pageSize));
 		if (selectAll == null) {
 			return new BaseExcution<Player>(BaseStateEnum.QUERY_ERROR);
 		}
-		int selectCount = mapper.selectCount(null);
-		return new BaseExcution<Player>(BaseStateEnum.SUCCESS, selectAll,selectCount);
+		int selectCount = mapper.selectCount(new Player());
+		return new BaseExcution<Player>(BaseStateEnum.SUCCESS, selectAll, selectCount);
 	}
 
 	@Override
-	public BaseExcution<PlayerVo> selectByPrimary(String id) {
-		PlayerVo selectByPrimary = mapper.selectByPrimary(id);
+	public BaseExcution<PlayerVo> findByIdMore(String id) {
+		PlayerVo selectByPrimary = mapper.selectPrimaryVo(new Player(id));
 		if (selectByPrimary == null) {
 			return new BaseExcution<PlayerVo>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -137,19 +139,18 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public BaseExcution<PlayerVo> queryAllByPage(Player example, int pageIndex, int pageSize) {
-
-		List<PlayerVo> selectAllByPage = mapper.selectAllByPage(example, Page.getInstance(pageIndex, pageSize));
+	public BaseExcution<PlayerVo> findAllMore(Player example, int pageIndex, int pageSize) {
+		List<PlayerVo> selectAllByPage = mapper.selectMoreRowBounds(example,Page.getInstance(pageIndex, pageSize));
 		if (selectAllByPage == null) {
 			return new BaseExcution<PlayerVo>(BaseStateEnum.QUERY_ERROR);
 		}
 		int selectCount = mapper.selectCount(example);
-		return new BaseExcution<PlayerVo>(BaseStateEnum.SUCCESS, selectAllByPage,selectCount);
+		return new BaseExcution<PlayerVo>(BaseStateEnum.SUCCESS, selectAllByPage, selectCount);
 	}
 
 	@Override
 	@Transactional
-	public BaseExcution<Player> insertObject(String teamId, String name, int num, String stuno, String depart,
+	public BaseExcution<Player> add(String teamId, String name, int num, String stuno, String depart,
 			String tel) throws Exception {
 		Player packagePlayer = null;
 		PlayerInfo packagePlayerInfo = null;
@@ -159,16 +160,16 @@ public class PlayerServiceImpl implements PlayerService {
 		} catch (Exception e) {
 			return new BaseExcution<Player>(BaseStateEnum.EMPTY);
 		}
-		//球队人数限制
-		Player temp=new Player();
+		// 球队人数限制
+		Player temp = new Player();
 		temp.setTeamId(teamId);
 		int selectCount = mapper.selectCount(temp);
-		if(selectCount>=14) {
+		if (selectCount >= 14) {
 			return new BaseExcution<>(BaseStateEnum.TO_MANY_PLAYER);
 		}
-		
+
 		temp.setPlayerNum(num);
-		if(null!=mapper.selectOne(temp)) {
+		if (null != mapper.selectPrimary(temp)) {
 			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYERNUM);
 		}
 		if (1 != mapper.insert(packagePlayer)) {
@@ -183,7 +184,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	@Transactional
-	public BaseExcution<Player> updateObject(String id, String teamId, String name, int num, String stuno,
+	public BaseExcution<Player> edit(String id, String teamId, String name, int num, String stuno,
 			String depart, String tel) throws Exception {
 		Player packagePlayer = null;
 		PlayerInfo packagePlayerInfo = null;
@@ -193,10 +194,10 @@ public class PlayerServiceImpl implements PlayerService {
 		} catch (Exception e) {
 			return new BaseExcution<Player>(BaseStateEnum.FAIL);
 		}
-		if (1 != mapper.updateByPrimaryKey(packagePlayer)) {
+		if (1 != mapper.update(packagePlayer)) {
 			throw new Exception("修改球员失败");
 		}
-		if (1 != infoMapper.updateByPrimaryKey(packagePlayerInfo)) {
+		if (1 != infoMapper.update(packagePlayerInfo)) {
 			throw new Exception("修改球员失败");
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
@@ -205,7 +206,7 @@ public class PlayerServiceImpl implements PlayerService {
 	@Override
 	public boolean checkValidCode(String validCode, String teamId) {
 
-		Team selectOne = teamMapper.selectOne(new Team(teamId));
+		Team selectOne = teamMapper.selectByPrimary(teamId);
 		if (selectOne == null | ParamUtils.emptyString(selectOne.getVaildCode())) {
 			return false;
 		}
@@ -216,20 +217,20 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public BaseExcution<Player> deleteObjectList(List<String> list) throws Exception {
+	public BaseExcution<Player> removeByIdList(List<String> list) throws Exception {
 		Iterator<?> iterator = list.iterator();
 		if (iterator == null) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		while (iterator.hasNext()) {
-			deleteObjByPrimaryKey((String) iterator.next());
+			removeById((String) iterator.next());
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
 	public BaseExcution<Player> checkValidId(String playerId) {
-		if (0 != mapper.selectCountByPrimary(playerId)) {
+		if (0 != mapper.selectCount(new Player(playerId))) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);

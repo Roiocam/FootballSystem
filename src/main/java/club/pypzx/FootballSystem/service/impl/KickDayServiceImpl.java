@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.service.impl.mybatis;
+package club.pypzx.FootballSystem.service.impl;
 
 import java.util.Date;
 
@@ -21,7 +21,7 @@ public class KickDayServiceImpl implements KickDayService {
 		KickDay kick = new KickDay();
 		kick.setDate(new Date());
 		kick.setNum(0);
-		int insertKickDay = kickDAO.insertKickDay(kick);
+		int insertKickDay = kickDAO.insert(kick);
 		if (insertKickDay > 0) {
 			return new BaseExcution<KickDay>(BaseStateEnum.SUCCESS, kick);
 		} else {
@@ -44,11 +44,8 @@ public class KickDayServiceImpl implements KickDayService {
 		KickDay queryKickToday = kickDAO.queryKickToday();
 		if (queryKickToday != null && queryKickToday.getDate() != null) {
 			int updateKickDay = 0;
-			if (isPlus) {
-				updateKickDay = kickDAO.updateKickDayPlus();
-			} else {
-				updateKickDay = kickDAO.updateKickDayReduce();
-			}
+			queryKickToday.setNum(isPlus ? queryKickToday.getNum() + 1 : queryKickToday.getNum() - 1);
+			updateKickDay = kickDAO.update(queryKickToday);
 			if (updateKickDay > 0)
 				return new BaseExcution<KickDay>(BaseStateEnum.SUCCESS);
 			return new BaseExcution<KickDay>(BaseStateEnum.FAIL);

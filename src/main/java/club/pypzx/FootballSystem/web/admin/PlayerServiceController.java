@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
 
 import club.pypzx.FootballSystem.dto.PlayerVo;
 import club.pypzx.FootballSystem.entity.Player;
@@ -46,7 +47,7 @@ public class PlayerServiceController {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.PAGE_ERROR.getStateInfo());
 		}
 		// 条件查找
-		BaseExcution<PlayerVo> queryAllByPage = service.queryAllByPage(example, pageIndex, pageSize);
+		BaseExcution<PlayerVo> queryAllByPage = service.findAllMore(example, pageIndex, pageSize);
 		if (ResultUtil.failResult(queryAllByPage)) {
 			return ModelMapUtil.getDtoMap(queryAllByPage, "查询球员列表失败");
 		}
@@ -67,7 +68,7 @@ public class PlayerServiceController {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
 		try {
-			BaseExcution<Player> insertObj = service.insertObject(teamId, playerName, playerNum, stuno, depart, tel);
+			BaseExcution<Player> insertObj = service.add(teamId, playerName, playerNum, stuno, depart, tel);
 			if (ResultUtil.failResult(insertObj)) {
 				return ModelMapUtil.getErrorMap("加入球队失败:" + insertObj.getStateInfo());
 			}
@@ -90,7 +91,7 @@ public class PlayerServiceController {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
 		try {
-			BaseExcution<Player> updateObj = service.updateObject(playerId, teamId, playerName, playerNum, stuno,
+			BaseExcution<Player> updateObj = service.edit(playerId, teamId, playerName, playerNum, stuno,
 					depart, tel);
 			if (ResultUtil.failResult(updateObj)) {
 				return ModelMapUtil.getErrorMap("编辑球员失败:" + updateObj.getStateInfo());
@@ -108,7 +109,7 @@ public class PlayerServiceController {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
 		try {
-			BaseExcution<Player> deleteObjByPrimaryKey = service.deleteObjByPrimaryKey(playerId);
+			BaseExcution<Player> deleteObjByPrimaryKey = service.removeById(playerId);
 			if (ResultUtil.failResult(deleteObjByPrimaryKey)) {
 				return ModelMapUtil.getErrorMap("删除球员失败");
 			}
@@ -120,12 +121,14 @@ public class PlayerServiceController {
 	}
 
 	@PostMapping("/deletePlayerList")
-	public Map<String, Object> deletePlayerList(@RequestBody List<String> list) {
+	public Map<String, Object> deletePlayerList(HttpServletRequest request) {
+		String str = HttpServletRequestUtil.getString(request, "list");
+		List<String> list = (List<String>) JSON.parseArray(str, String.class);
 		if (list == null || list.size() <= 0) {
 			return ModelMapUtil.getErrorMap("删除失败,请选择球员后删除!");
 		}
 		try {
-			BaseExcution<Player> deleteObjectList = service.deleteObjectList(list);
+			BaseExcution<Player> deleteObjectList = service.removeByIdList(list);
 			if (ResultUtil.failResult(deleteObjectList)) {
 				return ModelMapUtil.getErrorMap("Oops!删除失败，请联系管理员");
 			}

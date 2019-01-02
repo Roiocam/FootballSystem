@@ -1,12 +1,13 @@
 package club.pypzx.FootballSystem.dto;
 
 import club.pypzx.FootballSystem.entity.Cup;
+import club.pypzx.FootballSystem.entity.Player;
 
 public class TeamVo {
 	private String teamId;
 	private String teamName;
 	private Cup cup;
-	private String leaderName;
+	private Player leader;
 	private String vaildCode;
 	private String teamDesc;
 	public String getTeamId() {
@@ -27,11 +28,11 @@ public class TeamVo {
 	public void setCup(Cup cup) {
 		this.cup = cup;
 	}
-	public String getLeaderName() {
-		return leaderName;
+	public Player getLeader() {
+		return leader;
 	}
-	public void setLeaderName(String leaderName) {
-		this.leaderName = leaderName;
+	public void setLeader(Player leader) {
+		this.leader = leader;
 	}
 	public String getVaildCode() {
 		return vaildCode;
@@ -45,7 +46,6 @@ public class TeamVo {
 	public void setTeamDesc(String teamDesc) {
 		this.teamDesc = teamDesc;
 	}
-
 	
 	
 	

@@ -15,16 +15,16 @@ public interface TeamService extends BaseService<Team> {
 
 	public BaseExcution<Team> createTeam(String cupId, String teamName, String vaildCode, String teamDesc);
 
-	public BaseExcution<TeamVo> selectByPrimary(String id);
+	public BaseExcution<TeamVo> findByIdMore(String id);
 
-	public BaseExcution<TeamVo> queryAllByPage(Team example, int pageIndex, int pageSize);
+	public BaseExcution<TeamVo> findAllMore(Team t, int pageIndex, int pageSize);
 
-	public BaseExcution<Team> updateTeamLeader(String teamId, String leaderId);
+	public BaseExcution<Team> editTeamLeader(String teamId, String leaderId);
 
 	public BaseExcution<Team> createTeamAddPlayer(String cupId, String teamName, String vaildCode, String teamDesc,
 			String playerName, int playerNum, String playerStuno, String playerDepart, String playerTel)
 			throws Exception;
 
-	public BaseExcution<GroupVo> queryTeamByGroup(String cupId);
+	public BaseExcution<GroupVo> findTeamByGroup(String cupId);
 	public BaseExcution<TeamPrint> getTeamPrint(String teamId);
 }

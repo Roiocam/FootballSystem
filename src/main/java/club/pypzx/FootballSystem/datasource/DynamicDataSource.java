@@ -26,23 +26,23 @@ public class DynamicDataSource extends DataSource {
 	@Override
 	public Connection getConnection() {
 		// 获取工程编码
-		String projectCode = DBIdentifier.getProjectCode();
+		String dbCode = DBIdentifier.getDbCode();
 		// 1、根据工程编码获取获取对应数据源
-		DataSource dds = DDSHolder.instance().getDDS(projectCode);
+		DataSource dds = DDSHolder.instance().getDDS(dbCode);
 		// 2、如果数据源不存在则创建
 		if (dds == null) {
 			try {
-				DataSource newDDS = initDDS(projectCode);
+				DataSource newDDS = initDDS(dbCode);
 				// 在动态数据源管理器中添加该数据源
-				DDSHolder.instance().addDDS(projectCode, newDDS);
+				DDSHolder.instance().addDDS(dbCode, newDDS);
 				// 这里不直接返回,而是全部管理交给DDSHolder，这里的代码可用AOP优化
 			} catch (IllegalArgumentException | IllegalAccessException e) {
-				log.error("Init data source fail. projectCode:" + projectCode);
+				log.error("Init data source fail. projectCode:" + dbCode);
 				return null;
 			}
 		}
 		// 3.获取动态数据源管理器中的数据源
-		dds = DDSHolder.instance().getDDS(projectCode);
+		dds = DDSHolder.instance().getDDS(dbCode);
 		// 4.获取数据库连接并返回
 		try {
 			return dds.getConnection();
@@ -59,7 +59,7 @@ public class DynamicDataSource extends DataSource {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 */
-	private DataSource initDDS(String projectCode) throws IllegalArgumentException, IllegalAccessException {
+	private DataSource initDDS(String dbCode) throws IllegalArgumentException, IllegalAccessException {
 		// 1.创建数据源
 		DataSource dds = new DataSource();
 		// 2.复制PoolConfiguration的属性
@@ -80,8 +80,8 @@ public class DynamicDataSource extends DataSource {
 		// 3.设置数据库名称和IP(一般来说，端口和用户名、密码都是统一固定的),在properties中写好了
 		// 根据项目名,获取ProjectDBMgr下写好的数据库名称和具体数据库Ip
 		String urlFormat = this.getUrl();
-		String url = String.format(urlFormat, ProjectDBMgr.instance().getDBIP(projectCode),
-				ProjectDBMgr.instance().getDBName(projectCode));
+		String url = String.format(urlFormat, ProjectDBMgr.instance().getDBIP(dbCode),
+				ProjectDBMgr.instance().getDBName(dbCode));
 		dds.setUrl(url);
 		// 4.返回动态生成的数据源
 		return dds;

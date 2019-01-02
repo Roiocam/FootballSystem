@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.service.impl.mybatis;
+package club.pypzx.FootballSystem.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import club.pypzx.FootballSystem.dao.mybatis.CupMapper;
 import club.pypzx.FootballSystem.dao.mybatis.GameMapper;
 import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
 import club.pypzx.FootballSystem.dto.GameVo;
+import club.pypzx.FootballSystem.entity.Cup;
 import club.pypzx.FootballSystem.entity.Game;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.entity.Page;
@@ -33,7 +35,7 @@ public class GameServiceImpl implements GameService {
 	private CupMapper cupMapper;
 
 	@Override
-	public BaseExcution<Game> insertObj(Game obj) {
+	public BaseExcution<Game> add(Game obj) {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
@@ -44,19 +46,21 @@ public class GameServiceImpl implements GameService {
 	}
 
 	@Override
-	public BaseExcution<Game> updateObjByPrimaryKey(Game obj) throws Exception {
+	public BaseExcution<Game> edit(Game obj) throws Exception {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.updateByPrimaryKey(obj)) {
+		if (1 != mapper.update(obj)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
-	public BaseExcution<Game> queryObjOneByPrimaryKey(String objId) {
-		Game selectByPrimaryKey = mapper.selectByPrimaryKey(objId);
+	public BaseExcution<Game> findById(String objId) {
+		Game game = new Game();
+		game.setCupId(objId);
+		Game selectByPrimaryKey = mapper.selectPrimary(game);
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Game>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -64,33 +68,34 @@ public class GameServiceImpl implements GameService {
 	}
 
 	@Override
-	public BaseExcution<Game> queryObjOne(Game obj) {
-		Game selectOne = mapper.selectOne(obj);
-		if (selectOne == null) {
-			return new BaseExcution<Game>(BaseStateEnum.QUERY_ERROR);
+	public BaseExcution<Game> findByCondition(Game obj) {
+		int selectCount = mapper.selectCount(obj);
+		List<Game> selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		if (selectRowBounds != null && selectRowBounds.size() > -1) {
+			return new BaseExcution<Game>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
 		}
-		return new BaseExcution<Game>(BaseStateEnum.SUCCESS, selectOne);
+		return new BaseExcution<Game>(BaseStateEnum.QUERY_ERROR);
 	}
 
 	@Override
-	public BaseExcution<GameVo> queryAll(String cupId, int pageIndex, int pageSize) {
+	public BaseExcution<GameVo> findAll(String cupId, int pageIndex, int pageSize) {
 		List<GameVo> selectGameByCup = mapper.selectGameByCup(cupId, Page.getInstance(pageIndex, pageSize));
 		if (selectGameByCup == null) {
 			return new BaseExcution<GameVo>(BaseStateEnum.QUERY_ERROR);
 		}
-		int selectCount = mapper.selectCount(null);
+		int selectCount = mapper.selectCount(new Game());
 		return new BaseExcution<GameVo>(BaseStateEnum.SUCCESS, selectGameByCup, selectCount);
 	}
 
 	@Override
 	@Deprecated
-	public BaseExcution<Game> deleteObjByPrimaryKey(String objId) throws Exception {
+	public BaseExcution<Game> removeById(String objId) throws Exception {
 		return null;
 	}
 
 	@Override
 	@Deprecated
-	public BaseExcution<Game> deleteObjectList(List<String> list) throws Exception {
+	public BaseExcution<Game> removeByIdList(List<String> list) throws Exception {
 		return null;
 	}
 
@@ -104,7 +109,10 @@ public class GameServiceImpl implements GameService {
 		if (0 == mapper.delete(record) || 0 == groupMapper.delete(group)) {
 			throw new RuntimeException("删除赛程表和分组时出错");
 		}
-		if (1 != cupMapper.updateCupNotGroup(cupId)) {
+		Cup cup = new Cup();
+		cup.setCupId(cupId);
+		cup.setIsGroup(0);
+		if (1 != cupMapper.update(cup)) {
 			throw new Exception("更新赛事分组状态失败");
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
@@ -113,7 +121,8 @@ public class GameServiceImpl implements GameService {
 	@Override
 	@Transactional
 	public BaseExcution<Game> randomGameByGroup(String cupId) throws Exception {
-		List<Group> select = groupMapper.select(new Group(cupId));
+		int selectCount = groupMapper.selectCount(new Group(cupId));
+		List<Group> select = groupMapper.selectRowBounds(new Group(cupId), new RowBounds(0, selectCount));
 		Iterator<Group> iterator = select.iterator();
 		List<Group> A = new ArrayList<Group>();
 		List<Group> B = new ArrayList<Group>();
@@ -175,7 +184,7 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	@Deprecated
-	public BaseExcution<Game> queryAll(int pageIndex, int pageSize) {
+	public BaseExcution<Game> findAll(int pageIndex, int pageSize) {
 		return null;
 	}
 

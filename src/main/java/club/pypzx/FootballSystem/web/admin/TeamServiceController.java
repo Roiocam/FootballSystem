@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
 
 import club.pypzx.FootballSystem.dto.GroupVo;
 import club.pypzx.FootballSystem.dto.TeamPrint;
@@ -38,11 +39,11 @@ public class TeamServiceController {
 		if (ParamUtils.wrongPage(pageIndex, pageSize)) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.PAGE_ERROR.getStateInfo());
 		}
-		BaseExcution<TeamVo> queryAllByPage = service.queryAllByPage(null, pageIndex, pageSize);
+		BaseExcution<TeamVo> queryAllByPage = service.findAllMore(null, pageIndex, pageSize);
 		if (ResultUtil.failResult(queryAllByPage)) {
 			return ModelMapUtil.getDtoMap(queryAllByPage, "查询球队列表失败");
 		}
-		return ModelMapUtil.getSuccessMapWithList("查询球队列表成功", queryAllByPage.getObjList(),queryAllByPage.getCount());
+		return ModelMapUtil.getSuccessMapWithList("查询球队列表成功", queryAllByPage.getObjList(), queryAllByPage.getCount());
 
 	}
 
@@ -57,9 +58,9 @@ public class TeamServiceController {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
 		try {
-			BaseExcution<Team> insertObj = service.insertObj(service.packageTeam(cupId, teamName, vaildCode, teamDesc));
+			BaseExcution<Team> insertObj = service.add(service.packageTeam(cupId, teamName, vaildCode, teamDesc));
 			if (ResultUtil.failResult(insertObj)) {
-				return ModelMapUtil.getErrorMap("新增球队失败:"+insertObj.getStateInfo());
+				return ModelMapUtil.getErrorMap("新增球队失败:" + insertObj.getStateInfo());
 			}
 			return ModelMapUtil.getSuccessMap("新增成功");
 		} catch (Exception e) {
@@ -80,7 +81,7 @@ public class TeamServiceController {
 		}
 		try {
 			BaseExcution<Team> updateObj = service
-					.updateObjByPrimaryKey(service.packageTeam(teamId, cupId, teamName, leaderId, vaildCode, teamDesc));
+					.edit(service.packageTeam(teamId, cupId, teamName, leaderId, vaildCode, teamDesc));
 			if (ResultUtil.failResult(updateObj)) {
 				return ModelMapUtil.getErrorMap("编辑球队失败");
 			}
@@ -97,9 +98,9 @@ public class TeamServiceController {
 			return ModelMapUtil.getErrorMap("删除失败，编号错误");
 		}
 		try {
-			BaseExcution<Team> deleteObjByPrimaryKey = service.deleteObjByPrimaryKey(teamId);
+			BaseExcution<Team> deleteObjByPrimaryKey = service.removeById(teamId);
 			if (ResultUtil.failResult(deleteObjByPrimaryKey)) {
-				return ModelMapUtil.getErrorMap("删除球队失败:"+deleteObjByPrimaryKey.getStateInfo());
+				return ModelMapUtil.getErrorMap("删除球队失败:" + deleteObjByPrimaryKey.getStateInfo());
 			}
 			return ModelMapUtil.getSuccessMap("删除球队成功");
 		} catch (Exception e) {
@@ -109,12 +110,14 @@ public class TeamServiceController {
 	}
 
 	@PostMapping("/deleteTeamList")
-	public Map<String, Object> deleteTeamList(@RequestBody List<String> list) {
+	public Map<String, Object> deleteTeamList(HttpServletRequest request) {
+		String str = HttpServletRequestUtil.getString(request, "list");
+		List<String> list = (List<String>) JSON.parseArray(str, String.class);
 		if (list == null || list.size() <= 0) {
 			return ModelMapUtil.getErrorMap("删除失败,请选择球队后删除!");
 		}
 		try {
-			BaseExcution<Team> deleteObjectList = service.deleteObjectList(list);
+			BaseExcution<Team> deleteObjectList = service.removeByIdList(list);
 			if (ResultUtil.failResult(deleteObjectList)) {
 				return ModelMapUtil.getErrorMap("Oops!删除失败，请联系管理员");
 			}
@@ -131,7 +134,7 @@ public class TeamServiceController {
 		if (ParamUtils.emptyString(teamId) || ParamUtils.emptyString(leaderId)) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
-		BaseExcution<Team> updateTeamLeader = service.updateTeamLeader(teamId, leaderId);
+		BaseExcution<Team> updateTeamLeader = service.editTeamLeader(teamId, leaderId);
 		if (ResultUtil.failResult(updateTeamLeader)) {
 			return ModelMapUtil.getErrorMap("指定球队队长失败");
 		}
@@ -144,13 +147,14 @@ public class TeamServiceController {
 		if (ParamUtils.emptyString(cupId)) {
 			return ModelMapUtil.getErrorMap("请选择赛事");
 		}
-		BaseExcution<GroupVo> queryTeamByGroup = service.queryTeamByGroup(cupId);
+		BaseExcution<GroupVo> queryTeamByGroup = service.findTeamByGroup(cupId);
 		if (ResultUtil.failResult(queryTeamByGroup)) {
 			return ModelMapUtil.getDtoMap(queryTeamByGroup, "查询球队分组失败,该赛事并未分组！");
 		}
 		return ModelMapUtil.getSuccessMapWithObject("查询球队列表成功", queryTeamByGroup.getObjList());
 
 	}
+
 	@PostMapping("/getTeamById")
 	public Map<String, Object> getTeamById(HttpServletRequest request) {
 		String teamId = HttpServletRequestUtil.getString(request, "teamId");
@@ -164,5 +168,5 @@ public class TeamServiceController {
 		return ModelMapUtil.getSuccessMapWithObject("查询球队详情成功", teamPrint.getObj());
 
 	}
-	
+
 }

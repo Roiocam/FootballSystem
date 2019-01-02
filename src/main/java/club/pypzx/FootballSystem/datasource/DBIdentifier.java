@@ -16,10 +16,10 @@ public class DBIdentifier {
 	/**
 	 * 用不同的工程编码来区分数据库
 	 */
-	private static ThreadLocal<String> projectCode = new ThreadLocal<String>();
+	private static ThreadLocal<String> dbCode = new ThreadLocal<String>();
 
-	public static String getProjectCode() {
-		return projectCode.get();
+	public static String getDbCode() {
+		return dbCode.get();
 	}
 
 	/**
@@ -28,11 +28,11 @@ public class DBIdentifier {
 	 * @param code
 	 * @return
 	 */
-	public static boolean setProjectCode(String code) {
+	public static boolean setDbCode(String code) {
 		if (!ProjectDBMgr.instance().containsKey(code)) {
 			return false;
 		}
-		projectCode.set(code);
+		dbCode.set(code);
 		return true;
 	}
 }

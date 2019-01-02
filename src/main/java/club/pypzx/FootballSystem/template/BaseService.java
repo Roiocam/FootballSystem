@@ -3,17 +3,17 @@ package club.pypzx.FootballSystem.template;
 import java.util.List;
 
 public interface BaseService<T> {
-	public BaseExcution<T> insertObj(T obj);
+	public BaseExcution<T> add(T obj);
 
-	public BaseExcution<T> updateObjByPrimaryKey(T obj)  throws Exception;;
+	public BaseExcution<T> edit(T obj) throws Exception;;
 
-	public BaseExcution<T> queryObjOneByPrimaryKey(String objId);
+	public BaseExcution<T> findById(String objId);
 
-	public BaseExcution<T> queryObjOne(T obj);
+	public BaseExcution<T> findByCondition(T obj);
 
-	public BaseExcution<T> queryAll(int pageIndex, int pageSize);
+	public BaseExcution<T> findAll(int pageIndex, int pageSize);
 
-	public BaseExcution<T> deleteObjByPrimaryKey(String objId) throws Exception;
+	public BaseExcution<T> removeById(String objId) throws Exception;
 
-	public BaseExcution<T> deleteObjectList(List<String> list) throws Exception;
+	public BaseExcution<T> removeByIdList(List<String> list) throws Exception;
 }

@@ -7,9 +7,13 @@ $(function() {
 
 
 	function getData() {
+		var formData=new FormData();
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
 		 $.ajax({
 				url : getDataUrl,
 				type : 'POST',
+				data:formData,
 				contentType : false,
 				processData : false,
 				cache : false,

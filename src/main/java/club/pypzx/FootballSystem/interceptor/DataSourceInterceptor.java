@@ -32,8 +32,8 @@ public class DataSourceInterceptor extends HandlerInterceptorAdapter {
 	@ResponseBody
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		String projectCode = HttpServletRequestUtil.getString(request, "projectCode");
-		if (!DBIdentifier.setProjectCode(projectCode)) {
+		String dbCode = HttpServletRequestUtil.getString(request, "dbCode");
+		if (!DBIdentifier.setDbCode(dbCode)) {
 			Map<String, Object> errorMap = ModelMapUtil.getErrorMap("工程编码不存在或有误");
 			String json = JSON.toJSON(errorMap).toString();
 			returnJson(response, json);

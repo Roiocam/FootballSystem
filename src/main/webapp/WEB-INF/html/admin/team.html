@@ -81,9 +81,9 @@ td {
 						<td colspan="1">{{item.teamName}}</td>
 						<td :value="item.cup.cupId">{{item.cup.cupName}} </td>
 						<td colspan="1">{{item.vaildCode}}</td>
-						<td colspan="1">{{item.leaderName}}</td>
+						<td colspan="1">{{item.leader.playerName}}</td>
 						<td colspan="2">{{item.teamDesc}}</td>
-						<td colspan="1"><a href="#" data-toggle="modal" data-target="#leaderModal" class="btn btn-primary mr-3" id="cleaderModal">{{item.leaderName=='无'?'选择队长':'更改队长'}}</a></td>
+						<td colspan="1"><a href="#" data-toggle="modal" data-target="#leaderModal" class="btn btn-primary mr-3" id="cleaderModal">{{item.leader.playerName=='无'?'选择队长':'更改队长'}}</a></td>
 					</tr>
 				</tbody>
 

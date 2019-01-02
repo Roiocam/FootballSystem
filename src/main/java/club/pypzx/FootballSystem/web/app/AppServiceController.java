@@ -104,8 +104,7 @@ public class AppServiceController {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
 		try {
-			BaseExcution<Player> insertObj = playerService.insertObject(teamId, playerName, playerNum, stuno, depart,
-					tel);
+			BaseExcution<Player> insertObj = playerService.add(teamId, playerName, playerNum, stuno, depart, tel);
 			if (insertObj.getState() != BaseStateEnum.SUCCESS.getState()) {
 				return ModelMapUtil.getErrorMap("加入球队失败：" + insertObj.getStateInfo());
 			}
@@ -115,7 +114,7 @@ public class AppServiceController {
 				WechatAccount wechat = new WechatAccount();
 				wechat.setOpenid(openid);
 				wechat.setPlayerId(playerId);
-				wechatService.insertObj(wechat);
+				wechatService.add(wechat);
 			}
 			return ModelMapUtil.getSuccessMap("新增成功");
 		} catch (Exception e) {
@@ -154,7 +153,7 @@ public class AppServiceController {
 				WechatAccount wechat = new WechatAccount();
 				wechat.setOpenid(openid);
 				wechat.setTeamId(teamId);
-				wechatService.insertObj(wechat);
+				wechatService.add(wechat);
 			}
 			return ModelMapUtil.getSuccessMap("创建球队成功");
 		} catch (Exception e) {
@@ -170,19 +169,19 @@ public class AppServiceController {
 		if (ParamUtils.emptyString(openid)) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:a]");
 		}
-		queryObjOneByPrimaryKey = wechatService.queryObjOneByPrimaryKey(openid);
+		queryObjOneByPrimaryKey = wechatService.findById(openid);
 		if (ResultUtil.failResult(queryObjOneByPrimaryKey)) {
 			return ModelMapUtil.getErrorMap("该微信用户下无创建信息");
 		}
 		String teamId = queryObjOneByPrimaryKey.getObj().getTeamId();
 		if (teamId != null && teamId != "") {
-			BaseExcution<Team> queryObjOne = teamService.queryObjOne(new Team(teamId));
-			BaseExcution<PlayerVo> playerDto = playerService.selectByPrimary(queryObjOne.getObj().getLeaderId());
+			BaseExcution<Team> queryObjOne = teamService.findByCondition(new Team(teamId));
+			BaseExcution<PlayerVo> playerDto = playerService.findByIdMore(queryObjOne.getObj().getLeaderId());
 			return ModelMapUtil.getSuccessMapWithDuals("查询成功", queryObjOne.getObj(), playerDto.getObj());
 		}
 		String playerId = queryObjOneByPrimaryKey.getObj().getPlayerId();
 		if (playerId != null && playerId != "") {
-			BaseExcution<PlayerVo> selectByPrimary = playerService.selectByPrimary(playerId);
+			BaseExcution<PlayerVo> selectByPrimary = playerService.findByIdMore(playerId);
 			return ModelMapUtil.getSuccessMapWithObject("查询成功", selectByPrimary.getObj());
 		}
 		return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:b]");
@@ -197,7 +196,7 @@ public class AppServiceController {
 		if (ParamUtils.emptyString(playerId)) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:a]");
 		}
-		BaseExcution<PlayerVo> selectByPrimary = playerService.selectByPrimary(playerId);
+		BaseExcution<PlayerVo> selectByPrimary = playerService.findByIdMore(playerId);
 		if (selectByPrimary.getState() != BaseStateEnum.SUCCESS.getState()) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:b]");
 		}
@@ -211,11 +210,11 @@ public class AppServiceController {
 		if (ParamUtils.emptyString(teamId)) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:a]");
 		}
-		BaseExcution<Team> queryObjOne = teamService.queryObjOne(new Team(teamId));
+		BaseExcution<Team> queryObjOne = teamService.findByCondition(new Team(teamId));
 		if (queryObjOne.getState() != BaseStateEnum.SUCCESS.getState()) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:b]");
 		}
-		BaseExcution<PlayerVo> playerDto = playerService.selectByPrimary(queryObjOne.getObj().getLeaderId());
+		BaseExcution<PlayerVo> playerDto = playerService.findByIdMore(queryObjOne.getObj().getLeaderId());
 		if (queryObjOne.getState() != BaseStateEnum.SUCCESS.getState()) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:c]");
 		}
@@ -230,7 +229,7 @@ public class AppServiceController {
 		if (ParamUtils.emptyString(teamId)) {
 			return ModelMapUtil.getErrorMap("该球队信息有误,请联系管理员解决.");
 		}
-		BaseExcution<TeamVo> queryObjOne = teamService.selectByPrimary(teamId);
+		BaseExcution<TeamVo> queryObjOne = teamService.findByIdMore(teamId);
 		if (queryObjOne.getState() != BaseStateEnum.SUCCESS.getState()) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:b]");
 		}
