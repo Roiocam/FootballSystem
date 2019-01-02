@@ -34,7 +34,14 @@ public class DataSourceInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		String dbCode = HttpServletRequestUtil.getString(request, "dbCode");
 		if (!DBIdentifier.setDbCode(dbCode)) {
-			Map<String, Object> errorMap = ModelMapUtil.getErrorMap("工程编码不存在或有误");
+			Map<String, Object> errorMap = ModelMapUtil.getErrorMap("数据库编码不存在或有误");
+			String json = JSON.toJSON(errorMap).toString();
+			returnJson(response, json);
+			return false;
+		}
+		String dbType = HttpServletRequestUtil.getString(request, "dbType");
+		if (!DBIdentifier.setDbType(dbType)) {
+			Map<String, Object> errorMap = ModelMapUtil.getErrorMap("数据访问对象编码不存在或有误");
 			String json = JSON.toJSON(errorMap).toString();
 			returnJson(response, json);
 			return false;

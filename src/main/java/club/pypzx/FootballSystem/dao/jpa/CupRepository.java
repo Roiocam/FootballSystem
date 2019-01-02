@@ -8,4 +8,5 @@ public interface CupRepository extends JpaRepository<Cup, String> {
 	Cup findCupByCupId(String cupId);
 
 
+
 }

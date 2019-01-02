@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import club.pypzx.FootballSystem.dao.jpa.CupRepository;
 import club.pypzx.FootballSystem.dao.mybatis.CupMapper;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Cup;
@@ -31,8 +30,6 @@ public class CupServiceImpl implements CupService {
 
 	@Autowired
 	private CupMapper mapper;
-	@Autowired
-	private CupRepository dao;
 	@Autowired
 	private TeamService teamSerivce;
 	@Autowired

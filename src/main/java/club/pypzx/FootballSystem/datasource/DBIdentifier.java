@@ -3,7 +3,7 @@ package club.pypzx.FootballSystem.datasource;
 import club.pypzx.FootballSystem.dbmgr.ProjectDBMgr;
 
 /**
- * 数据库标识管理类。用于区分数据源连接的不同数据库。
+ * 数据库标识管理类。用于区分数据源连接的不同数据库和编码
  * 
  * @author Roiocam
  * @date 2018年12月30日 下午1:58:14
@@ -14,16 +14,48 @@ public class DBIdentifier {
 	 */
 
 	/**
-	 * 用不同的工程编码来区分数据库
+	 * 用不同的编码来区分数据库
 	 */
 	private static ThreadLocal<String> dbCode = new ThreadLocal<String>();
 
+	/**
+	 * 用不同的编码来区别数据访问对象
+	 */
+	private static ThreadLocal<String> dbType = new ThreadLocal<String>();
+
+	/**
+	 * 获取数据库访问对象编码
+	 * 
+	 * @return
+	 */
+	public static String getDbType() {
+		return dbType.get();
+	}
+
+	/**
+	 * 设置数据库访问对象编码
+	 * 
+	 * @param type
+	 */
+	public static boolean setDbType(String type) {
+		if ("MyBatis".equals(type) || "JPA".equals(type)) {
+			dbCode.set(type);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 获取数据库编码
+	 * 
+	 * @return
+	 */
 	public static String getDbCode() {
 		return dbCode.get();
 	}
 
 	/**
-	 * 设置工程编码，如果工程编码不存在，则返回false
+	 * 设置数据库编码，如果数据库编码不存在，则返回false
 	 * 
 	 * @param code
 	 * @return
