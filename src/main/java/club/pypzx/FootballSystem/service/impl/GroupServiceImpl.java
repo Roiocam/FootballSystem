@@ -64,7 +64,7 @@ public class GroupServiceImpl implements GroupService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectByPrimaryKey = mapper.selectPrimary(group);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimaryKey = repository.findById(objId).get();
+			selectByPrimaryKey = repository.findById(objId).orElse(null);
 		}
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Group>(BaseStateEnum.QUERY_ERROR);

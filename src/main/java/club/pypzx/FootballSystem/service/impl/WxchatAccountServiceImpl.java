@@ -58,7 +58,7 @@ public class WxchatAccountServiceImpl implements WechatAccountService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectByPrimaryKey = mapper.selectPrimary(obj);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimaryKey = repository.findOne(Example.of(obj)).get();
+			selectByPrimaryKey = repository.findOne(Example.of(obj)).orElse(null);
 		}
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<WechatAccount>(BaseStateEnum.QUERY_ERROR);

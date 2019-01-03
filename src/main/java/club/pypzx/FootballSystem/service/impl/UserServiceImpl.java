@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectPrimary = userDao.selectPrimary(user);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectPrimary = repository.findOne(Example.of(user)).get();
+			selectPrimary = repository.findOne(Example.of(user)).orElse(null);
 		}
 		if (null != selectPrimary && null != selectPrimary.getUsername()) {
 			throw new UserException("用户名已存在");
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 				return new UserExcution(UserStateEnum.DELETE_ERROR);
 			}
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectPrimary = repository.findOne(Example.of(user)).get();
+			selectPrimary = repository.findOne(Example.of(user)).orElse(null);
 			repository.delete(selectPrimary);
 		}
 		return new UserExcution(UserStateEnum.SUCCESS);
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectPrimary = userDao.selectPrimary(temp);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectPrimary = repository.findOne(Example.of(temp)).get();
+			selectPrimary = repository.findOne(Example.of(temp)).orElse(null);
 		}
 		if (selectPrimary != null) {
 			return new UserExcution(UserStateEnum.SUCCESS, selectPrimary);

@@ -39,7 +39,7 @@ public class DBIdentifier {
 	 * @param type
 	 */
 	public static boolean setDbType(String type) {
-		if (DBType.MY_BATIS.equals(type)||DBType.JPA.equals(type)) {
+		if (DBType.MY_BATIS.equals(type) || DBType.JPA.equals(type)) {
 			dbType.set(type);
 			return true;
 		}

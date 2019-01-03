@@ -80,7 +80,7 @@ public class TeamServiceImpl implements TeamService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectByPrimaryKey = mapper.selectPrimary(new Team(objId));
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimaryKey = repository.findOne(Example.of(new Team(objId))).get();
+			selectByPrimaryKey = repository.findOne(Example.of(new Team(objId))).orElse(null);
 		}
 		if (selectByPrimaryKey == null || selectByPrimaryKey.getCupId() == null) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
@@ -149,7 +149,7 @@ public class TeamServiceImpl implements TeamService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectByPrimaryKey = mapper.selectByPrimary(objId);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimaryKey = repository.findById(objId).get();
+			selectByPrimaryKey = repository.findById(objId).orElse(null);
 		}
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
@@ -198,7 +198,7 @@ public class TeamServiceImpl implements TeamService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectByPrimary = mapper.selectMorePrimary(id);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimary = voRepository.findById(id).get();
+			selectByPrimary = voRepository.findById(id).orElse(null);
 		}
 		if (selectByPrimary == null) {
 			return new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR);
@@ -271,7 +271,7 @@ public class TeamServiceImpl implements TeamService {
 			selectPrimary = mapper.selectPrimary(temp);
 			selectCount = mapper.selectCount(cupTeam);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectPrimary = repository.findOne(Example.of(temp)).get();
+			selectPrimary = repository.findOne(Example.of(temp)).orElse(null);
 			selectCount = (int) repository.count(Example.of(cupTeam));
 		}
 		if (null != selectPrimary) {
@@ -328,7 +328,7 @@ public class TeamServiceImpl implements TeamService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectPrimary = mapper.selectPrimary(new Team(teamId));
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectPrimary = repository.findOne(Example.of(new Team(teamId))).get();
+			selectPrimary = repository.findOne(Example.of(new Team(teamId))).orElse(null);
 		}
 		temp.setTeam(selectPrimary);
 		BaseExcution<PlayerVo> findByIdMore = playerService.findByIdMore(selectPrimary.getLeaderId());

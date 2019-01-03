@@ -133,7 +133,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectByPrimaryKey = mapper.selectByPrimary(objId);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimaryKey = repository.findById(objId).get();
+			selectByPrimaryKey = repository.findById(objId).orElse(null);
 		}
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Player>(BaseStateEnum.QUERY_ERROR);
@@ -181,7 +181,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectByPrimary = mapper.selectPrimaryVo(new Player(id));
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimary = voRepository.findById(id).get();
+			selectByPrimary = voRepository.findById(id).orElse(null);
 		}
 		if (selectByPrimary == null) {
 			return new BaseExcution<PlayerVo>(BaseStateEnum.QUERY_ERROR);
@@ -237,7 +237,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectPrimary = mapper.selectPrimary(temp);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectPrimary = repository.findOne(Example.of(temp)).get();
+			selectPrimary = repository.findOne(Example.of(temp)).orElse(null);
 		}
 		if (null != selectPrimary) {
 			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYERNUM);

@@ -84,7 +84,7 @@ public class GameServiceImpl implements GameService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			findById = mapper.selectPrimary(game);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			findById = repository.findById(objId).get();
+			findById = repository.findById(objId).orElse(null);
 		}
 		if (findById == null) {
 			return new BaseExcution<Game>(BaseStateEnum.QUERY_ERROR);

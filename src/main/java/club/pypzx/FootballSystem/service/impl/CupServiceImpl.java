@@ -128,7 +128,7 @@ public class CupServiceImpl implements CupService {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectByPrimaryKey = mapper.selectByPrimary(objId);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimaryKey = repository.findById(objId).get();
+			selectByPrimaryKey = repository.findById(objId).orElse(null);
 		}
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Cup>(BaseStateEnum.QUERY_ERROR);
