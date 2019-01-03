@@ -5,7 +5,8 @@
 	<include
 		resource="org/springframework/boot/logging/logback/base.xml" />
 	<!-- 定义日志文件 输入位置 -->
-	<property name="log_dir" value="${LOG_PATH}" />
+	<property name="log_dir"
+		value="/usr/local/apache-tomcat-8.5.34/APP_LOG/" />
 	<!--<property name="log_dir" value="/opt/Log/prom_prize" /> -->
 	<!-- 日志最大的历史 30天 -->
 	<property name="maxHistory" value="30" />
@@ -168,10 +169,13 @@
 	<!-- JPA -->
 	<!-- JPA -->
 	<!--输出到控制台 -->
+	<property name="log_dir"
+		value="/usr/local/apache-tomcat-8.5.34/APP_LOG/" />
 	<appender name="console"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
+				%msg%n
 			</pattern>
 		</encoder>
 	</appender>
@@ -184,7 +188,8 @@
 			<fileNamePattern>logback.%d{yyyy-MM-dd}.log</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
+				%msg%n
 			</pattern>
 		</encoder>
 	</appender>
@@ -199,7 +204,8 @@
 			<fileNamePattern>error.%d{yyyy-MM-dd}.log</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
+				%msg%n
 			</pattern>
 		</encoder>
 	</appender>

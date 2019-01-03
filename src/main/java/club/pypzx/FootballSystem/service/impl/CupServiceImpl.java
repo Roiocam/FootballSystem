@@ -64,7 +64,7 @@ public class CupServiceImpl implements CupService {
 	public BaseExcution<Cup> removeById(String objId) throws Exception {
 		// 先查询是否存在赛程分配
 		BaseExcution<Group> exist = groupService.findByCondition(new Group(objId));
-		if (ResultUtil.failListResult(exist)) {
+		if (!ResultUtil.failListResult(exist)) {
 			return new BaseExcution<>(BaseStateEnum.NEED_DELETE_GROUP);
 		}
 		// 先删除比赛记录,再删除球员,再删除球队,再删除赛程安排表

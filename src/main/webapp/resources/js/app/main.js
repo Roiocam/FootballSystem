@@ -9,7 +9,7 @@ $(function() {
 	$('#sumbitKick').on("click", function() {
 		var formData=new FormData();
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'JPA');
+		formData.append('dbType', 'MyBatis'); 
 		$.ajax({
 			url : addDataUrl,
 			type : 'POST',
@@ -31,7 +31,7 @@ $(function() {
 	$('#cancelKick').on("click", function() {
 		var formData=new FormData();
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'JPA');
+		formData.append('dbType', 'MyBatis'); 
 		$.ajax({
 			url : reduceDataUrl,
 			type : 'POST',

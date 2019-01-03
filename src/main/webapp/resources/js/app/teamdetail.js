@@ -10,7 +10,7 @@ $(function() {
 		var formData = new FormData();
 		formData.append('teamId', teamId);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'JPA');
+		formData.append('dbType', 'MyBatis'); 
 		$.ajax({
 			url : getTeamUrl,
 			type : 'POST',

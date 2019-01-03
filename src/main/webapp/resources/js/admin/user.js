@@ -33,7 +33,7 @@ var app = new Vue(
 				formData.append('pageIndex', pageIndex);
 				formData.append('pageSize', pageSize);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'JPA');
+				formData.append('dbType', 'MyBatis'); 
 				const that = this
 				axios
 					.post(
@@ -102,7 +102,7 @@ $(function () {
 				formData.append('username', username);
 				formData.append('password', password);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'JPA');
+				formData.append('dbType', 'MyBatis'); 
 				$
 					.ajax({
 						url: urlStr,
@@ -181,7 +181,7 @@ $(function () {
 		var formData = new FormData();
 		formData.append('username', objId);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'JPA');
+		formData.append('dbType', 'MyBatis'); 
 		$
 			.ajax({
 				url: delOneUrl,
@@ -224,7 +224,7 @@ $(function () {
 		})
 	var formData = new FormData();
 	formData.append('dbCode', 'FootballSystem');
-	formData.append('dbType', 'JPA');
+	formData.append('dbType', 'MyBatis'); 
 	formData.append('list', JSON.stringify(list));
 		$
 			.ajax({

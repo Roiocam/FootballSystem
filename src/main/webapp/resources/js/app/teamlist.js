@@ -10,7 +10,7 @@ $(function() {
 			formData.append('pageIndex', 1);
 			formData.append('pageSize', 999);
 			formData.append('dbCode', 'FootballSystem');
-			formData.append('dbType', 'JPA');
+			formData.append('dbType', 'MyBatis'); 
 		$.ajax({
 			url : getTeamUrl,
 			type : 'POST',

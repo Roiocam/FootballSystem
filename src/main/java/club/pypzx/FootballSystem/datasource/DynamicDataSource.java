@@ -77,6 +77,11 @@ public class DynamicDataSource extends DataSource {
 			}
 		}
 		dds.setPoolProperties(property);
+		dds.setValidationQuery("SELECT 1");
+		dds.setTestWhileIdle(true);
+		dds.setTestOnBorrow(true);
+		dds.setTimeBetweenEvictionRunsMillis(300000);
+		dds.setMinEvictableIdleTimeMillis(1800000);
 		// 3.设置数据库名称和IP(一般来说，端口和用户名、密码都是统一固定的),在properties中写好了
 		// 根据项目名,获取ProjectDBMgr下写好的数据库名称和具体数据库Ip
 		String urlFormat = this.getUrl();
