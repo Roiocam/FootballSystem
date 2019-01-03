@@ -28,6 +28,34 @@ var app = new Vue(
 			loading.append();
 			this.initData()
 			this.err = false
+			$("#pageList").delegate(".page-link", "click", function () {
+				var obj = $(this).parent();
+				if (obj.hasClass('next')) {
+					pageIndex = parseInt(pageIndex) + 1;
+					$('#pageIndexInput').val(pageIndex);
+					app.initData();
+					return; 
+				} if (obj.hasClass('prev')) {
+					pageIndex = parseInt(pageIndex) - 1;
+					$('#pageIndexInput').val(pageIndex);
+					app.initData();
+					return;
+				}
+				pageIndex = parseInt(obj.children().html());
+				$('#pageIndexInput').val(pageIndex);
+				app.initData();
+			});
+			$('#pageIndexInput').bind('keypress', function (event) {
+				if (event.keyCode == 13) {
+					var index = parseInt($(this).val());
+					if (index > pageCount) {
+						alert("请正确输入页码");
+						return;
+					}
+					pageIndex = index;
+					app.initData();
+				}
+			});
 		},
 		methods: {
 			initData: function () {

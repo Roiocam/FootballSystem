@@ -20,7 +20,7 @@ import club.pypzx.FootballSystem.datasource.DynamicDataSource;
  * @date 2018年12月30日 下午2:36:36
  */
 @Configuration
-@MapperScan("club.pypzx.FootballSystem.dao.mybatis") //配置mybatis的mapper的扫描路径
+@MapperScan("club.pypzx.FootballSystem.dao.mybatis") // 配置mybatis的mapper的扫描路径
 public class DataSourceConfiguration {
 
 	/**
@@ -50,6 +50,7 @@ public class DataSourceConfiguration {
 		// Boot自动生成一个dataSource对象(已写好的参数为url,username,password,driver-class-name)
 
 		return builder.build();
+
 	}
 
 	/**
@@ -59,7 +60,8 @@ public class DataSourceConfiguration {
 	 * @return 会话工厂
 	 */
 	@Bean(name = "sqlSessionFactory")
-	public SqlSessionFactory getSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource,org.apache.ibatis.session.Configuration config) {
+	public SqlSessionFactory getSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource,
+			org.apache.ibatis.session.Configuration config) {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(dataSource);
 		bean.setConfiguration(config);
@@ -70,10 +72,11 @@ public class DataSourceConfiguration {
 			return null;
 		}
 	}
+
 	@Bean
 	@ConfigurationProperties("mybatis.configuration")
-	public org.apache.ibatis.session.Configuration globalConfig(){
+	public org.apache.ibatis.session.Configuration globalConfig() {
 		return new org.apache.ibatis.session.Configuration();
 	}
-	
+
 }

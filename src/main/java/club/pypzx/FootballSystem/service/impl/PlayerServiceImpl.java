@@ -87,6 +87,13 @@ public class PlayerServiceImpl implements PlayerService {
 		if (findById.getState() != BaseStateEnum.SUCCESS.getState()) {
 			throw new RuntimeException("球员信息有误");
 		}
+		// 球队不为空，删除球队
+		if (ParamUtils.validString(findById.getObj().getTeamId())) {
+			BaseExcution<Team> editTeamLeader = teamService.editTeamLeader(findById.getObj().getTeamId(), null);
+			if (editTeamLeader.getState() != BaseStateEnum.SUCCESS.getState()) {
+				throw new RuntimeException("球员信息有误");
+			}
+		}
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			infoMapper.delete(new PlayerInfo(objId));
 			rankMapper.delete(new PlayerRank(objId));
@@ -98,13 +105,7 @@ public class PlayerServiceImpl implements PlayerService {
 			rankRepository.delete(new PlayerRank(objId));
 			repository.delete(new Player(objId));
 		}
-		// 球队不为空，删除球队
-		if (ParamUtils.validString(findById.getObj().getTeamId())) {
-			BaseExcution<Team> editTeamLeader = teamService.editTeamLeader(findById.getObj().getTeamId(), null);
-			if (editTeamLeader.getState() != BaseStateEnum.SUCCESS.getState()) {
-				throw new RuntimeException("球员信息有误");
-			}
-		}
+
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 

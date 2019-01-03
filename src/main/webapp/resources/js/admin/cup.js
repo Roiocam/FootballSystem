@@ -42,8 +42,37 @@ var app = new Vue({
 		}
 	},
 	mounted : function() {
-		this.initData()
-	}
+		this.initData();
+		$("#pageList").delegate(".page-link", "click", function() {
+			var obj = $(this).parent();
+			if (obj.hasClass('next')) {
+				pageIndex = parseInt(pageIndex) + 1;
+				$('#pageIndexInput').val(pageIndex);
+				app.initData();
+				return;
+			}
+			if (obj.hasClass('prev')) {
+				pageIndex = parseInt(pageIndex) - 1;
+				$('#pageIndexInput').val(pageIndex);
+				app.initData();
+				return;
+			}
+			pageIndex = parseInt(obj.children().html());
+			$('#pageIndexInput').val(pageIndex);
+			app.initData();
+		});
+		$('#pageIndexInput').bind('keypress', function(event) {
+			if (event.keyCode == 13) {
+				var index = parseInt($(this).val());
+				if (index > pageCount) {
+					alert("请正确输入页码");
+					return;
+				}
+				pageIndex = index;
+				app.initData();
+			}
+		});
+	},
 })
 $('#inputModal').on('show.bs.modal', function(event) {
 	var button = $(event.relatedTarget) // Button that triggered the modal
@@ -133,7 +162,7 @@ function delList() {
 	formData.append('dbCode', 'FootballSystem');
 	formData.append('dbType', 'JPA');
 	formData.append('list', JSON.stringify(list));
-	
+
 	$.ajax({
 		url : delListUrl,
 		type : 'POST',
@@ -148,14 +177,14 @@ function delList() {
 			if (data.state == 0) {
 				app.err = false;
 				app.initData();
-				setTimeout(function() { //使用  setTimeout（）方法设定定时2000毫秒
+				setTimeout(function() { // 使用 setTimeout（）方法设定定时2000毫秒
 					$("#deleteModal").modal('hide');
 					app.message = '';
 					app.messageShow = false;
 				}, 500);
 			} else {
 				app.err = true;
-				setTimeout(function() { //使用  setTimeout（）方法设定定时2000毫秒
+				setTimeout(function() { // 使用 setTimeout（）方法设定定时2000毫秒
 					$("#deleteModal").modal('hide');
 					app.message = '';
 					app.messageShow = false;
