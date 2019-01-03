@@ -133,7 +133,7 @@ $(function() {
 		formData.append('playerDepart', playerDepart);
 		formData.append('playerTel', playerTel);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 
 		$.ajax({
 			url : addDataUrl,
@@ -170,7 +170,7 @@ $(function() {
 		formData.append('pageIndex', 1);
 		formData.append('pageSize', 50);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 		$.ajax({
 			url : getDepartUrl,
 			type : 'POST',
@@ -196,7 +196,7 @@ $(function() {
 		var formData = new FormData();
 		formData.append('playerId', id);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 		$.ajax({
 			url : checkIdUrl,
 			type : 'POST',

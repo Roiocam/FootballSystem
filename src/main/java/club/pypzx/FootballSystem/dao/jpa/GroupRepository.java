@@ -1,9 +1,16 @@
 package club.pypzx.FootballSystem.dao.jpa;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import club.pypzx.FootballSystem.dto.GroupVo;
 import club.pypzx.FootballSystem.entity.Group;
 
 public interface GroupRepository extends JpaRepository<Group, String> {
-
+	@Query("SELECT new club.pypzx.FootballSystem.dto.GroupVo(g.team_id,t.teamName,g.teamGroup) FROM Group g  LEFT JOIN "
+			+ "Team t ON g.team_id=t.teamId  WHERE g.cupId=:cupId")
+	public List<GroupVo> queryTeamByGroup(@Param("cupId") String cupId);
 }

@@ -28,7 +28,7 @@ var app = new Vue({
 			formData.append('pageIndex', pageIndex);
 			formData.append('pageSize', pageSize);
 			formData.append('dbCode', 'FootballSystem');
-			formData.append('dbType', 'MyBatis');
+			formData.append('dbType', 'JPA');
 			const that = this
 			axios.post(getUrl, formData).then(function(res) {
 				if (res.data.state == 0) {
@@ -89,7 +89,7 @@ function delOne() {
 	var formData = new FormData();
 	formData.append('cupId', objId);
 	formData.append('dbCode', 'FootballSystem');
-	formData.append('dbType', 'MyBatis');
+	formData.append('dbType', 'JPA');
 	$.ajax({
 		url : delOneUrl,
 		type : 'POST',
@@ -131,7 +131,7 @@ function delList() {
 	})
 	var formData = new FormData();
 	formData.append('dbCode', 'FootballSystem');
-	formData.append('dbType', 'MyBatis');
+	formData.append('dbType', 'JPA');
 	formData.append('list', JSON.stringify(list));
 	
 	$.ajax({
@@ -181,7 +181,7 @@ $('#submitData').click(function() {
 	formData.append('cupId', cupId);
 	formData.append('cupName', cupName);
 	formData.append('dbCode', 'FootballSystem');
-	formData.append('dbType', 'MyBatis');
+	formData.append('dbType', 'JPA');
 	$.ajax({
 		url : urlStr,
 		type : 'POST',

@@ -37,7 +37,7 @@ var app = new Vue(
 				formData.append('pageIndex', 1);
 				formData.append('pageSize', 10);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis');
+				formData.append('dbType', 'JPA');
 				const that = this
 				axios
 					.post(
@@ -57,7 +57,7 @@ var app = new Vue(
 				var formData = new FormData();
 				formData.append('cupId', cupId);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis');
+				formData.append('dbType', 'JPA');
 				const that = this
 				axios
 					.post(
@@ -102,7 +102,7 @@ $(function () {
 		var cupId = $('#cupId').val();
 		var formData = new FormData();
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 		formData.append('cupId', cupId);
 		$.ajax({
 			url: randomUrl,
@@ -138,7 +138,7 @@ $(function () {
 		var formData = new FormData();
 		formData.append('cupId', cupId)
 		formData.append('dbCode', 'FootballSystem');
-			formData.append('dbType', 'MyBatis');
+			formData.append('dbType', 'JPA');
 		$.ajax({
 			url: delUrl,
 			type: 'POST',
@@ -179,7 +179,7 @@ $(function () {
 		var formData = new FormData();
 		formData.append('cupId', cupId);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 		$.ajax({
 			url: randomGameUrl,
 			type: 'POST',

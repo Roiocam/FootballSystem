@@ -19,7 +19,7 @@ $(function() {
 		var loginUrl = '/FootballSystem/admin/service/loginCheck';
 		formData.append('userStr', JSON.stringify(userStr));
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 		$.ajax({
 			url : loginUrl,
 			type : 'POST',

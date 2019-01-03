@@ -104,7 +104,6 @@ public class CupServiceImpl implements CupService {
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			repository.save(obj);
 		}
-
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
@@ -120,7 +119,6 @@ public class CupServiceImpl implements CupService {
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			repository.save(obj);
 		}
-
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 

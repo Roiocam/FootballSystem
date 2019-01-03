@@ -35,7 +35,7 @@ var app = new Vue(
 				formData.append('pageIndex', pageIndex);
 				formData.append('pageSize', pageSize);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis');
+				formData.append('dbType', 'JPA');
 				const that = this
 				axios
 					.post(
@@ -57,7 +57,7 @@ var app = new Vue(
 				formData.append('pageIndex', 1);
 				formData.append('pageSize', 50);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis');
+				formData.append('dbType', 'JPA');
 				const that = this
 				axios
 					.post(
@@ -111,7 +111,7 @@ $(function () {
 				formData.append('teamDesc', teamDesc);
 				formData.append('cupId', cupId);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis');
+				formData.append('dbType', 'JPA');
 				$
 					.ajax({
 						url: urlStr,
@@ -194,7 +194,7 @@ $(function () {
 			formData.append('pageSize', 40);
 			formData.append('teamId', teamId);
 			formData.append('dbCode', 'FootballSystem');
-			formData.append('dbType', 'MyBatis');
+			formData.append('dbType', 'JPA');
 			$.ajax({
 				url: getLeaderUrl,
 				type: 'POST',
@@ -247,7 +247,7 @@ $(function () {
 				formData.append('teamId', teamId);
 				formData.append('leaderId', leaderId);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis');
+				formData.append('dbType', 'JPA');
 				$
 					.ajax({
 						url: editLeaderUrl,
@@ -292,7 +292,7 @@ $(function () {
 		var formData = new FormData();
 		formData.append('teamId', objId);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 		$
 			.ajax({
 				url: delOneUrl,
@@ -335,7 +335,7 @@ $(function () {
 		})
 	var formData = new FormData();
 	formData.append('dbCode', 'FootballSystem');
-	formData.append('dbType', 'MyBatis');
+	formData.append('dbType', 'JPA');
 	formData.append('list', JSON.stringify(list));
 		$
 			.ajax({

@@ -35,7 +35,7 @@ var app = new Vue(
 				formData.append('pageIndex', 1);
 				formData.append('pageSize', 10);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis');
+				formData.append('dbType', 'JPA');
 				const that = this
 				axios
 					.post(
@@ -57,7 +57,7 @@ var app = new Vue(
 				formData.append('pageSize', pageSize);
 				formData.append('cupId', cupId);
 				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis');
+				formData.append('dbType', 'JPA');
 				const that = this
 				axios
 					.post(

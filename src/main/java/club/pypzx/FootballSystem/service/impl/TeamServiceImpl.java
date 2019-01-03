@@ -5,11 +5,17 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import club.pypzx.FootballSystem.dao.jpa.TeamRankRepository;
+import club.pypzx.FootballSystem.dao.jpa.TeamRepository;
+import club.pypzx.FootballSystem.dao.jpa.TeamVoRepository;
 import club.pypzx.FootballSystem.dao.mybatis.TeamMapper;
 import club.pypzx.FootballSystem.dao.mybatis.TeamRankMapper;
+import club.pypzx.FootballSystem.datasource.DBIdentifier;
 import club.pypzx.FootballSystem.dto.GroupVo;
 import club.pypzx.FootballSystem.dto.PlayerVo;
 import club.pypzx.FootballSystem.dto.TeamPrint;
@@ -19,6 +25,7 @@ import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.Player;
 import club.pypzx.FootballSystem.entity.Team;
 import club.pypzx.FootballSystem.entity.TeamRank;
+import club.pypzx.FootballSystem.enums.DBType;
 import club.pypzx.FootballSystem.service.GroupService;
 import club.pypzx.FootballSystem.service.PlayerService;
 import club.pypzx.FootballSystem.service.TeamService;
@@ -33,11 +40,17 @@ public class TeamServiceImpl implements TeamService {
 	@Autowired
 	private TeamMapper mapper;
 	@Autowired
+	private TeamRepository repository;
+	@Autowired
 	private PlayerService playerService;
 	@Autowired
 	private TeamRankMapper rankMapper;
 	@Autowired
+	private TeamRankRepository rankRepository;
+	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private TeamVoRepository voRepository;
 
 	public Team packageTeam(String cupId, String name, String code, String desc) {
 		Team obj = new Team();
@@ -63,7 +76,12 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	@Transactional
 	public BaseExcution<Team> removeById(String objId) throws Exception {
-		Team selectByPrimaryKey = mapper.selectPrimary(new Team(objId));
+		Team selectByPrimaryKey = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectByPrimaryKey = mapper.selectPrimary(new Team(objId));
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectByPrimaryKey = repository.findOne(Example.of(new Team(objId))).get();
+		}
 		if (selectByPrimaryKey == null || selectByPrimaryKey.getCupId() == null) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
@@ -85,10 +103,16 @@ public class TeamServiceImpl implements TeamService {
 				playerService.removeById(iterator.next().getPlayerId());
 			}
 		}
-		rankMapper.delete(new TeamRank(objId));
-		if (1 != mapper.delete(new Team(objId))) {
-			throw new Exception("删除球队记录失败");
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			rankMapper.delete(new TeamRank(objId));
+			if (1 != mapper.delete(new Team(objId))) {
+				throw new Exception("删除球队记录失败");
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			rankRepository.delete(new TeamRank(objId));
+			repository.delete(new Team(objId));
 		}
+
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
@@ -109,15 +133,24 @@ public class TeamServiceImpl implements TeamService {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.update(obj)) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (1 != mapper.update(obj)) {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			repository.save(obj);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
 	public BaseExcution<Team> findById(String objId) {
-		Team selectByPrimaryKey = mapper.selectByPrimary(objId);
+		Team selectByPrimaryKey = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectByPrimaryKey = mapper.selectByPrimary(objId);
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectByPrimaryKey = repository.findById(objId).get();
+		}
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -126,8 +159,13 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public BaseExcution<Team> findByCondition(Team obj) {
-		int selectCount = mapper.selectCount(obj);
-		List<Team> selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		List<Team> selectRowBounds = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			int selectCount = mapper.selectCount(obj);
+			selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectRowBounds = repository.findAll(Example.of(obj));
+		}
 		if (selectRowBounds != null && selectRowBounds.size() > -1) {
 			return new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
 		}
@@ -137,18 +175,31 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public BaseExcution<Team> findAll(int pageIndex, int pageSize) {
-
-		List<Team> selectAll = mapper.selectRowBounds(new Team(), Page.getInstance(pageIndex, pageSize));
+		List<Team> selectAll = null;
+		int selectCount = 0;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectAll = mapper.selectRowBounds(new Team(), Page.getInstance(pageIndex, pageSize));
+			selectCount = mapper.selectCount(new Team());
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			org.springframework.data.domain.Page<Team> findAll = repository
+					.findAll(PageRequest.of(pageIndex - 1, pageSize));
+			selectAll = findAll.getContent();
+			selectCount = (int) repository.count();
+		}
 		if (selectAll == null) {
 			return new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
 		}
-		int selectCount = mapper.selectCount(new Team());
 		return new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectAll, selectCount);
 	}
 
 	@Override
 	public BaseExcution<TeamVo> findByIdMore(String id) {
-		TeamVo selectByPrimary = mapper.selectMorePrimary(id);
+		TeamVo selectByPrimary = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectByPrimary = mapper.selectMorePrimary(id);
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectByPrimary = voRepository.findById(id).get();
+		}
 		if (selectByPrimary == null) {
 			return new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -157,11 +208,20 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public BaseExcution<TeamVo> findAllMore(Team obj, int pageIndex, int pageSize) {
-		List<TeamVo> selectAllByPage = mapper.selectMoreRowBounds(obj, Page.getInstance(pageIndex, pageSize));
+		List<TeamVo> selectAllByPage = null;
+		int selectCount = 0;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectAllByPage = mapper.selectMoreRowBounds(obj, Page.getInstance(pageIndex, pageSize));
+			selectCount = mapper.selectCount(new Team());
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			org.springframework.data.domain.Page<TeamVo> findAll = voRepository
+					.findAll(PageRequest.of(pageIndex - 1, pageSize));
+			selectAllByPage = findAll.getContent();
+			selectCount = (int) repository.count();
+		}
 		if (selectAllByPage == null) {
 			return new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR);
 		}
-		int selectCount = mapper.selectCount(new Team());
 		return new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectAllByPage, selectCount);
 	}
 
@@ -203,17 +263,29 @@ public class TeamServiceImpl implements TeamService {
 		Team temp = new Team();
 		temp.setTeamName(obj.getTeamName());
 		temp.setCupId(obj.getCupId());
-		if (null != mapper.selectPrimary(temp)) {
-			return new BaseExcution<>(BaseStateEnum.SAME_TEAMNAME);
-		}
+		Team selectPrimary = null;
+		int selectCount = 0;
 		Team cupTeam = new Team();
 		cupTeam.setCupId(obj.getCupId());
-		int selectCount = mapper.selectCount(cupTeam);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectPrimary = mapper.selectPrimary(temp);
+			selectCount = mapper.selectCount(cupTeam);
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectPrimary = repository.findOne(Example.of(temp)).get();
+			selectCount = (int) repository.count(Example.of(cupTeam));
+		}
+		if (null != selectPrimary) {
+			return new BaseExcution<>(BaseStateEnum.SAME_TEAMNAME);
+		}
 		if (selectCount >= 9) {
 			return new BaseExcution<>(BaseStateEnum.MAX_TEAM_COUNT);
 		}
-		if (1 != mapper.insert(obj)) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (1 != mapper.insert(obj)) {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			repository.save(obj);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
@@ -252,12 +324,14 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	public BaseExcution<TeamPrint> getTeamPrint(String teamId) {
 		TeamPrint temp = new TeamPrint();
-		Team team = mapper.selectByPrimary(teamId);
-		if (team == null) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		Team selectPrimary = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectPrimary = mapper.selectPrimary(new Team(teamId));
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectPrimary = repository.findOne(Example.of(new Team(teamId))).get();
 		}
-		temp.setTeam(team);
-		BaseExcution<PlayerVo> findByIdMore = playerService.findByIdMore(team.getLeaderId());
+		temp.setTeam(selectPrimary);
+		BaseExcution<PlayerVo> findByIdMore = playerService.findByIdMore(selectPrimary.getLeaderId());
 		if (ResultUtil.failResult(findByIdMore)) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}

@@ -8,7 +8,7 @@ $(function() {
 		formData.append('pageIndex', 1);
 		formData.append('pageSize', 10);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 
 		$
 				.ajax({
@@ -52,7 +52,7 @@ $(function() {
 		formData.append('pageSize', 50);
 		formData.append('cupId', cupId);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis');
+		formData.append('dbType', 'JPA');
 		$.ajax({
 			url : getUrl,
 			type : 'POST',

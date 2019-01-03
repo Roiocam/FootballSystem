@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import club.pypzx.FootballSystem.dao.jpa.GameRepository;
+import club.pypzx.FootballSystem.dao.jpa.GameVoRepository;
 import club.pypzx.FootballSystem.dao.mybatis.GameMapper;
 import club.pypzx.FootballSystem.datasource.DBIdentifier;
 import club.pypzx.FootballSystem.dto.GameVo;
@@ -39,6 +40,8 @@ public class GameServiceImpl implements GameService {
 	private GameMapper mapper;
 	@Autowired
 	private GameRepository repository;
+	@Autowired
+	private GameVoRepository gameVoRepository;
 	@Autowired
 	private CupService cupService;
 
@@ -114,10 +117,11 @@ public class GameServiceImpl implements GameService {
 			selectAll = mapper.selectGameByCup(cupId, Page.getInstance(pageIndex, pageSize));
 			selectCount = mapper.selectCount(game);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-//			org.springframework.data.domain.Page<Cup> findAll = repository
-//					.findAll(PageRequest.of(pageIndex - 1, pageSize));
-//			selectAll = findAll.getContent();
-//			selectCount = (int) repository.count();
+			GameVo gameVo = new GameVo(cupId);
+			org.springframework.data.domain.Page<GameVo> findAll = gameVoRepository.findAll(Example.of(gameVo),
+					PageRequest.of(pageIndex - 1, pageSize));
+			selectAll = findAll.getContent();
+			selectCount = (int) gameVoRepository.count();
 		}
 		if (selectAll == null) {
 			return new BaseExcution<GameVo>(BaseStateEnum.QUERY_ERROR);
@@ -144,9 +148,13 @@ public class GameServiceImpl implements GameService {
 		record.setCupId(cupId);
 		Group group = new Group();
 		group.setCupId(cupId);
-		if (0 == mapper.delete(record)
-				|| BaseStateEnum.SUCCESS.getState() != groupService.removeById(cupId).getState()) {
-			throw new RuntimeException("删除赛程表和分组时出错");
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (0 == mapper.delete(record)
+					|| BaseStateEnum.SUCCESS.getState() != groupService.removeById(cupId).getState()) {
+				throw new RuntimeException("删除赛程表和分组时出错");
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			repository.delete(record);
 		}
 		Cup cup = new Cup();
 		cup.setCupId(cupId);
@@ -198,8 +206,12 @@ public class GameServiceImpl implements GameService {
 		Iterator<Game> iterator2 = list.iterator();
 		while (iterator2.hasNext()) {
 			Game game = (Game) iterator2.next();
-			if (1 != mapper.insert(game)) {
-				throw new RuntimeException("创建赛程失败");
+			if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+				if (1 != mapper.insert(game)) {
+					throw new RuntimeException("创建赛程失败");
+				}
+			} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+				repository.save(game);
 			}
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);

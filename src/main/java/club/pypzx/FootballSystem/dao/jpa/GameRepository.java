@@ -7,5 +7,4 @@ import club.pypzx.FootballSystem.entity.Game;
 public interface GameRepository extends JpaRepository<Game, String> {
 
 
-
 }
