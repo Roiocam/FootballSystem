@@ -105,11 +105,6 @@ public class UserServiceImpl implements UserService {
 		int selectCount = 0;
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectAll = userDao.selectRowBounds(new User(), Page.getInstance(pageIndex, pageSize));
-			Iterator<User> iterator = selectAll.iterator();
-			while (iterator.hasNext()) {
-				User next = iterator.next();
-				next.setPassword(DESUtil.getDecryptString(next.getPassword()));
-			}
 			selectCount = userDao.selectCount(new User());
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			org.springframework.data.domain.Page<User> findAll = repository
