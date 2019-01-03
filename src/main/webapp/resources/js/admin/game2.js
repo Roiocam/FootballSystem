@@ -87,6 +87,7 @@ $(function () {
 		if (grouped == 1) {
 			app.getGameData(cupId);
 		} else {
+			app.datalist=[]
 			$('#errModal').modal('show');
 			setTimeout(() => {
 				$('#errModal').modal('hide');

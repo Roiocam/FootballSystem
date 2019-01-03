@@ -24,7 +24,8 @@ $(function() {
 					$('#teamName').html(obj.teamName);
 					$('#vaildCode').html(obj.vaildCode);
 					$('#cupName').html(obj.cup.cupName);
-					$('#leaderName').html(obj.leader.playerName);
+					$('#leaderName').html(
+							obj.leader == null ? '无' : obj.leader.playerName);
 					$('#teamDesc').html(obj.teamDesc);
 
 				} else {
