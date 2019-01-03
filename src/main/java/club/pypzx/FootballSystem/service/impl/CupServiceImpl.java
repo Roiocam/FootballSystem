@@ -1,5 +1,6 @@
 package club.pypzx.FootballSystem.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -194,24 +195,26 @@ public class CupServiceImpl implements CupService {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}
 		List<TeamVo> objList = queryAllByPage.getObjList();
-		if (objList.size() != 9) {
+		if (objList == null || objList.size() != 9) {
 			return new BaseExcution<>(BaseStateEnum.WRONG_TEAM_COUNT);
 		}
+		// 转为可写数组
+		List<TeamVo> list = new ArrayList<>(objList);
 		// 打乱list
-		Collections.shuffle(objList);
+		Collections.shuffle(list);
 		int count = 0;
 		// 遍历9次,读出
 		for (int i = 1; i < 4; i++) {
 			for (int j = 1; j < 4; j++) {
 				GroupEnum stringOf = GroupEnum.stringOf(j);
-				TeamVo teamVo = objList.get(count);
+				TeamVo teamVo = list.get(count);
 				Group g = new Group();
 				g.setCupId(cupId);
 				g.setTeam_id(teamVo.getTeamId());
 				g.setTeamGroup(stringOf.getGroup_string());
 				BaseExcution<Group> insertObj = groupService.add(g);
 				if (ResultUtil.failResult(insertObj)) {
-					throw new Exception("分组失败");
+					throw new RuntimeException("分组失败");
 				}
 				count++;
 			}
@@ -224,12 +227,13 @@ public class CupServiceImpl implements CupService {
 				throw new Exception("更新赛事分组状态失败");
 			}
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			Cup save = repository.save(cup);
+			Cup orElse = repository.findById(cupId).orElse(null);
+			orElse.setIsGroup(1);
+			Cup save = repository.save(orElse);
 			if (1 != save.getIsGroup()) {
 				throw new Exception("更新赛事分组状态失败");
 			}
 		}
-
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 

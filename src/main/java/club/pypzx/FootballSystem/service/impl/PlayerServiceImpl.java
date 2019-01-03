@@ -83,16 +83,27 @@ public class PlayerServiceImpl implements PlayerService {
 	@Override
 	@Transactional
 	public BaseExcution<Player> removeById(String objId) throws Exception {
+		BaseExcution<Player> findById = findById(objId);
+		if (findById.getState() != BaseStateEnum.SUCCESS.getState()) {
+			throw new RuntimeException("球员信息有误");
+		}
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			infoMapper.delete(new PlayerInfo(objId));
 			rankMapper.delete(new PlayerRank(objId));
 			if (1 != mapper.delete(new Player(objId))) {
-				throw new Exception("删除球员失败");
+				throw new RuntimeException("删除球员失败");
 			}
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			infoRepository.delete(new PlayerInfo(objId));
 			rankRepository.delete(new PlayerRank(objId));
 			repository.delete(new Player(objId));
+		}
+		// 球队不为空，删除球队
+		if (ParamUtils.validString(findById.getObj().getTeamId())) {
+			BaseExcution<Team> editTeamLeader = teamService.editTeamLeader(findById.getObj().getTeamId(), null);
+			if (editTeamLeader.getState() != BaseStateEnum.SUCCESS.getState()) {
+				throw new RuntimeException("球员信息有误");
+			}
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
@@ -197,8 +208,9 @@ public class PlayerServiceImpl implements PlayerService {
 			selectAllByPage = mapper.selectMoreRowBounds(example, Page.getInstance(pageIndex, pageSize));
 			selectCount = mapper.selectCount(new Player());
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			org.springframework.data.domain.Page<PlayerVo> findAll = voRepository
-					.findAll(PageRequest.of(pageIndex - 1, pageSize));
+			org.springframework.data.domain.Page<PlayerVo> findAll = voRepository.findAll(
+					Example.of(new PlayerVo(example.getTeamId(), example.getPlayerName())),
+					PageRequest.of(pageIndex - 1, pageSize));
 			selectAllByPage = findAll.getContent();
 			selectCount = (int) repository.count();
 		}

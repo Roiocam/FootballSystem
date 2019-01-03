@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity(name="TeamVo")
+@Entity(name = "TeamVo")
 @Table(name = "pypzx_team")
 public class TeamVo {
 	@Id
@@ -26,8 +26,14 @@ public class TeamVo {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "leader_id", referencedColumnName = "player_id")
 	private Player leader;
+
 	public TeamVo() {
 	}
+
+	public TeamVo(String cupId) {
+		this.cup = new Cup(cupId);
+	}
+
 	public String getTeamId() {
 		return teamId;
 	}

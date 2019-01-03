@@ -15,10 +15,10 @@ import org.apache.tomcat.jdbc.pool.DataSource;
  * @date 2018年12月30日 下午4:03:09
  */
 public class DDSHolder {
+	private static DDSHolder instance = null;
 
 	/**
-	 * 管理动态数据源列表。<工程编码，数据源> 根据工程编码管理具体的数据源 DDSTimer，
-	 * 对数据源进行二次封装，保证清除超时连接
+	 * 管理动态数据源列表。<工程编码，数据源> 根据工程编码管理具体的数据源 DDSTimer， 对数据源进行二次封装，保证清除超时连接
 	 */
 	private Map<String, DDSTimer> ddsMap = new HashMap<String, DDSTimer>();
 
@@ -40,7 +40,10 @@ public class DDSHolder {
 	 * 获取单例对象
 	 */
 	public static DDSHolder instance() {
-		return DDSHolderBuilder.instance;
+		if (instance == null) {
+			instance = new DDSHolder();
+		}
+		return instance;
 	}
 
 	/**
@@ -63,7 +66,7 @@ public class DDSHolder {
 	public synchronized DataSource getDDS(String projectCode) {
 		if (ddsMap.containsKey(projectCode)) {
 			DDSTimer ddst = ddsMap.get(projectCode);
-			//数据源重新使用，刷新时间
+			// 数据源重新使用，刷新时间
 			ddst.refreshTime();
 			return ddst.getDds();
 		}
@@ -84,13 +87,4 @@ public class DDSHolder {
 		}
 	}
 
-	/**
-	 * 单例构件类（单例模式）
-	 * 
-	 * @author Roiocam
-	 * @date 2018年12月30日 下午4:04:58
-	 */
-	private static class DDSHolderBuilder {
-		private static DDSHolder instance = new DDSHolder();
-	}
 }

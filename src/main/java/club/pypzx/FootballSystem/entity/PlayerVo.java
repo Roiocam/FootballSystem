@@ -8,7 +8,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity(name="PlayerVo")
+import club.pypzx.FootballSystem.utils.ParamUtils;
+
+@Entity(name = "PlayerVo")
 @Table(name = "pypzx_player")
 public class PlayerVo {
 	@Id
@@ -24,8 +26,19 @@ public class PlayerVo {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "player_id", referencedColumnName = "player_id")
 	private PlayerInfo info;
+
 	public PlayerVo() {
 	}
+
+	public PlayerVo(String teamId, String playerName) {
+		if (ParamUtils.validString(teamId)) {
+			this.team = new Team(teamId);
+		}
+		if (ParamUtils.validString(playerName)) {
+			this.playerName = playerName;
+		}
+	}
+
 	public String getPlayerId() {
 		return playerId;
 	}

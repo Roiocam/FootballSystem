@@ -2,6 +2,7 @@ package club.pypzx.FootballSystem.service.impl;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -215,7 +216,7 @@ public class TeamServiceImpl implements TeamService {
 			selectCount = mapper.selectCount(new Team());
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			org.springframework.data.domain.Page<TeamVo> findAll = voRepository
-					.findAll(PageRequest.of(pageIndex - 1, pageSize));
+					.findAll(Example.of(new TeamVo(obj.getCupId())), PageRequest.of(pageIndex - 1, pageSize));
 			selectAllByPage = findAll.getContent();
 			selectCount = (int) repository.count();
 		}
@@ -248,9 +249,20 @@ public class TeamServiceImpl implements TeamService {
 		Team team = new Team();
 		team.setTeamId(teamId);
 		team.setLeaderId(leaderId);
-		int updateByPrimaryKey = mapper.update(team);
-		if (updateByPrimaryKey != 1) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			int updateByPrimaryKey = mapper.update(team);
+			if (updateByPrimaryKey != 1) {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			Optional<Team> findById = repository.findById(teamId);
+			if (findById.isPresent()) {
+				Team temp = findById.get();
+				temp.setLeaderId(leaderId);
+				repository.save(temp);
+			} else {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
