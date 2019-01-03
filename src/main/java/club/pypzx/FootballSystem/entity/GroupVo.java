@@ -1,15 +1,22 @@
-package club.pypzx.FootballSystem.dto;
+package club.pypzx.FootballSystem.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity(name = "GroupVo")
+@Table(name = "pypzx_group")
 public class GroupVo {
+	@Id
 	@Column(name = "team_id")
 	private String teamId;
 	@Column(name = "team_name")
 	private String teamName;
 	@Column(name = "team_group")
 	private String teamGroup;
-
+	public GroupVo() {
+	}
 	public GroupVo(String teamId, String teamName, String teamGroup) {
 		this.teamId = teamId;
 		this.teamGroup = teamGroup;

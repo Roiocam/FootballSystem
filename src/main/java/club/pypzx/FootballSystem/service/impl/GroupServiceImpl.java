@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import club.pypzx.FootballSystem.dao.jpa.GroupRepository;
 import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
 import club.pypzx.FootballSystem.datasource.DBIdentifier;
-import club.pypzx.FootballSystem.dto.GroupVo;
 import club.pypzx.FootballSystem.entity.Group;
+import club.pypzx.FootballSystem.entity.GroupVo;
 import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.enums.DBType;
 import club.pypzx.FootballSystem.service.GroupService;
@@ -25,6 +25,7 @@ public class GroupServiceImpl implements GroupService {
 	private GroupMapper mapper;
 	@Autowired
 	private GroupRepository repository;
+
 
 	@Override
 	public BaseExcution<Group> add(Group obj) {

@@ -1,4 +1,4 @@
-package club.pypzx.FootballSystem.dto;
+package club.pypzx.FootballSystem.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -8,10 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import club.pypzx.FootballSystem.entity.Cup;
-import club.pypzx.FootballSystem.entity.Team;
-
-@Entity
+@Entity(name = "GameVo")
 @Table(name = "pypzx_game")
 public class GameVo {
 	@Id
@@ -28,6 +25,8 @@ public class GameVo {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cup_id", referencedColumnName = "cup_id")
 	private Cup cup;
+	public GameVo() {
+	}
 
 	public GameVo(String cupId) {
 		this.cup = new Cup(cupId);

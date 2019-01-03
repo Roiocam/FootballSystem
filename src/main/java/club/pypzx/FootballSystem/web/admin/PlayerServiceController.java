@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 
-import club.pypzx.FootballSystem.dto.PlayerVo;
 import club.pypzx.FootballSystem.entity.Player;
+import club.pypzx.FootballSystem.entity.PlayerVo;
 import club.pypzx.FootballSystem.service.PlayerService;
 import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseStateEnum;

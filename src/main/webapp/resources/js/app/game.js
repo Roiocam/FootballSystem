@@ -81,9 +81,9 @@ $(function() {
 							+ '		style="width: 50px; display: block">'
 							+ '</div>' + '<div class="weui-cell__bd">'
 							+ '	<h1 class="weui-media-box__title">'
-							+ item.teamHome
+							+ item.home.teamName
 							+ ' vs '
-							+ item.teamAway
+							+ item.away.teamName
 							+ '</h1>'
 							+ '	<p class="weui-media-box__desc">'
 							+ (item.gameDate).substring(0, 16)

@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
-import club.pypzx.FootballSystem.dto.GroupVo;
 import club.pypzx.FootballSystem.entity.Group;
+import club.pypzx.FootballSystem.entity.GroupVo;
 import club.pypzx.FootballSystem.template.BaseMapper;
 
 public interface GroupMapper extends BaseMapper<Group> {

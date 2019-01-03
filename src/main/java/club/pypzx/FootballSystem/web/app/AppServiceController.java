@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import club.pypzx.FootballSystem.dto.PlayerVo;
-import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.KickDay;
 import club.pypzx.FootballSystem.entity.Player;
+import club.pypzx.FootballSystem.entity.PlayerVo;
 import club.pypzx.FootballSystem.entity.Team;
+import club.pypzx.FootballSystem.entity.TeamVo;
 import club.pypzx.FootballSystem.entity.WechatAccount;
 import club.pypzx.FootballSystem.service.KickDayService;
 import club.pypzx.FootballSystem.service.PlayerService;

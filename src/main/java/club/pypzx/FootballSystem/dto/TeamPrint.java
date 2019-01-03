@@ -2,6 +2,7 @@ package club.pypzx.FootballSystem.dto;
 
 import java.util.List;
 
+import club.pypzx.FootballSystem.entity.PlayerVo;
 import club.pypzx.FootballSystem.entity.Team;
 
 public class TeamPrint {

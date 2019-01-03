@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.session.RowBounds;
 
-import club.pypzx.FootballSystem.dto.GameVo;
 import club.pypzx.FootballSystem.entity.Game;
+import club.pypzx.FootballSystem.entity.GameVo;
 import club.pypzx.FootballSystem.template.BaseMapper;
 
 public interface GameMapper extends BaseMapper<Game> {

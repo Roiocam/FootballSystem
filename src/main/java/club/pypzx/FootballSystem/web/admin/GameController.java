@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import club.pypzx.FootballSystem.dto.GameVo;
+import club.pypzx.FootballSystem.entity.GameVo;
 import club.pypzx.FootballSystem.service.GameService;
 import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.utils.HttpServletRequestUtil;

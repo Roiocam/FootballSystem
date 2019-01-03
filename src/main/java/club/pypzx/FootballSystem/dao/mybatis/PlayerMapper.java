@@ -11,8 +11,8 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.session.RowBounds;
 
 import club.pypzx.FootballSystem.dao.mybatis.sqlProvider.SelectSQLProvider;
-import club.pypzx.FootballSystem.dto.PlayerVo;
 import club.pypzx.FootballSystem.entity.Player;
+import club.pypzx.FootballSystem.entity.PlayerVo;
 import club.pypzx.FootballSystem.template.BaseMapper;
 
 public interface PlayerMapper extends BaseMapper<Player> {
