@@ -8,15 +8,20 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import club.pypzx.FootballSystem.dao.jpa.GameRepository;
 import club.pypzx.FootballSystem.dao.mybatis.GameMapper;
+import club.pypzx.FootballSystem.datasource.DBIdentifier;
 import club.pypzx.FootballSystem.dto.GameVo;
 import club.pypzx.FootballSystem.entity.Cup;
 import club.pypzx.FootballSystem.entity.Game;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.entity.Page;
+import club.pypzx.FootballSystem.enums.DBType;
 import club.pypzx.FootballSystem.service.CupService;
 import club.pypzx.FootballSystem.service.GameService;
 import club.pypzx.FootballSystem.service.GroupService;
@@ -33,6 +38,8 @@ public class GameServiceImpl implements GameService {
 	@Autowired
 	private GameMapper mapper;
 	@Autowired
+	private GameRepository repository;
+	@Autowired
 	private CupService cupService;
 
 	@Override
@@ -40,8 +47,12 @@ public class GameServiceImpl implements GameService {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.insert(obj)) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (1 != mapper.insert(obj)) {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			repository.save(obj);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
@@ -51,9 +62,14 @@ public class GameServiceImpl implements GameService {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.update(obj)) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (1 != mapper.update(obj)) {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			repository.save(obj);
 		}
+
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
@@ -61,17 +77,27 @@ public class GameServiceImpl implements GameService {
 	public BaseExcution<Game> findById(String objId) {
 		Game game = new Game();
 		game.setCupId(objId);
-		Game selectByPrimaryKey = mapper.selectPrimary(game);
-		if (selectByPrimaryKey == null) {
+		Game findById = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			findById = mapper.selectPrimary(game);
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			findById = repository.findById(objId).get();
+		}
+		if (findById == null) {
 			return new BaseExcution<Game>(BaseStateEnum.QUERY_ERROR);
 		}
-		return new BaseExcution<Game>(BaseStateEnum.SUCCESS, selectByPrimaryKey);
+		return new BaseExcution<Game>(BaseStateEnum.SUCCESS, findById);
 	}
 
 	@Override
 	public BaseExcution<Game> findByCondition(Game obj) {
-		int selectCount = mapper.selectCount(obj);
-		List<Game> selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		List<Game> selectRowBounds = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			int selectCount = mapper.selectCount(obj);
+			selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectRowBounds = repository.findAll(Example.of(obj));
+		}
 		if (selectRowBounds != null && selectRowBounds.size() > -1) {
 			return new BaseExcution<Game>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
 		}
@@ -80,12 +106,23 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public BaseExcution<GameVo> findAll(String cupId, int pageIndex, int pageSize) {
-		List<GameVo> selectGameByCup = mapper.selectGameByCup(cupId, Page.getInstance(pageIndex, pageSize));
-		if (selectGameByCup == null) {
+		List<GameVo> selectAll = null;
+		int selectCount = 0;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			Game game = new Game();
+			game.setCupId(cupId);
+			selectAll = mapper.selectGameByCup(cupId, Page.getInstance(pageIndex, pageSize));
+			selectCount = mapper.selectCount(game);
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+//			org.springframework.data.domain.Page<Cup> findAll = repository
+//					.findAll(PageRequest.of(pageIndex - 1, pageSize));
+//			selectAll = findAll.getContent();
+//			selectCount = (int) repository.count();
+		}
+		if (selectAll == null) {
 			return new BaseExcution<GameVo>(BaseStateEnum.QUERY_ERROR);
 		}
-		int selectCount = mapper.selectCount(new Game());
-		return new BaseExcution<GameVo>(BaseStateEnum.SUCCESS, selectGameByCup, selectCount);
+		return new BaseExcution<GameVo>(BaseStateEnum.SUCCESS, selectAll, selectCount);
 	}
 
 	@Override

@@ -6,15 +6,20 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import club.pypzx.FootballSystem.dao.jpa.CupRepository;
 import club.pypzx.FootballSystem.dao.mybatis.CupMapper;
+import club.pypzx.FootballSystem.datasource.DBIdentifier;
 import club.pypzx.FootballSystem.dto.TeamVo;
 import club.pypzx.FootballSystem.entity.Cup;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.entity.Team;
+import club.pypzx.FootballSystem.enums.DBType;
 import club.pypzx.FootballSystem.enums.DecideEnum;
 import club.pypzx.FootballSystem.enums.GroupEnum;
 import club.pypzx.FootballSystem.service.CupService;
@@ -25,11 +30,14 @@ import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.IDUtils;
 import club.pypzx.FootballSystem.utils.ResultUtil;
 
-@Service
+@Service()
+
 public class CupServiceImpl implements CupService {
 
 	@Autowired
 	private CupMapper mapper;
+	@Autowired
+	private CupRepository repository;
 	@Autowired
 	private TeamService teamSerivce;
 	@Autowired
@@ -71,8 +79,12 @@ public class CupServiceImpl implements CupService {
 				teamSerivce.removeById(iterator.next().getTeamId());
 			}
 		}
-		if (1 != mapper.delete(new Cup(objId))) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (1 != mapper.delete(new Cup(objId))) {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			repository.delete(new Cup(objId));
 		}
 
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
@@ -85,9 +97,14 @@ public class CupServiceImpl implements CupService {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
 		obj.setIsGroup(DecideEnum.FALSE.getState());
-		if (1 != mapper.insert(obj)) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (1 != mapper.insert(obj)) {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			repository.save(obj);
 		}
+
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
@@ -96,15 +113,25 @@ public class CupServiceImpl implements CupService {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (1 != mapper.update(obj)) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (1 != mapper.update(obj)) {
+				return new BaseExcution<>(BaseStateEnum.FAIL);
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			repository.save(obj);
 		}
+
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
 	public BaseExcution<Cup> findById(String objId) {
-		Cup selectByPrimaryKey = mapper.selectByPrimary(objId);
+		Cup selectByPrimaryKey = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectByPrimaryKey = mapper.selectByPrimary(objId);
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectByPrimaryKey = repository.findById(objId).get();
+		}
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Cup>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -113,8 +140,13 @@ public class CupServiceImpl implements CupService {
 
 	@Override
 	public BaseExcution<Cup> findByCondition(Cup obj) {
-		int selectCount = mapper.selectCount(obj);
-		List<Cup> selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		List<Cup> selectRowBounds = null;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			int selectCount = mapper.selectCount(obj);
+			selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			selectRowBounds = repository.findAll(Example.of(obj));
+		}
 		if (selectRowBounds != null && selectRowBounds.size() > -1) {
 			return new BaseExcution<Cup>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
 		}
@@ -124,11 +156,20 @@ public class CupServiceImpl implements CupService {
 
 	@Override
 	public BaseExcution<Cup> findAll(int pageIndex, int pageSize) {
-		List<Cup> selectAll = mapper.selectRowBounds(new Cup(), Page.getInstance(pageIndex, pageSize));
+		List<Cup> selectAll = null;
+		int selectCount = 0;
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			selectAll = mapper.selectRowBounds(new Cup(), Page.getInstance(pageIndex, pageSize));
+			selectCount = mapper.selectCount(new Cup());
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			org.springframework.data.domain.Page<Cup> findAll = repository
+					.findAll(PageRequest.of(pageIndex - 1, pageSize));
+			selectAll = findAll.getContent();
+			selectCount = (int) repository.count();
+		}
 		if (selectAll == null) {
 			return new BaseExcution<Cup>(BaseStateEnum.QUERY_ERROR);
 		}
-		int selectCount = mapper.selectCount(new Cup());
 		return new BaseExcution<Cup>(BaseStateEnum.SUCCESS, selectAll, selectCount);
 	}
 
@@ -180,9 +221,17 @@ public class CupServiceImpl implements CupService {
 		Cup cup = new Cup();
 		cup.setCupId(cupId);
 		cup.setIsGroup(1);
-		if (1 != mapper.update(cup)) {
-			throw new Exception("更新赛事分组状态失败");
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (1 != mapper.update(cup)) {
+				throw new Exception("更新赛事分组状态失败");
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			Cup save = repository.save(cup);
+			if (1 != save.getIsGroup()) {
+				throw new Exception("更新赛事分组状态失败");
+			}
 		}
+
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 

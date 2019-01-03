@@ -1,6 +1,7 @@
 package club.pypzx.FootballSystem.datasource;
 
 import club.pypzx.FootballSystem.dbmgr.ProjectDBMgr;
+import club.pypzx.FootballSystem.enums.DBType;
 
 /**
  * 数据库标识管理类。用于区分数据源连接的不同数据库和数据访问对象
@@ -38,7 +39,7 @@ public class DBIdentifier {
 	 * @param type
 	 */
 	public static boolean setDbType(String type) {
-		if ("MyBatis".equals(type) || "JPA".equals(type)) {
+		if (DBType.MY_BATIS.equals(type)||DBType.JPA.equals(type)) {
 			dbType.set(type);
 			return true;
 		}
