@@ -29,7 +29,7 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 public class CupServiceController {
 	@Autowired
 	private CupService service;
-	
+
 	@Autowired
 	private GameService gameService;
 
@@ -156,7 +156,6 @@ public class CupServiceController {
 			return ModelMapUtil.getErrorMap("请选择赛事!");
 		}
 		// 编写删除赛程逻辑
-
 		try {
 			BaseExcution<Game> removeGroupByCup = gameService.removeGroupByCup(cupId);
 			if (ResultUtil.failResult(removeGroupByCup)) {

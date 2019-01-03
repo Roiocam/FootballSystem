@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import club.pypzx.FootballSystem.dao.jpa.GroupRepository;
 import club.pypzx.FootballSystem.dao.mybatis.GroupMapper;
@@ -25,7 +26,6 @@ public class GroupServiceImpl implements GroupService {
 	private GroupMapper mapper;
 	@Autowired
 	private GroupRepository repository;
-
 
 	@Override
 	public BaseExcution<Group> add(Group obj) {
@@ -109,13 +109,21 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	@Deprecated
+	@Transactional
 	public BaseExcution<Group> removeById(String objId) throws Exception {
-		return null;
+		Group record = new Group(objId);
+		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			if (0 == mapper.delete(record)) {
+				throw new RuntimeException("删除赛程表和分组时出错");
+			}
+		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			List<Group> findAll = repository.findAll(Example.of(record));
+			repository.deleteInBatch(findAll);
+		}
+		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
-	@Deprecated
 	public BaseExcution<Group> removeByIdList(List<String> list) throws Exception {
 		return null;
 	}

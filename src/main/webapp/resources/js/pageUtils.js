@@ -89,7 +89,7 @@ function initPageData() {
 
 
 }
-$("#page").delegate(".page-link", "click", function () {
+$("#pageList").delegate(".page-link", "click", function () {
 	var obj = $(this).parent();
 	if (obj.hasClass('next')) {
 		pageIndex = parseInt(pageIndex) + 1;

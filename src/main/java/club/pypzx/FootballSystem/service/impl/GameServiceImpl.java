@@ -146,20 +146,25 @@ public class GameServiceImpl implements GameService {
 	public BaseExcution<Game> removeGroupByCup(String cupId) throws Exception {
 		Game record = new Game();
 		record.setCupId(cupId);
-		Group group = new Group();
-		group.setCupId(cupId);
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			if (0 == mapper.delete(record)
 					|| BaseStateEnum.SUCCESS.getState() != groupService.removeById(cupId).getState()) {
 				throw new RuntimeException("删除赛程表和分组时出错");
 			}
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			repository.delete(record);
+			List<Game> findAll = repository.findAll(Example.of(record));
+			repository.deleteInBatch(findAll);
+			if (BaseStateEnum.SUCCESS.getState() != groupService.removeById(cupId).getState()) {
+				throw new RuntimeException("删除赛程分组时出错");
+			}
 		}
-		Cup cup = new Cup();
-		cup.setCupId(cupId);
-		cup.setIsGroup(0);
-		if (BaseStateEnum.SUCCESS.getState() != cupService.edit(cup).getState()) {
+		BaseExcution<Cup> findById = cupService.findById(cupId);
+		if (BaseStateEnum.SUCCESS.getState() != findById.getState()) {
+			throw new Exception("更新赛事分组状态失败");
+		}
+		Cup obj = findById.getObj();
+		obj.setIsGroup(0);
+		if (BaseStateEnum.SUCCESS.getState() != cupService.edit(obj).getState()) {
 			throw new Exception("更新赛事分组状态失败");
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);

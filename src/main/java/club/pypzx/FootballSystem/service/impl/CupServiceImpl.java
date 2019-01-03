@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,6 @@ public class CupServiceImpl implements CupService {
 		if (ResultUtil.failListResult(exist)) {
 			return new BaseExcution<>(BaseStateEnum.NEED_DELETE_GROUP);
 		}
-
 		// 先删除比赛记录,再删除球员,再删除球队,再删除赛程安排表
 		// --查询赛事下是否有球队
 		Team t = new Team();
@@ -98,11 +98,21 @@ public class CupServiceImpl implements CupService {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
 		obj.setIsGroup(DecideEnum.FALSE.getState());
+		Cup temp = new Cup();
+		temp.setCupName(obj.getCupName());
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
+			Cup selectPrimary = mapper.selectPrimary(temp);
+			if (selectPrimary != null) {
+				return new BaseExcution<>(BaseStateEnum.SAME_CUPNAME);
+			}
 			if (1 != mapper.insert(obj)) {
 				return new BaseExcution<>(BaseStateEnum.FAIL);
 			}
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
+			Optional<Cup> findOne = repository.findOne(Example.of(temp));
+			if (findOne.isPresent()) {
+				return new BaseExcution<>(BaseStateEnum.SAME_CUPNAME);
+			}
 			repository.save(obj);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
