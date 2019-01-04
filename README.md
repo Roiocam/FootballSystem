@@ -8,7 +8,7 @@
 ### 多数据源切换/数据访问层框架切换
 - ....
 
-![switch_datasource['./image/switch_datasource.png']
+![switch_datasource](https://github.com/Roiocam/FootballSystem/raw/master/image/switch_datasource.png)
 
 ### MyBatis
 - 使用反射+MyBatis的SQL构建器自动生成基础CRUD
