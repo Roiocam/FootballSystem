@@ -5,10 +5,9 @@
 
 # 项目设计
 ## DAO层设计
-### 多数据源切换
+### 多数据源切换/数据访问层框架切换
 - ....
-### 数据访问层框架切换
-- ....
+![switch_datasource['./image/switch_datasource.png']
 ### MyBatis
 - 使用反射+MyBatis的SQL构建器自动生成基础CRUD
 ### Spring Data JPA
