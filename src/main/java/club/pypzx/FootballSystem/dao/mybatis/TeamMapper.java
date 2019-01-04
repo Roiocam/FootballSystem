@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.RowBounds;
 
 import club.pypzx.FootballSystem.dao.mybatis.sqlProvider.SelectSQLProvider;
@@ -31,5 +32,8 @@ public interface TeamMapper extends BaseMapper<Team> {
 	@ResultMap("selectMore")
 	@Select("SELECT * FROM pypzx_team  WHERE team_id=#{value} LIMIT 1")
 	public TeamVo selectMorePrimary(String teamId);
+
+	@Update("UPDATE pypzx_team SET leader_id=#{leaderId} WHERE team_id=#{teamId}")
+	public int updateLeader(Team obj);
 
 }

@@ -213,12 +213,12 @@ public class TeamServiceImpl implements TeamService {
 		int selectCount = 0;
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectAllByPage = mapper.selectMoreRowBounds(obj, Page.getInstance(pageIndex, pageSize));
-			selectCount = mapper.selectCount(new Team());
+			selectCount = mapper.selectCount(obj);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			org.springframework.data.domain.Page<TeamVo> findAll = voRepository
 					.findAll(Example.of(new TeamVo(obj.getCupId())), PageRequest.of(pageIndex - 1, pageSize));
 			selectAllByPage = findAll.getContent();
-			selectCount = (int) repository.count();
+			selectCount = (int) repository.count(Example.of(obj));
 		}
 		if (selectAllByPage == null) {
 			return new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR);
@@ -250,7 +250,7 @@ public class TeamServiceImpl implements TeamService {
 		team.setTeamId(teamId);
 		team.setLeaderId(leaderId);
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			int updateByPrimaryKey = mapper.update(team);
+			int updateByPrimaryKey = mapper.updateLeader(team);
 			if (updateByPrimaryKey != 1) {
 				return new BaseExcution<>(BaseStateEnum.FAIL);
 			}

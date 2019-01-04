@@ -207,13 +207,13 @@ public class PlayerServiceImpl implements PlayerService {
 		int selectCount = 0;
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			selectAllByPage = mapper.selectMoreRowBounds(example, Page.getInstance(pageIndex, pageSize));
-			selectCount = mapper.selectCount(new Player());
+			selectCount = mapper.selectCount(example);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			org.springframework.data.domain.Page<PlayerVo> findAll = voRepository.findAll(
 					Example.of(new PlayerVo(example.getTeamId(), example.getPlayerName())),
 					PageRequest.of(pageIndex - 1, pageSize));
 			selectAllByPage = findAll.getContent();
-			selectCount = (int) repository.count();
+			selectCount = (int) repository.count(Example.of(example));
 		}
 		if (selectAllByPage == null) {
 			return new BaseExcution<PlayerVo>(BaseStateEnum.QUERY_ERROR);

@@ -36,10 +36,15 @@ public class TeamServiceController {
 	public Map<String, Object> getTeams(HttpServletRequest request) {
 		int pageIndex = HttpServletRequestUtil.getInt(request, "pageIndex");
 		int pageSize = HttpServletRequestUtil.getInt(request, "pageSize");
+		String cupId = HttpServletRequestUtil.getString(request, "cupId");
+		Team condition = new Team();
+		if (ParamUtils.validString(cupId)) {
+			condition.setCupId(cupId);
+		}
 		if (ParamUtils.wrongPage(pageIndex, pageSize)) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.PAGE_ERROR.getStateInfo());
 		}
-		BaseExcution<TeamVo> queryAllByPage = service.findAllMore(new Team(), pageIndex, pageSize);
+		BaseExcution<TeamVo> queryAllByPage = service.findAllMore(condition, pageIndex, pageSize);
 		if (ResultUtil.failResult(queryAllByPage)) {
 			return ModelMapUtil.getDtoMap(queryAllByPage, "查询球队列表失败");
 		}

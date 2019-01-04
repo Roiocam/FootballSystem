@@ -1,11 +1,11 @@
 package club.pypzx.FootballSystem.dao.mybatis.sqlProvider;
 
-import club.pypzx.FootballSystem.entity.*;
-import club.pypzx.FootballSystem.enums.TableEnum;
-import club.pypzx.FootballSystem.utils.StringUtil;
+import java.lang.reflect.Field;
+
 import org.apache.ibatis.jdbc.SQL;
 
-import java.lang.reflect.Field;
+import club.pypzx.FootballSystem.enums.TableEnum;
+import club.pypzx.FootballSystem.utils.StringUtil;
 
 /**
  * 更新SQL语句构建器类
@@ -46,17 +46,5 @@ public class UpdateSQLProvider {
 
 	}
 
-	public static void main(String[] args) {
-		System.out.println(UpdateSQLProvider.update(new Cup()));
-		System.out.println(UpdateSQLProvider.update(new Game()));
-		System.out.println(UpdateSQLProvider.update(new GameRecord()));
-		System.out.println(UpdateSQLProvider.update(new Group()));
-		System.out.println(UpdateSQLProvider.update(new KickDay()));
-		System.out.println(UpdateSQLProvider.update(new Player()));
-		System.out.println(UpdateSQLProvider.update(new PlayerInfo()));
-		System.out.println(UpdateSQLProvider.update(new PlayerRank()));
-		System.out.println(UpdateSQLProvider.update(new Team()));
-		System.out.println(UpdateSQLProvider.update(new User()));
-		System.out.println(UpdateSQLProvider.update(new WechatAccount()));
-	}
+
 }

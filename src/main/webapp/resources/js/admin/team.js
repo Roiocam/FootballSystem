@@ -7,239 +7,225 @@ const editUrl = '/FootballSystem/admin/service/team/editTeam';
 const delOneUrl = '/FootballSystem/admin/service/team/deleteTeam';
 const delListUrl = '/FootballSystem/admin/service/team/deleteTeamList';
 const loading = new LoadingUtils();
+var searchData = null;
 loading.append();
-var app = new Vue(
-	{
-		el: '#app',
-		data: {
-			message: '',
-			datalist: [],
-			cuplist: [],
-			playerlist: [],
-			cupId: '',
-			message: '',
-			err: false,
-			messageShow: false,
-		},
-		computed: {
-			msgClass: function () {
-				return {
-					'bg-success': !this.err,
-					'bg-danger': this.err,
-				}
+var app = new Vue({
+	el : '#app',
+	data : {
+		message : '',
+		datalist : [],
+		cuplist : [],
+		playerlist : [],
+		cupId : '',
+		message : '',
+		err : false,
+		messageShow : false,
+	},
+	computed : {
+		msgClass : function() {
+			return {
+				'bg-success' : !this.err,
+				'bg-danger' : this.err,
 			}
-		},
-		methods: {
-			initData: function () {
-				var formData = new FormData();
-				formData.append('pageIndex', pageIndex);
-				formData.append('pageSize', pageSize);
-				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis'); 
-				const that = this
-				axios
-					.post(
-						getUrl,
-						formData)
-					.then(
-						function (res) {
-							if (res.data.state == 0) {
-								that.datalist = res.data.result
-								initPageCount(res.data.count);
-								initPageData();
-							} else {
-								alert(res.data.message)
-							}
-						});
-			},
-			getCupData: function () {
-				var formData = new FormData();
-				formData.append('pageIndex', 1);
-				formData.append('pageSize', 50);
-				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis'); 
-				const that = this
-				axios
-					.post(
-						getCupUrl,
-						formData)
-					.then(
-						function (res) {
-							if (res.data.state == 0) {
-								that.cuplist = res.data.result
-							} else {
-								alert(res.data.message)
-							}
-						});
+		}
+	},
+	methods : {
+		initData : function() {
+			var formData = new FormData();
+			formData.append('pageIndex', pageIndex);
+			formData.append('pageSize', pageSize);
+			formData.append('dbCode', 'FootballSystem');
+			formData.append('dbType', 'MyBatis');
+			if (searchData != null) {
+				formData.append('cupId', searchData.cupId);
 			}
-		},
-		mounted: function () {
-			this.initData()
-			this.getCupData()
-			$("#pageList").delegate(".page-link", "click", function () {
-				var obj = $(this).parent();
-				if (obj.hasClass('next')) {
-					pageIndex = parseInt(pageIndex) + 1;
-					$('#pageIndexInput').val(pageIndex);
-					app.initData();
-					return; 
-				} if (obj.hasClass('prev')) {
-					pageIndex = parseInt(pageIndex) - 1;
-					$('#pageIndexInput').val(pageIndex);
-					app.initData();
-					return;
+			const that = this
+			axios.post(getUrl, formData).then(function(res) {
+				if (res.data.state == 0) {
+					that.datalist = res.data.result
+					initPageCount(res.data.count);
+					initPageData();
+				} else {
+					alert(res.data.message)
 				}
-				pageIndex = parseInt(obj.children().html());
-				$('#pageIndexInput').val(pageIndex);
-				app.initData();
 			});
-			$('#pageIndexInput').bind('keypress', function (event) {
-				if (event.keyCode == 13) {
-					var index = parseInt($(this).val());
-					if (index > pageCount) {
-						alert("请正确输入页码");
-						return;
-					}
-					pageIndex = index;
-					app.initData();
+		},
+		getCupData : function() {
+			var formData = new FormData();
+			formData.append('pageIndex', 1);
+			formData.append('pageSize', 50);
+			formData.append('dbCode', 'FootballSystem');
+			formData.append('dbType', 'MyBatis');
+			const that = this
+			axios.post(getCupUrl, formData).then(function(res) {
+				if (res.data.state == 0) {
+					that.cuplist = res.data.result
+				} else {
+					alert(res.data.message)
 				}
 			});
 		}
-	})
-
-$(function () {
-	$('#submitData')
-		.click(
-			function () {
-
-				var type = $('#submitData').val();
-				var oldObjId = $('#submitData').data('objId');
-				var urlStr = '';
-				if (type == 'edit') {
-					urlStr = editUrl;
-				} else {
-					urlStr = addUrl;
-				}
-				var teamId = $('#teamId').val();
-				var teamName = $('#teamName').val();
-				var vaildCode = $('#vaildCode').val();
-				var teamDesc = $('#teamDesc').val();
-				var cupId = $('#cupId').val();
-				if (vaildCode.length < 4) {
-					app.messageShow = true;
-					app.message = '请正确输入验证码,4位字符数字';
-					app.err = true;
+	},
+	mounted : function() {
+		this.initData()
+		this.getCupData()
+		$("#pageList").delegate(".page-link", "click", function() {
+			var obj = $(this).parent();
+			if (obj.hasClass('next')) {
+				pageIndex = parseInt(pageIndex) + 1;
+				$('#pageIndexInput').val(pageIndex);
+				app.initData();
+				return;
+			}
+			if (obj.hasClass('prev')) {
+				pageIndex = parseInt(pageIndex) - 1;
+				$('#pageIndexInput').val(pageIndex);
+				app.initData();
+				return;
+			}
+			pageIndex = parseInt(obj.children().html());
+			$('#pageIndexInput').val(pageIndex);
+			app.initData();
+		});
+		$('#pageIndexInput').bind('keypress', function(event) {
+			if (event.keyCode == 13) {
+				var index = parseInt($(this).val());
+				if (index > pageCount) {
+					alert("请正确输入页码");
 					return;
 				}
-				loading.show();
-				var formData = new FormData();
-				formData.append('teamId', teamId);
-				formData.append('teamName', teamName);
-				formData.append('vaildCode', vaildCode);
-				formData.append('teamDesc', teamDesc);
-				formData.append('cupId', cupId);
-				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis'); 
-				$
-					.ajax({
-						url: urlStr,
-						type: 'POST',
-						data: formData,
-						contentType: false,
-						processData: false,
-						cache: false,
-						success: function (data) {
-							loading.hide();
-							app.messageShow = true;
-							app.message = data.message;
-							if (data.state == 0) {
-								app.err = false;
-								app.initData();
-								setTimeout(function () { // 使用
-									// setTimeout（）方法设定定时2000毫秒
-									$("#inputModal").modal('hide');
-									app.messageShow = false;
-									app.message = '';
-								}, 500);
-							} else {
-								app.err = true;
-								setTimeout(function () { // 使用
-									app.messageShow = false;
-									app.message = '';
-								}, 5000);
-							}
-						}
-					});
-
-			});
-
-	$('#inputModal')
-		.on(
-			'show.bs.modal',
-			function (event) {
-				var button = $(event.relatedTarget) // Button that
-				// triggered the
-				// modal
-				var modal = $(this)
-				var type = button.data('id');
-				var objId = button.data('objId');
-				if (type == 'edit') {
-					var teamId = button.closest('tr').find('td').eq(1)
-						.text();
-					var teamName = button.closest('tr').find('td')
-						.eq(2).text();
-					var cupId = button.closest('tr').find('td').eq(3)
-						.attr('value');
-					app.cupId = cupId;
-					var vaildCode = button.closest('tr').find('td').eq(
-						4).text();
-					var teamDesc = button.closest('tr').find('td')
-						.eq(6).text();
-					modal.find('.modal-body #teamId').val(teamId)
-					modal.find('.modal-body #teamName').val(teamName)
-					modal.find('.modal-body #vaildCode').val(vaildCode)
-					modal.find('.modal-body #teamDesc').val(teamDesc)
-					$('#submitData').val('edit');
-					$('#submitData').data('objId', objId);
-				} else {
-					modal.find('.modal-body #teamId').val(null)
-					modal.find('.modal-body #teamName').val(null)
-					modal.find('.modal-body #vaildCode').val(null)
-					modal.find('.modal-body #teamDesc').val(null)
-					$('#submitData').val('add');
-				}
-			});
-	$('#leaderModal').on(
-		'show.bs.modal',
-		function (event) {
-			var button = $(event.relatedTarget) // Button that triggered the
-			// modal
-			var modal = $(this)
-			var teamId = button.closest('tr').find('td').eq(1).text();
-			modal.find('.modal-body #lteamId').val(teamId)
-			var formData = new FormData();
-			formData.append('pageIndex', 1);
-			formData.append('pageSize', 40);
-			formData.append('teamId', teamId);
-			formData.append('dbCode', 'FootballSystem');
-			formData.append('dbType', 'MyBatis'); 
-			$.ajax({
-				url: getLeaderUrl,
-				type: 'POST',
-				data: formData,
-				contentType: false,
-				processData: false,
-				cache: false,
-				success: function (data) {
-					if (data.state == 0) {
-						app.playerlist = data.result
-					} else {
-						alert(data.message)
-					}
-				}
-			});
+				pageIndex = index;
+				app.initData();
+			}
 		});
-	$('#deleteModal').on('show.bs.modal', function (event) {
+	}
+})
+
+$(function() {
+	$('#searchBtn').click(function() {
+		searchData = new Object();
+		searchData.cupId = $('#searchCup').val();
+		app.initData();
+	});
+	$('#submitData').click(function() {
+
+		var type = $('#submitData').val();
+		var oldObjId = $('#submitData').data('objId');
+		var urlStr = '';
+		if (type == 'edit') {
+			urlStr = editUrl;
+		} else {
+			urlStr = addUrl;
+		}
+		var teamId = $('#teamId').val();
+		var teamName = $('#teamName').val();
+		var vaildCode = $('#vaildCode').val();
+		var teamDesc = $('#teamDesc').val();
+		var cupId = $('#cupId').val();
+		if (vaildCode.length < 4) {
+			app.messageShow = true;
+			app.message = '请正确输入验证码,4位字符数字';
+			app.err = true;
+			return;
+		}
+		loading.show();
+		var formData = new FormData();
+		formData.append('teamId', teamId);
+		formData.append('teamName', teamName);
+		formData.append('vaildCode', vaildCode);
+		formData.append('teamDesc', teamDesc);
+		formData.append('cupId', cupId);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
+		$.ajax({
+			url : urlStr,
+			type : 'POST',
+			data : formData,
+			contentType : false,
+			processData : false,
+			cache : false,
+			success : function(data) {
+				loading.hide();
+				app.messageShow = true;
+				app.message = data.message;
+				if (data.state == 0) {
+					app.err = false;
+					app.initData();
+					setTimeout(function() { // 使用
+						// setTimeout（）方法设定定时2000毫秒
+						$("#inputModal").modal('hide');
+						app.messageShow = false;
+						app.message = '';
+					}, 500);
+				} else {
+					app.err = true;
+					setTimeout(function() { // 使用
+						app.messageShow = false;
+						app.message = '';
+					}, 5000);
+				}
+			}
+		});
+
+	});
+
+	$('#inputModal').on('show.bs.modal', function(event) {
+		var button = $(event.relatedTarget) // Button that
+		// triggered the
+		// modal
+		var modal = $(this)
+		var type = button.data('id');
+		var objId = button.data('objId');
+		if (type == 'edit') {
+			var teamId = button.closest('tr').find('td').eq(1).text();
+			var teamName = button.closest('tr').find('td').eq(2).text();
+			var cupId = button.closest('tr').find('td').eq(3).attr('value');
+			app.cupId = cupId;
+			var vaildCode = button.closest('tr').find('td').eq(4).text();
+			var teamDesc = button.closest('tr').find('td').eq(6).text();
+			modal.find('.modal-body #teamId').val(teamId)
+			modal.find('.modal-body #teamName').val(teamName)
+			modal.find('.modal-body #vaildCode').val(vaildCode)
+			modal.find('.modal-body #teamDesc').val(teamDesc)
+			$('#submitData').val('edit');
+			$('#submitData').data('objId', objId);
+		} else {
+			modal.find('.modal-body #teamId').val(null)
+			modal.find('.modal-body #teamName').val(null)
+			modal.find('.modal-body #vaildCode').val(null)
+			modal.find('.modal-body #teamDesc').val(null)
+			$('#submitData').val('add');
+		}
+	});
+	$('#leaderModal').on('show.bs.modal', function(event) {
+		var button = $(event.relatedTarget) // Button that triggered the
+		// modal
+		var modal = $(this)
+		var teamId = button.closest('tr').find('td').eq(1).text();
+		modal.find('.modal-body #lteamId').val(teamId)
+		var formData = new FormData();
+		formData.append('pageIndex', 1);
+		formData.append('pageSize', 40);
+		formData.append('teamId', teamId);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
+		$.ajax({
+			url : getLeaderUrl,
+			type : 'POST',
+			data : formData,
+			contentType : false,
+			processData : false,
+			cache : false,
+			success : function(data) {
+				if (data.state == 0) {
+					app.playerlist = data.result
+				} else {
+					alert(data.message)
+				}
+			}
+		});
+	});
+	$('#deleteModal').on('show.bs.modal', function(event) {
 		var button = $(event.relatedTarget) // Button that triggered the modal
 		var modal = $(this)
 		var objId = button.data('id');
@@ -248,7 +234,7 @@ $(function () {
 		$('#deleteObj').data('type', type);
 	});
 
-	$('#deleteObj').click(function () {
+	$('#deleteObj').click(function() {
 		loading.show();
 		var type = $('#deleteObj').data('type');
 		if (type == 'list') {
@@ -258,59 +244,55 @@ $(function () {
 		}
 
 	});
-	$('#submitLeader')
-		.click(
-			function () {
-				loading.show();
-				var teamId = $('#lteamId').val();
-				var leaderId = $('#leaderId').val();
-				if (leaderId == 0||leaderId=='0') {
-					loading.hide();
-					app.messageShow = true
-					app.message = '请先为球队新增球员';
-					app.err = true
-					return
-				}
-				var formData = new FormData();
-				formData.append('teamId', teamId);
-				formData.append('leaderId', leaderId);
-				formData.append('dbCode', 'FootballSystem');
-				formData.append('dbType', 'MyBatis'); 
-				$
-					.ajax({
-						url: editLeaderUrl,
-						type: 'POST',
-						data: formData,
-						contentType: false,
-						processData: false,
-						cache: false,
-						success: function (data) {
-							loading.hide();
-							app.messageShow = true;
-							app.message = data.message;
-							if (data.state == 0) {
-								app.err = false;
-								app.initData();
-								setTimeout(
-									function () { // 使用
-										// setTimeout（）方法设定定时2000毫秒
-										$("#leaderModal")
-											.modal('hide');
-										app.messageShow = false;
-										app.message = '';
-									}, 500);
-							} else {
-								app.err = true;
-								setTimeout(function () { // 使用
-									app.messageShow = false;
-									app.message = '';
-								}, 5000);
-							}
-						}
-					});
+	$('#submitLeader').click(function() {
+		loading.show();
+		var teamId = $('#lteamId').val();
+		var leaderId = $('#leaderId').val();
+		if (leaderId == 0 || leaderId == '0') {
+			loading.hide();
+			app.messageShow = true
+			app.message = '请先为球队新增球员';
+			app.err = true
+			return
 
-			});
-	$("#teamDesc").on("input propertychange", function () {
+		}
+		var formData = new FormData();
+		formData.append('teamId', teamId);
+		formData.append('leaderId', leaderId);
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
+		$.ajax({
+			url : editLeaderUrl,
+			type : 'POST',
+			data : formData,
+			contentType : false,
+			processData : false,
+			cache : false,
+			success : function(data) {
+				loading.hide();
+				app.messageShow = true;
+				app.message = data.message;
+				if (data.state == 0) {
+					app.err = false;
+					app.initData();
+					setTimeout(function() { // 使用
+						// setTimeout（）方法设定定时2000毫秒
+						$("#leaderModal").modal('hide');
+						app.messageShow = false;
+						app.message = '';
+					}, 500);
+				} else {
+					app.err = true;
+					setTimeout(function() { // 使用
+						app.messageShow = false;
+						app.message = '';
+					}, 5000);
+				}
+			}
+		});
+
+	});
+	$("#teamDesc").on("input propertychange", function() {
 		var $this = $(this), _val = $this.val();
 		$("#teamDescCount").text(_val.length);
 	});
@@ -320,83 +302,79 @@ $(function () {
 		var formData = new FormData();
 		formData.append('teamId', objId);
 		formData.append('dbCode', 'FootballSystem');
-		formData.append('dbType', 'MyBatis'); 
-		$
-			.ajax({
-				url: delOneUrl,
-				type: 'POST',
-				data: formData,
-				contentType: false,
-				processData: false,
-				cache: false,
-				success: function (data) {
-					loading.hide();
-					app.messageShow = true;
-					app.message = data.message;
-					if (data.state == 0) {
-						app.err = false;
-						app.initData();
-						setTimeout(function () { // 使用
-							// setTimeout（）方法设定定时2000毫秒
-							$("#deleteModal").modal('hide');
-							app.messageShow = false;
-							app.message = '';
-						}, 500);
-					} else {
-						app.err = true;
-						setTimeout(function () { // 使用
-							// setTimeout（）方法设定定时2000毫秒
-							$("#deleteModal").modal('hide');
-							app.messageShow = false;
-							app.message = '';
-						}, 2000);
-					}
+		formData.append('dbType', 'MyBatis');
+		$.ajax({
+			url : delOneUrl,
+			type : 'POST',
+			data : formData,
+			contentType : false,
+			processData : false,
+			cache : false,
+			success : function(data) {
+				loading.hide();
+				app.messageShow = true;
+				app.message = data.message;
+				if (data.state == 0) {
+					app.err = false;
+					app.initData();
+					setTimeout(function() { // 使用
+						// setTimeout（）方法设定定时2000毫秒
+						$("#deleteModal").modal('hide');
+						app.messageShow = false;
+						app.message = '';
+					}, 500);
+				} else {
+					app.err = true;
+					setTimeout(function() { // 使用
+						// setTimeout（）方法设定定时2000毫秒
+						$("#deleteModal").modal('hide');
+						app.messageShow = false;
+						app.message = '';
+					}, 2000);
 				}
-			});
+			}
+		});
 	}
 	function delList() {
 		var list = [];
-		$(".cboxlist").each(function (index, element) {
+		$(".cboxlist").each(function(index, element) {
 			if (element.checked == true) {
 				list.push(element.value);
 			}
 		})
-	var formData = new FormData();
-	formData.append('dbCode', 'FootballSystem');
-	formData.append('dbType', 'MyBatis'); 
-	formData.append('list', JSON.stringify(list));
-		$
-			.ajax({
-				url: delListUrl,
-				type : 'POST',
-				data : formData,
-				contentType : false,
-				processData : false,
-				cache : false,
-				success: function (data) {
-					loading.hide();
-					app.messageShow = true;
-					app.message = data.message;
-					if (data.state == 0) {
-						app.err = false;
-						app.initData();
-						setTimeout(function () { //使用  setTimeout（）方法设定定时2000毫秒
-							$("#deleteModal").modal('hide');
-							app.messageShow = false;
-							app.message = '';
-						}, 500);
-					} else {
-						app.err = true;
-						setTimeout(function () { //使用  setTimeout（）方法设定定时2000毫秒
-							$("#deleteModal").modal('hide');
-							app.messageShow = false;
-							app.message = '';
-						}, 2000);
-					}
+		var formData = new FormData();
+		formData.append('dbCode', 'FootballSystem');
+		formData.append('dbType', 'MyBatis');
+		formData.append('list', JSON.stringify(list));
+		$.ajax({
+			url : delListUrl,
+			type : 'POST',
+			data : formData,
+			contentType : false,
+			processData : false,
+			cache : false,
+			success : function(data) {
+				loading.hide();
+				app.messageShow = true;
+				app.message = data.message;
+				if (data.state == 0) {
+					app.err = false;
+					app.initData();
+					setTimeout(function() { //使用  setTimeout（）方法设定定时2000毫秒
+						$("#deleteModal").modal('hide');
+						app.messageShow = false;
+						app.message = '';
+					}, 500);
+				} else {
+					app.err = true;
+					setTimeout(function() { //使用  setTimeout（）方法设定定时2000毫秒
+						$("#deleteModal").modal('hide');
+						app.messageShow = false;
+						app.message = '';
+					}, 2000);
 				}
-			});
+			}
+		});
 	}
 
 });
-
-

@@ -49,6 +49,20 @@ td {
 
 			</div>
 		</div>
+		<div class="form-row mb-2">
+			<div class="col-4">
+				<select class="form-control" id="searchCup" >
+					<option value="" id="chooseSelect">选择赛事</option>
+					<option v-if="cuplist.length!=0" v-for="(item, index) in cuplist"
+						:value="item.cupId" >{{item.cupName}}</option>
+				</select>
+			</div>
+			<div class="col">
+				<button class="btn btn-outline-secondary" type="button"
+					id="searchBtn">搜索</button>
+
+			</div>
+		</div>
 		<div class="input-group mb-3">
 			<button type="button" class="btn btn-primary mr-3"
 				data-toggle="modal" data-target="#inputModal">新增</button>

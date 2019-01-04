@@ -234,8 +234,8 @@ public class GameServiceImpl implements GameService {
 	private void packList(List<Game> listAll, List<Group> list) {
 
 		for (int i = 0; i < 3; i++) {
-			Game packGame = packGame(list.get(i).getCupId(), list.get(i).getTeam_id(),
-					list.get((i == 2) ? 0 : (i + 1)).getTeam_id());
+			Game packGame = packGame(list.get(i).getCupId(), list.get(i).getTeamId(),
+					list.get((i == 2) ? 0 : (i + 1)).getTeamId());
 			listAll.add(packGame);
 		}
 	}

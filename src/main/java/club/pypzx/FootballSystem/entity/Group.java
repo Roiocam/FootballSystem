@@ -9,7 +9,7 @@ public class Group {
 	private String cupId;
 	@Id
 	@Column(name = "team_id")
-	private String team_id;
+	private String teamId;
 
 	@Column(name = "team_group")
 	private String teamGroup;
@@ -30,15 +30,15 @@ public class Group {
 		this.cupId = cupId;
 	}
 
-	public String getTeam_id() {
-		return team_id;
+	
+
+
+	public String getTeamId() {
+		return teamId;
 	}
-
-	public void setTeam_id(String team_id) {
-		this.team_id = team_id;
+	public void setTeamId(String teamId) {
+		this.teamId = teamId;
 	}
-
-
 	public String getTeamGroup() {
 		return teamGroup;
 	}

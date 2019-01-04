@@ -1,11 +1,11 @@
 package club.pypzx.FootballSystem.dao.mybatis.sqlProvider;
 
-import club.pypzx.FootballSystem.entity.*;
-import club.pypzx.FootballSystem.enums.TableEnum;
-import club.pypzx.FootballSystem.utils.StringUtil;
+import java.lang.reflect.Field;
+
 import org.apache.ibatis.jdbc.SQL;
 
-import java.lang.reflect.Field;
+import club.pypzx.FootballSystem.enums.TableEnum;
+import club.pypzx.FootballSystem.utils.StringUtil;
 
 /**
  *   插入SQL语句构建器类
@@ -33,29 +33,5 @@ public class InsertSQLProvider {
 
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public static void main(String[] args) {
-		System.out.println(InsertSQLProvider.insert(new Cup()));
-		System.out.println(InsertSQLProvider.insert(new Game()));
-		System.out.println(InsertSQLProvider.insert(new GameRecord()));
-		System.out.println(InsertSQLProvider.insert(new Group()));
-		System.out.println(InsertSQLProvider.insert(new KickDay()));
-		System.out.println(InsertSQLProvider.insert(new Player()));
-		System.out.println(InsertSQLProvider.insert(new PlayerInfo()));
-		System.out.println(InsertSQLProvider.insert(new PlayerRank()));
-		System.out.println(InsertSQLProvider.insert(new Team()));
-		System.out.println(InsertSQLProvider.insert(new User()));
-		System.out.println(InsertSQLProvider.insert(new WechatAccount()));
-	}
+
 }

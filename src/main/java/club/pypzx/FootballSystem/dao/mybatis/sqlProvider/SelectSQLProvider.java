@@ -98,17 +98,5 @@ public class SelectSQLProvider {
 		}
 	}
 
-	public static void main(String[] args) {
-//		System.out.println(SelectSQLProvider.selectRowBounds(new Cup(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new Game(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new GameRecord(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new Group(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new KickDay(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new Player(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new PlayerInfo(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new PlayerRank(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new Team(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new User(), null));
-//		System.out.println(SelectSQLProvider.selectRowBounds(new WechatAccount(), null));
-	}
+
 }

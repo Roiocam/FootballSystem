@@ -221,7 +221,7 @@ public class CupServiceImpl implements CupService {
 				TeamVo teamVo = list.get(count);
 				Group g = new Group();
 				g.setCupId(cupId);
-				g.setTeam_id(teamVo.getTeamId());
+				g.setTeamId(teamVo.getTeamId());
 				g.setTeamGroup(stringOf.getGroup_string());
 				BaseExcution<Group> insertObj = groupService.add(g);
 				if (ResultUtil.failResult(insertObj)) {

@@ -1,11 +1,11 @@
 package club.pypzx.FootballSystem.dao.mybatis.sqlProvider;
 
-import club.pypzx.FootballSystem.entity.*;
-import club.pypzx.FootballSystem.enums.TableEnum;
-import club.pypzx.FootballSystem.utils.StringUtil;
+import java.lang.reflect.Field;
+
 import org.apache.ibatis.jdbc.SQL;
 
-import java.lang.reflect.Field;
+import club.pypzx.FootballSystem.enums.TableEnum;
+import club.pypzx.FootballSystem.utils.StringUtil;
 
 /**
  * 删除SQL语句构建器类
@@ -31,7 +31,6 @@ public class DeleteSQLProvider {
 							WHERE(StringUtil.underscoreName(field.getName()) + " = #{" + field.getName() + "}");
 						}
 					}
-
 				}
 			}.toString();
 		} catch (Exception e) {
@@ -40,17 +39,4 @@ public class DeleteSQLProvider {
 
 	}
 
-	public static void main(String[] args) {
-		System.out.println(DeleteSQLProvider.delete(new Cup()));
-		System.out.println(DeleteSQLProvider.delete(new Game()));
-		System.out.println(DeleteSQLProvider.delete(new GameRecord()));
-		System.out.println(DeleteSQLProvider.delete(new Group()));
-		System.out.println(DeleteSQLProvider.delete(new KickDay()));
-		System.out.println(DeleteSQLProvider.delete(new Player()));
-		System.out.println(DeleteSQLProvider.delete(new PlayerInfo()));
-		System.out.println(DeleteSQLProvider.delete(new PlayerRank()));
-		System.out.println(DeleteSQLProvider.delete(new Team()));
-		System.out.println(DeleteSQLProvider.delete(new User()));
-		System.out.println(DeleteSQLProvider.delete(new WechatAccount()));
-	}
 }
