@@ -1,19 +1,32 @@
 # FootBallSystem
+
 # 项目介绍
+
 本项目为足协内部管理系统，出发点为解决每日踢球人数的提醒.后衍生了多个模块，主要解决了协会赛事报名，分组功能，使用程序实现部分自动化
+
 # 项目结构
 
 # 项目设计
+
 ## DAO层设计
+
 ### 多数据源切换/数据访问层框架切换
 - ....
 
 ![switch_datasource](https://github.com/Roiocam/FootballSystem/raw/master/image/switch_datasource.png)
 
 ### MyBatis
+
 - 使用反射+MyBatis的SQL构建器自动生成基础CRUD
+
 ### Spring Data JPA
+
 - ....
+
+### WEB API示意图
+
+![system_line](https://github.com/Roiocam/FootballSystem/raw/master/image/system_line.png)
+
 ## 业务规范
 - 使用泛型类BaseExcution作为统一返回类型
 - 使用枚举类BaseStateEnum作为统一返回标识
@@ -25,6 +38,21 @@
 - 封装ResultUtil判断业务结果
 
 # 系统模块
+
+## 模块业务图
+
+### 系统模块
+
+![admin_logic](https://github.com/Roiocam/FootballSystem/raw/master/image/admin_logic.png)
+
+### APP模块
+
+![app_logic](https://github.com/Roiocam/FootballSystem/raw/master/image/app_logic.png)
+
+### APP业务图
+
+![system_block](https://github.com/Roiocam/FootballSystem/raw/master/image/system_block.png)
+
 ## 后台管理系统
 赛事，球队，球员，赛程，管理员五个主要模块
 
