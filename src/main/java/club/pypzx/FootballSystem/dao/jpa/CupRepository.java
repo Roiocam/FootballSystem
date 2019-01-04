@@ -7,6 +7,4 @@ import club.pypzx.FootballSystem.entity.Cup;
 public interface CupRepository extends JpaRepository<Cup, String> {
 	Cup findCupByCupId(String cupId);
 
-
-
 }

@@ -65,7 +65,7 @@ public interface BaseMapper<T> {
 	 * @return
 	 */
 	@SelectProvider(type = SelectSQLProvider.class, method = "selectRowBounds")
-	public List<T> selectRowBounds(T obj,RowBounds rowBounds);
+	public List<T> selectRowBounds(T obj, RowBounds rowBounds);
 
 	/**
 	 * 查询总数，以obj的不为空的属性做条件,与分页连用
