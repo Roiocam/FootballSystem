@@ -8,10 +8,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import club.pypzx.FootballSystem.utils.ParamUtils;
 
 @Entity(name = "PlayerVo")
 @Table(name = "pypzx_player")
+@Component
+@Scope("prototype")
 public class PlayerVo {
 	@Id
 	@Column(name = "player_id")

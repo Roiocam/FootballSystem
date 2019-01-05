@@ -5,8 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 @Entity(name = "GroupVo")
 @Table(name = "pypzx_group")
+@Component
+@Scope("prototype")
 public class GroupVo {
 	@Id
 	@Column(name = "team_id")

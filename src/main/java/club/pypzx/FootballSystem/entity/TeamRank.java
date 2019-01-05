@@ -1,8 +1,13 @@
 package club.pypzx.FootballSystem.entity;
 
 import javax.persistence.*;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 @Entity
 @Table(name = "pypzx_team_rank")
+@Component
+@Scope("prototype")
 public class TeamRank {
 	@Id
 	@Column(name = "team_id")

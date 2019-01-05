@@ -2,6 +2,9 @@ package club.pypzx.FootballSystem.entity;
 
 import javax.persistence.*;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 
 
 /**
@@ -12,6 +15,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "pypzx_user")
+@Component
+@Scope("prototype")
 public class User {
 	@Id
 	@Column(name = "username")

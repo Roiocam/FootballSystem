@@ -4,6 +4,9 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 /**
  * 每日踢球人数
  * 
@@ -12,6 +15,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "pypzx_kick_day")
+@Component
+@Scope("prototype")
 public class KickDay {
 	@Id
 	@Column(name = "date")

@@ -9,32 +9,32 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-import club.pypzx.FootballSystem.dao.jpa.CupRepository;
-import club.pypzx.FootballSystem.dao.mybatis.CupMapper;
+import club.pypzx.FootballSystem.dao.jpa.TeamRankRepository;
+import club.pypzx.FootballSystem.dao.mybatis.TeamRankMapper;
 import club.pypzx.FootballSystem.datasource.DBIdentifier;
 import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
-import club.pypzx.FootballSystem.entity.Cup;
+import club.pypzx.FootballSystem.entity.TeamRank;
 import club.pypzx.FootballSystem.entity.Page;
 import club.pypzx.FootballSystem.enums.DBType;
 import club.pypzx.FootballSystem.template.BaseDao;
 
 @Repository
 @Scope(value = "singleton")
-public class CupDao implements BaseDao<Cup> {
+public class TeamRankDao implements BaseDao<TeamRank> {
 	@Autowired
-	private CupMapper mapper;
+	private TeamRankMapper mapper;
 	@Autowired
-	private CupRepository repository;
+	private TeamRankRepository repository;
 
-	public static BaseDao<Cup> instance() {
-		return EntityFactroy.getBean(CupDao.class);
+	public static BaseDao<TeamRank> instance() {
+		return EntityFactroy.getBean(TeamRankDao.class);
 	}
 
 	@Override
-	public void add(Cup obj) throws Exception {
+	public void add(TeamRank obj) throws Exception {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			if (1 != mapper.insert(obj)) {
-				throw new RuntimeException("新增赛事失败");
+				throw new RuntimeException("新增球队排行失败");
 			}
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			repository.save(obj);
@@ -42,10 +42,10 @@ public class CupDao implements BaseDao<Cup> {
 	}
 
 	@Override
-	public void edit(Cup obj) {
+	public void edit(TeamRank obj) {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			if (1 != mapper.update(obj)) {
-				throw new RuntimeException("更新赛事失败");
+				throw new RuntimeException("更新球队排行失败");
 			}
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			repository.save(obj);
@@ -55,11 +55,11 @@ public class CupDao implements BaseDao<Cup> {
 
 	@Override
 	public void remove(String objId) {
-		Cup bean = EntityFactroy.getBean(Cup.class);
-		bean.setCupId(objId);
+		TeamRank bean = EntityFactroy.getBean(TeamRank.class);
+		bean.setTeamId(objId);
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			if (1 != mapper.delete(bean)) {
-				throw new RuntimeException("删除赛事失败");
+				throw new RuntimeException("删除球队排行失败");
 			}
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			repository.delete(bean);
@@ -68,10 +68,11 @@ public class CupDao implements BaseDao<Cup> {
 	}
 
 	@Override
-	public Cup findById(String objId) {
-		Cup selectByPrimaryKey = null;
+	public TeamRank findById(String objId) {
+		TeamRank selectByPrimaryKey = EntityFactroy.getBean(TeamRank.class);
+		selectByPrimaryKey.setTeamId(objId);
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			selectByPrimaryKey = mapper.selectByPrimary(objId);
+			selectByPrimaryKey = mapper.selectPrimary(selectByPrimaryKey);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			selectByPrimaryKey = repository.findById(objId).orElse(null);
 		}
@@ -80,7 +81,7 @@ public class CupDao implements BaseDao<Cup> {
 	}
 
 	@Override
-	public Cup findByCondition(Cup obj) {
+	public TeamRank findByCondition(TeamRank obj) {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			return mapper.selectPrimary(obj);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
@@ -90,7 +91,7 @@ public class CupDao implements BaseDao<Cup> {
 	}
 
 	@Override
-	public List<Cup> findAllCondition(Cup obj) {
+	public List<TeamRank> findAllCondition(TeamRank obj) {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			int selectCount = mapper.selectCount(obj);
 			return mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
@@ -102,14 +103,14 @@ public class CupDao implements BaseDao<Cup> {
 	@Override
 	public int count() {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			return mapper.selectCount(EntityFactroy.getBean(Cup.class));
+			return mapper.selectCount(EntityFactroy.getBean(TeamRank.class));
 		} else {
 			return (int) repository.count();
 		}
 	}
 
 	@Override
-	public int countExmaple(Cup obj) {
+	public int countExmaple(TeamRank obj) {
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			return mapper.selectCount(obj);
 		} else {
@@ -118,12 +119,12 @@ public class CupDao implements BaseDao<Cup> {
 	}
 
 	@Override
-	public List<Cup> findAll(int pageIndex, int pageSize) {
-		Cup bean = EntityFactroy.getBean(Cup.class);
+	public List<TeamRank> findAll(int pageIndex, int pageSize) {
+		TeamRank bean = EntityFactroy.getBean(TeamRank.class);
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			return mapper.selectRowBounds(bean, Page.getInstance(pageIndex, pageSize));
 		} else {
-			org.springframework.data.domain.Page<Cup> findAll = repository
+			org.springframework.data.domain.Page<TeamRank> findAll = repository
 					.findAll(PageRequest.of(pageIndex - 1, pageSize));
 			return findAll.getContent();
 		}

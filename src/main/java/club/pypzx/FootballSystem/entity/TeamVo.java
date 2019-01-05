@@ -8,8 +8,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 @Entity(name = "TeamVo")
 @Table(name = "pypzx_team")
+@Component
+@Scope("prototype")
 public class TeamVo {
 	@Id
 	@Column(name = "team_id")

@@ -2,8 +2,13 @@ package club.pypzx.FootballSystem.entity;
 
 import javax.persistence.*;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 @Entity
 @Table(name = "pypzx_wechat_account")
+@Component
+@Scope("prototype")
 public class WechatAccount {
 	@Id
 	@Column(name = "openid")

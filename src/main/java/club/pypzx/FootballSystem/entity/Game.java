@@ -6,6 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 /**
  *   
  * @author Roiocam
@@ -13,6 +16,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "pypzx_game")
+@Component
+@Scope("prototype")
 public class Game {
 
 
