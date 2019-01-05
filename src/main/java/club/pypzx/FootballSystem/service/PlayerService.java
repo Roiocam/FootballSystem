@@ -7,10 +7,7 @@ import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseService;
 
 public interface PlayerService extends BaseService<Player> {
-	public Player packagePlayer(String teamId, String name, int num) throws Exception;
-
-	public Player packagePlayer(String id, String teamId, String name, int num) throws Exception;
-
+	
 	public BaseExcution<Player> add(Player player, PlayerInfo info) throws Exception;
 
 	public BaseExcution<Player> edit(Player player, PlayerInfo info) throws Exception;

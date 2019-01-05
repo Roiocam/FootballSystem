@@ -36,33 +36,6 @@ public class PlayerServiceImpl implements PlayerService {
 	@Autowired
 	private TeamService teamService;
 
-	public Player packagePlayer(String teamId, String name, int num) throws Exception {
-		Player obj = EntityFactroy.getBean(Player.class);
-		obj.setPlayerNum(num);
-		obj.setPlayerId(IDUtils.getUUID());
-		obj.setPlayerName(name);
-		obj.setTeamId(teamId);
-		return obj;
-	}
-
-	public Player packagePlayer(String id, String teamId, String name, int num) throws Exception {
-		Player obj = EntityFactroy.getBean(Player.class);
-		obj.setPlayerId(id);
-		obj.setPlayerNum(num);
-		obj.setPlayerName(name);
-		obj.setTeamId(teamId);
-		return obj;
-	}
-
-	public PlayerInfo packagePlayerInfo(String id, String stuno, String depart, String tel) throws Exception {
-		PlayerInfo obj = EntityFactroy.getBean(PlayerInfo.class);
-		obj.setPlayerId(id);
-		obj.setPlayerStuno(stuno);
-		obj.setPlayerDepart(depart);
-		obj.setPlayerTel(tel);
-		return obj;
-	}
-
 	@Override
 	@Transactional
 	public BaseExcution<Player> removeById(String objId) throws Exception {
@@ -89,8 +62,9 @@ public class PlayerServiceImpl implements PlayerService {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
+		obj.setPlayerId(IDUtils.getUUID());
 		dao.add(obj);
-		return new BaseExcution<>(BaseStateEnum.SUCCESS);
+		return new BaseExcution<>(BaseStateEnum.SUCCESS, obj);
 	}
 
 	@Override
@@ -165,11 +139,17 @@ public class PlayerServiceImpl implements PlayerService {
 		if (null != selectPrimary) {
 			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYERNUM);
 		}
-		if (BaseStateEnum.SUCCESS.getState() != add(player).getState()) {
+		BaseExcution<Player> checkValidId = checkValidId(info.getPlayerStuno());
+		if(BaseStateEnum.SUCCESS.getState()!=checkValidId.getState()) {
+			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYER_STUNO);
+		}
+		BaseExcution<Player> add = add(player);
+		if (BaseStateEnum.SUCCESS.getState() != add.getState()) {
 			throw new Exception("加入球队失败");
 		}
+		info.setPlayerId(add.getObj().getPlayerId());
 		infoDao.add(info);
-		return new BaseExcution<>(BaseStateEnum.SUCCESS, player);
+		return new BaseExcution<>(BaseStateEnum.SUCCESS, add.getObj());
 	}
 
 	@Override
@@ -178,6 +158,8 @@ public class PlayerServiceImpl implements PlayerService {
 		if (BaseStateEnum.SUCCESS.getState() != edit(player).getState()) {
 			throw new Exception("修改球员失败");
 		}
+		info.setPlayerId(player.getPlayerId());
+		dao.edit(player);
 		infoDao.edit(info);
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}

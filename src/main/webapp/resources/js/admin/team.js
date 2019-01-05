@@ -206,7 +206,7 @@ $(function() {
 		var formData = new FormData();
 		formData.append('pageIndex', 1);
 		formData.append('pageSize', 40);
-		formData.append('team.teamId', teamId);
+		formData.append('player.teamId', teamId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis');
 		$.ajax({

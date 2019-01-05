@@ -42,7 +42,10 @@ public class KickDayServiceImpl implements KickDayService {
 
 	@Override
 	public BaseExcution<KickDay> changeKick(boolean isPlus) {
-		KickDay queryKickToday = todayKick().getObj();
+		KickDay queryKickToday = dao.queryKickToday();
+		if (queryKickToday == null) {
+			newDay();
+		}
 		if (queryKickToday != null && queryKickToday.getDate() != null) {
 			queryKickToday.setNum(isPlus ? queryKickToday.getNum() + 1 : queryKickToday.getNum() - 1);
 			dao.edit(queryKickToday);

@@ -25,7 +25,6 @@ var app = new Vue(
 			}
 		},
 		mounted: function () {
-			loading.append();
 			this.initData()
 			this.err = false
 			$("#pageList").delegate(".page-link", "click", function () {

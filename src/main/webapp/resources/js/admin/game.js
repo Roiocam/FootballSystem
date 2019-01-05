@@ -27,7 +27,6 @@ var app = new Vue(
 			}
 		},
 		mounted: function () {
-			loading.append();
 			this.initData()
 			this.err = false
 		},
@@ -55,7 +54,7 @@ var app = new Vue(
 			getGroupData: function (cupId) {
 				var cupId = $('#cupId').val();
 				var formData = new FormData();
-				formData.append('cup.cupId', cupId);
+				formData.append('team.cupId', cupId);
 				formData.append('dbCode', 'FootballSystem');
 				formData.append('dbType', 'MyBatis'); 
 				const that = this

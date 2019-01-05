@@ -45,3 +45,5 @@ CHANGE COLUMN `group` `team_group` VARCHAR(1) NULL DEFAULT NULL ;
 
 ALTER TABLE `pypzx_admin`  RENAME TO  .`pypzx_user` ;
 
+ALTER TABLE `pypzx_player_info` 
+CHANGE COLUMN `player_stuno` `player_stuno` VARCHAR(11) NULL DEFAULT NULL ;

@@ -10,7 +10,8 @@ public enum BaseStateEnum {
 	DELETE_ERROR(-1006, "删除失败"), UPDATE_ERROR(-1005, "更新失败"), FAIL(-1000, "操作失败"), PAGE_ERROR(-1002, "分页信息错误"),
 	WRONG_TEAM_COUNT(-1007, "球队数不足"), NEED_DELETE_GROUP(-1008, "请删除该赛事下的赛程分配后重试!"),
 	SAME_TEAMNAME(-1009, "该赛事下存在相同的球队名称!"), SAME_PLAYERNUM(-1010, "球衣号码已被选,请重新选择号码"),
-	MAX_TEAM_COUNT(-1011, "该赛事下球队数已满"), TO_MANY_PLAYER(-1012, "球队人数已满"), SAME_CUPNAME(-1013, "存在相同的赛事名称!");
+	MAX_TEAM_COUNT(-1011, "该赛事下球队数已满"), TO_MANY_PLAYER(-1012, "球队人数已满"), SAME_CUPNAME(-1013, "存在相同的赛事名称!"),
+	SAME_PLAYER_STUNO(-1014,"学号已存在");
 	private int state;
 
 	private String stateInfo;

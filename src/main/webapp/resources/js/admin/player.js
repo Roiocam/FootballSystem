@@ -30,7 +30,6 @@ var app = new Vue({
 		}
 	},
 	mounted : function() {
-		loading.append();
 		this.initData();
 		this.getTeamData();
 		this.err = false
@@ -154,7 +153,7 @@ $(function() {
 
 		var formData = new FormData();
 		formData.append('player.playerId', playerId);
-		formData.append('team.teamId', teamId);
+		formData.append('player.teamId', teamId);
 		formData.append('player.playerNum', playerNum);
 		formData.append('player.playerName', playerName);
 		formData.append('playerInfo.playerStuno', playerStuno);

@@ -61,6 +61,7 @@
 			</div>
 			<div class="col-4">
 				<select id="searchTeam" class="form-control">
+					<option value="">选择球队</option>
 					<option v-for="(item, index) in teamlist" :value="item.teamId">{{item.teamName}}</option>
 				</select>
 			</div>
@@ -205,6 +206,7 @@
 							<div class="form-group">
 								<label for="teamId" class="col-form-label">选择球队</label> <select
 									class="form-control" id="teamId" name="teamId">
+									<option value="">选择球队</option>
 									<option v-for="(item, index) in teamlist" :value="item.teamId">{{item.teamName}}</option>
 								</select>
 							</div>

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
 import club.pypzx.FootballSystem.dto.RequestEntity;
 import club.pypzx.FootballSystem.entity.Player;
 import club.pypzx.FootballSystem.entity.PlayerInfo;
@@ -30,6 +31,9 @@ public class PlayerServiceController {
 	@PostMapping("/getPlayers")
 	public Map<String, Object> getPlayers(RequestEntity request) {
 		Player example = request.getPlayer();
+		if (example == null) {
+			example = EntityFactroy.getBean(Player.class);
+		}
 		if (ParamUtils.wrongPage(request.getPageIndex(), request.getPageSize())) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.PAGE_ERROR.getStateInfo());
 		}

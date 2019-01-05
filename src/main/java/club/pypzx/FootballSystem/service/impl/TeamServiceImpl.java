@@ -95,7 +95,7 @@ public class TeamServiceImpl implements TeamService {
 		if (ResultUtil.failResult(insertObj)) {
 			return insertObj;
 		}
-		return new BaseExcution<Team>(BaseStateEnum.SUCCESS, team);
+		return new BaseExcution<Team>(BaseStateEnum.SUCCESS, insertObj.getObj());
 
 	}
 
@@ -196,8 +196,9 @@ public class TeamServiceImpl implements TeamService {
 		if (selectCount >= 9) {
 			return new BaseExcution<>(BaseStateEnum.MAX_TEAM_COUNT);
 		}
+		obj.setTeamId(IDUtils.getUUID());
 		dao.add(obj);
-		return new BaseExcution<>(BaseStateEnum.SUCCESS);
+		return new BaseExcution<>(BaseStateEnum.SUCCESS,obj);
 	}
 
 	@Override

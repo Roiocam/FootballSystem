@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
 import club.pypzx.FootballSystem.dto.RequestEntity;
 import club.pypzx.FootballSystem.dto.TeamPrint;
 import club.pypzx.FootballSystem.entity.GroupVo;
@@ -30,9 +31,9 @@ public class TeamServiceController {
 
 	@PostMapping("/getTeams")
 	public Map<String, Object> getTeams(RequestEntity request) {
-		Team condition = new Team();
-		if (request.getCup() != null && ParamUtils.validString(request.getCup().getCupId())) {
-			condition.setCupId(request.getCup().getCupId());
+		Team condition = request.getTeam();
+		if (condition == null) {
+			condition = EntityFactroy.getBean(Team.class);
 		}
 		if (ParamUtils.wrongPage(request.getPageIndex(), request.getPageSize())) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.PAGE_ERROR.getStateInfo());
