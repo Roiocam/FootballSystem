@@ -17,7 +17,8 @@ $(function() {
 		userStr.password = $('#inputPassword').val();
 		var formData = new FormData();
 		var loginUrl = '/FootballSystem/admin/service/loginCheck';
-		formData.append('userStr', JSON.stringify(userStr));
+		formData.append('user.username', userStr.username);
+		formData.append('user.password', userStr.password);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$.ajax({

@@ -99,8 +99,8 @@ $(function () {
 				var username = $('#username').val();
 				var password = $('#password').val();
 				var formData = new FormData();
-				formData.append('username', username);
-				formData.append('password', password);
+				formData.append('user.username', username);
+				formData.append('user.password', password);
 				formData.append('dbCode', 'FootballSystem');
 				formData.append('dbType', 'MyBatis'); 
 				$
@@ -179,7 +179,7 @@ $(function () {
 	function delOne() {
 		var objId = $('#deleteObj').val();
 		var formData = new FormData();
-		formData.append('username', objId);
+		formData.append('user.username', objId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$
@@ -225,7 +225,7 @@ $(function () {
 	var formData = new FormData();
 	formData.append('dbCode', 'FootballSystem');
 	formData.append('dbType', 'MyBatis'); 
-	formData.append('list', JSON.stringify(list));
+	formData.append('idList',list);
 		$
 			.ajax({
 				url: delListUrl,

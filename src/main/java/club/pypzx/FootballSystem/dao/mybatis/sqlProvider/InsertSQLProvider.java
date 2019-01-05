@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import org.apache.ibatis.jdbc.SQL;
 
+import club.pypzx.FootballSystem.entity.Team;
 import club.pypzx.FootballSystem.enums.TableEnum;
 import club.pypzx.FootballSystem.utils.StringUtil;
 
@@ -35,4 +36,7 @@ public class InsertSQLProvider {
 
 	}
 
+	public static void main(String[] args) {
+		System.out.println(insert(new Team("asd")));
+	}
 }

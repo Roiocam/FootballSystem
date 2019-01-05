@@ -151,51 +151,34 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	@Transactional
-	public BaseExcution<Player> add(String teamId, String name, int num, String stuno, String depart, String tel)
-			throws Exception {
-		Player packagePlayer = null;
-		PlayerInfo packagePlayerInfo = null;
-		try {
-			packagePlayer = packagePlayer(teamId, name, num);
-			packagePlayerInfo = packagePlayerInfo(packagePlayer.getPlayerId(), stuno, depart, tel);
-		} catch (Exception e) {
-			return new BaseExcution<Player>(BaseStateEnum.EMPTY);
-		}
+	public BaseExcution<Player> add(Player player, PlayerInfo info) throws Exception {
 		// 球队人数限制
-		Player temp =EntityFactroy.getBean(Player.class);
-		temp.setTeamId(teamId);
+		Player temp = EntityFactroy.getBean(Player.class);
+		temp.setTeamId(player.getTeamId());
 		int selectCount = dao.countExmaple(temp);
 		if (selectCount >= 14) {
 			return new BaseExcution<>(BaseStateEnum.TO_MANY_PLAYER);
 		}
-		temp.setPlayerNum(num);
+		// 球衣号码限制
+		temp.setPlayerNum(player.getPlayerNum());
 		Player selectPrimary = dao.findByCondition(temp);
 		if (null != selectPrimary) {
 			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYERNUM);
 		}
-		if (BaseStateEnum.SUCCESS.getState() != add(packagePlayer).getState()) {
+		if (BaseStateEnum.SUCCESS.getState() != add(player).getState()) {
 			throw new Exception("加入球队失败");
 		}
-		infoDao.add(packagePlayerInfo);
-		return new BaseExcution<>(BaseStateEnum.SUCCESS, packagePlayer);
+		infoDao.add(info);
+		return new BaseExcution<>(BaseStateEnum.SUCCESS, player);
 	}
 
 	@Override
 	@Transactional
-	public BaseExcution<Player> edit(String id, String teamId, String name, int num, String stuno, String depart,
-			String tel) throws Exception {
-		Player packagePlayer = null;
-		PlayerInfo packagePlayerInfo = null;
-		try {
-			packagePlayer = packagePlayer(id, teamId, name, num);
-			packagePlayerInfo = packagePlayerInfo(packagePlayer.getPlayerId(), stuno, depart, tel);
-		} catch (Exception e) {
-			return new BaseExcution<Player>(BaseStateEnum.FAIL);
-		}
-		if (BaseStateEnum.SUCCESS.getState() != edit(packagePlayer).getState()) {
+	public BaseExcution<Player> edit(Player player, PlayerInfo info) throws Exception {
+		if (BaseStateEnum.SUCCESS.getState() != edit(player).getState()) {
 			throw new Exception("修改球员失败");
 		}
-		infoDao.edit(packagePlayerInfo);
+		infoDao.edit(info);
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
@@ -228,10 +211,10 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public BaseExcution<Player> checkValidId(String playerId) {
-		Player bean = EntityFactroy.getBean(Player.class);
-		bean.setPlayerId(playerId);
-		int selectCount = dao.countExmaple(bean);
+	public BaseExcution<Player> checkValidId(String playerStuno) {
+		PlayerInfo bean = EntityFactroy.getBean(PlayerInfo.class);
+		bean.setPlayerStuno(playerStuno);
+		int selectCount = infoDao.countExmaple(bean);
 		if (0 != selectCount) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}

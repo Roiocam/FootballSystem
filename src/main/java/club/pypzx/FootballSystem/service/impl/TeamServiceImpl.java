@@ -14,6 +14,7 @@ import club.pypzx.FootballSystem.dto.TeamPrint;
 import club.pypzx.FootballSystem.entity.Group;
 import club.pypzx.FootballSystem.entity.GroupVo;
 import club.pypzx.FootballSystem.entity.Player;
+import club.pypzx.FootballSystem.entity.PlayerInfo;
 import club.pypzx.FootballSystem.entity.PlayerVo;
 import club.pypzx.FootballSystem.entity.Team;
 import club.pypzx.FootballSystem.entity.TeamVo;
@@ -89,14 +90,12 @@ public class TeamServiceImpl implements TeamService {
 	}
 
 	@Override
-	public BaseExcution<Team> createTeam(String cupId, String teamName, String vaildCode, String teamDesc) {
-		Team packageTeam;
-		packageTeam = packageTeam(cupId, teamName, vaildCode, teamDesc);
-		BaseExcution<Team> insertObj = add(packageTeam);
+	public BaseExcution<Team> createTeam(Team team) {
+		BaseExcution<Team> insertObj = add(team);
 		if (ResultUtil.failResult(insertObj)) {
 			return insertObj;
 		}
-		return new BaseExcution<Team>(BaseStateEnum.SUCCESS, packageTeam);
+		return new BaseExcution<Team>(BaseStateEnum.SUCCESS, team);
 
 	}
 
@@ -197,21 +196,18 @@ public class TeamServiceImpl implements TeamService {
 		if (selectCount >= 9) {
 			return new BaseExcution<>(BaseStateEnum.MAX_TEAM_COUNT);
 		}
-		dao.add(selectPrimary);
+		dao.add(obj);
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
 	@Transactional
-	public BaseExcution<Team> createTeamAddPlayer(String cupId, String teamName, String vaildCode, String teamDesc,
-			String playerName, int playerNum, String playerStuno, String playerDepart, String playerTel)
-			throws Exception {
-		BaseExcution<Team> createTeam = createTeam(cupId, teamName, vaildCode, teamDesc);
+	public BaseExcution<Team> createTeamAddPlayer(Team team, Player player, PlayerInfo info) throws Exception {
+		BaseExcution<Team> createTeam = createTeam(team);
 		if (ResultUtil.failResult(createTeam)) {
 			throw new RuntimeException("创建球队失败：" + createTeam.getStateInfo());
 		}
-		BaseExcution<Player> insertObj = playerService.add(createTeam.getObj().getTeamId(), playerName, playerNum,
-				playerStuno, playerDepart, playerTel);
+		BaseExcution<Player> insertObj = playerService.add(player, info);
 		if (ResultUtil.failResult(insertObj)) {
 			throw new RuntimeException("创建球员失败" + insertObj.getStateInfo());
 		}

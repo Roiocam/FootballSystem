@@ -4,7 +4,9 @@ import java.util.List;
 
 import club.pypzx.FootballSystem.entity.Cup;
 import club.pypzx.FootballSystem.entity.Player;
+import club.pypzx.FootballSystem.entity.PlayerInfo;
 import club.pypzx.FootballSystem.entity.Team;
+import club.pypzx.FootballSystem.entity.User;
 
 public class RequestEntity {
 	private int pageIndex;
@@ -13,11 +15,22 @@ public class RequestEntity {
 	private String dbType;
 	private Cup cup;
 	private Player player;
+	private PlayerInfo playerInfo;
 	private Team team;
+	private User user;
 	private List<String> idList;
+	private String openid;
 
 	public int getPageIndex() {
 		return pageIndex;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setPageIndex(int pageIndex) {
@@ -78,6 +91,22 @@ public class RequestEntity {
 
 	public void setIdList(List<String> idList) {
 		this.idList = idList;
+	}
+
+	public PlayerInfo getPlayerInfo() {
+		return playerInfo;
+	}
+
+	public void setPlayerInfo(PlayerInfo playerInfo) {
+		this.playerInfo = playerInfo;
+	}
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
 
 }

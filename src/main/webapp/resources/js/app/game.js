@@ -50,7 +50,7 @@ $(function() {
 		var formData = new FormData();
 		formData.append('pageIndex', 1);
 		formData.append('pageSize', 50);
-		formData.append('cupId', cupId);
+		formData.append('cup.cupId', cupId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$.ajax({

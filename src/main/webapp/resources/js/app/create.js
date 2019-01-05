@@ -123,15 +123,15 @@ $(function() {
 			return;
 		}
 		var formData = new FormData();
-		formData.append('cupId', cupId);
-		formData.append('teamName', teamName);
-		formData.append('vaildCode', vaildCode);
-		formData.append('teamDesc', teamDesc);
-		formData.append('playerNum', playerNum);
-		formData.append('playerName', playerName);
-		formData.append('playerStuno', playerStuno);
-		formData.append('playerDepart', playerDepart);
-		formData.append('playerTel', playerTel);
+		formData.append('team.cupId', cupId);
+		formData.append('team.teamName', teamName);
+		formData.append('team.vaildCode', vaildCode);
+		formData.append('team.teamDesc', teamDesc);
+		formData.append('player.playerNum', playerNum);
+		formData.append('player.playerName', playerName);
+		formData.append('playerInfo.playerStuno', playerStuno);
+		formData.append('playerInfo.playerDepart', playerDepart);
+		formData.append('playerInfo.playerTel', playerTel);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 
@@ -194,7 +194,7 @@ $(function() {
 	}
 	function checkId(id) {
 		var formData = new FormData();
-		formData.append('playerId', id);
+		formData.append('playerInfo.playerStuno', id);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$.ajax({

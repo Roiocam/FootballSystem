@@ -71,8 +71,8 @@ var app = new Vue({
 			formData.append('dbCode', 'FootballSystem');
 			formData.append('dbType', 'MyBatis'); 
 			if (searchData != null) {
-				formData.append('teamId', searchData.teamId);
-				formData.append('playerName', searchData.playerName);
+				formData.append('player.teamId', searchData.teamId);
+				formData.append('player.playerName', searchData.playerName);
 			}
 			const that = this
 			axios.post(getUrl, formData).then(function(res) {
@@ -153,13 +153,13 @@ $(function() {
 		loading.show();
 
 		var formData = new FormData();
-		formData.append('playerId', playerId);
-		formData.append('teamId', teamId);
-		formData.append('playerNum', playerNum);
-		formData.append('playerName', playerName);
-		formData.append('playerStuno', playerStuno);
-		formData.append('playerDepart', playerDepart);
-		formData.append('playerTel', playerTel);
+		formData.append('player.playerId', playerId);
+		formData.append('team.teamId', teamId);
+		formData.append('player.playerNum', playerNum);
+		formData.append('player.playerName', playerName);
+		formData.append('playerInfo.playerStuno', playerStuno);
+		formData.append('playerInfo.playerDepart', playerDepart);
+		formData.append('playerInfo.playerTel', playerTel);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$.ajax({
@@ -260,7 +260,7 @@ $(function() {
 	function delOne() {
 		var objId = $('#deleteObj').val();
 		var formData = new FormData();
-		formData.append('playerId', objId);
+		formData.append('player.playerId', objId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$.ajax({
@@ -305,7 +305,7 @@ $(function() {
 		var formData = new FormData();
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
-		formData.append('list', JSON.stringify(list));
+		formData.append('idList',list);
 		$.ajax({
 			url : delListUrl,
 			type : 'POST',

@@ -37,7 +37,7 @@ var app = new Vue({
 			formData.append('dbCode', 'FootballSystem');
 			formData.append('dbType', 'MyBatis');
 			if (searchData != null) {
-				formData.append('cupId', searchData.cupId);
+				formData.append('team.cupId', searchData.cupId);
 			}
 			const that = this
 			axios.post(getUrl, formData).then(function(res) {
@@ -130,11 +130,11 @@ $(function() {
 		}
 		loading.show();
 		var formData = new FormData();
-		formData.append('teamId', teamId);
-		formData.append('teamName', teamName);
-		formData.append('vaildCode', vaildCode);
-		formData.append('teamDesc', teamDesc);
-		formData.append('cupId', cupId);
+		formData.append('team.teamId', teamId);
+		formData.append('team.teamName', teamName);
+		formData.append('team.vaildCode', vaildCode);
+		formData.append('team.teamDesc', teamDesc);
+		formData.append('team.cupId', cupId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis');
 		$.ajax({
@@ -206,7 +206,7 @@ $(function() {
 		var formData = new FormData();
 		formData.append('pageIndex', 1);
 		formData.append('pageSize', 40);
-		formData.append('teamId', teamId);
+		formData.append('team.teamId', teamId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis');
 		$.ajax({
@@ -257,8 +257,8 @@ $(function() {
 
 		}
 		var formData = new FormData();
-		formData.append('teamId', teamId);
-		formData.append('leaderId', leaderId);
+		formData.append('team.teamId', teamId);
+		formData.append('team.leaderId', leaderId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis');
 		$.ajax({
@@ -300,7 +300,7 @@ $(function() {
 	function delOne() {
 		var objId = $('#deleteObj').val();
 		var formData = new FormData();
-		formData.append('teamId', objId);
+		formData.append('team.teamId', objId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis');
 		$.ajax({
@@ -345,7 +345,7 @@ $(function() {
 		var formData = new FormData();
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis');
-		formData.append('list', JSON.stringify(list));
+		formData.append('idList',list);
 		$.ajax({
 			url : delListUrl,
 			type : 'POST',

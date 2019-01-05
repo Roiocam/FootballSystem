@@ -7,10 +7,6 @@ import java.util.Map.Entry;
 import java.util.Timer;
 
 import org.apache.tomcat.jdbc.pool.DataSource;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
 
 /**
  * 动态数据源管理器
@@ -18,8 +14,7 @@ import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
  * @author Roiocam
  * @date 2018年12月30日 下午4:03:09
  */
-@Component
-@Scope(value = "singleton")
+
 public class DDSHolder {
 	private static DDSHolder instance = null;
 
@@ -47,7 +42,7 @@ public class DDSHolder {
 	 */
 	public static DDSHolder instance() {
 		if (instance == null) {
-			instance = EntityFactroy.getBean(DDSHolder.class);
+			instance = new DDSHolder();
 		}
 		return instance;
 	}

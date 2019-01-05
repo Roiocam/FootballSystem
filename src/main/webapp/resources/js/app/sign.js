@@ -71,13 +71,13 @@ $(function() {
 		var playerTel = $('#playerTel').val();
 		
 		var formData = new FormData();
-		formData.append('vaildCode', vaildCode);
-		formData.append('teamId', teamId);
-		formData.append('playerNum', playerNum);
-		formData.append('playerName', playerName);
-		formData.append('playerStuno', playerStuno);
-		formData.append('playerDepart', playerDepart);
-		formData.append('playerTel', playerTel);
+		formData.append('team.vaildCode', vaildCode);
+		formData.append('team.teamId', teamId);
+		formData.append('player.playerNum', playerNum);
+		formData.append('player.playerName', playerName);
+		formData.append('playerInfo.playerStuno', playerStuno);
+		formData.append('playerInfo.playerDepart', playerDepart);
+		formData.append('playerInfo.playerTel', playerTel);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 
@@ -140,7 +140,7 @@ $(function() {
 	}
 	function checkId(id) {
 		 var formData = new FormData();
-			formData.append('playerId', id);
+			formData.append('player.playerId', id);
 			formData.append('dbCode', 'FootballSystem');
 			formData.append('dbType', 'MyBatis'); 
 		$.ajax({

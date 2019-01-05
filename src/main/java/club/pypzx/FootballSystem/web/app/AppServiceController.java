@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import club.pypzx.FootballSystem.dto.RequestEntity;
 import club.pypzx.FootballSystem.entity.KickDay;
 import club.pypzx.FootballSystem.entity.Player;
+import club.pypzx.FootballSystem.entity.PlayerInfo;
 import club.pypzx.FootballSystem.entity.PlayerVo;
 import club.pypzx.FootballSystem.entity.Team;
 import club.pypzx.FootballSystem.entity.TeamVo;
@@ -23,7 +25,6 @@ import club.pypzx.FootballSystem.service.TeamService;
 import club.pypzx.FootballSystem.service.WechatAccountService;
 import club.pypzx.FootballSystem.template.BaseExcution;
 import club.pypzx.FootballSystem.template.BaseStateEnum;
-import club.pypzx.FootballSystem.utils.HttpServletRequestUtil;
 import club.pypzx.FootballSystem.utils.ModelMapUtil;
 import club.pypzx.FootballSystem.utils.ParamUtils;
 import club.pypzx.FootballSystem.utils.ResultUtil;
@@ -83,36 +84,36 @@ public class AppServiceController {
 
 	@PostMapping("/addPlayer")
 	@ResponseBody
-	public Map<String, Object> addPlayers(HttpServletRequest request) {
-		String vaildCode = HttpServletRequestUtil.getString(request, "vaildCode");
-		String teamId = HttpServletRequestUtil.getString(request, "teamId");
-		String openid = HttpServletRequestUtil.getString(request, "openid");
-		if (ParamUtils.emptyString(vaildCode) || ParamUtils.emptyString(teamId)) {
+	public Map<String, Object> addPlayers(RequestEntity requestEntity, HttpServletRequest request) {
+		Team team = requestEntity.getTeam();
+		if (team == null || ParamUtils.emptyString(team.getVaildCode()) || ParamUtils.emptyString(team.getTeamId())) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
-		if (false == playerService.checkValidCode(vaildCode, teamId)) {
+		if (false == playerService.checkValidCode(team.getVaildCode(), team.getTeamId())) {
 			return ModelMapUtil.getErrorMap("入队验证码错误");
 		}
-
-		String playerName = HttpServletRequestUtil.getString(request, "playerName");
-		int playerNum = HttpServletRequestUtil.getInt(request, "playerNum");
-		String stuno = HttpServletRequestUtil.getString(request, "playerStuno");
-		String depart = HttpServletRequestUtil.getString(request, "playerDepart");
-		String tel = HttpServletRequestUtil.getString(request, "playerTel");
-		if (ParamUtils.emptyString(playerName) || ParamUtils.emptyString(stuno) || ParamUtils.emptyString(depart)
-				|| ParamUtils.emptyString(tel) || playerNum < 0) {
+		Player player = requestEntity.getPlayer();
+		PlayerInfo playerInfo = requestEntity.getPlayerInfo();
+		if (player == null || playerInfo == null) {
+			return ModelMapUtil.getErrorMap("请检查参数,");
+		}
+		if (ParamUtils.emptyString(player.getTeamId()) || ParamUtils.emptyString(player.getPlayerName())
+				|| ParamUtils.emptyString(playerInfo.getPlayerStuno())
+				|| ParamUtils.emptyString(playerInfo.getPlayerTel())
+				|| ParamUtils.emptyString(playerInfo.getPlayerTel()) || player.getPlayerNum() < 0) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
+		player.setTeamId(team.getTeamId());
 		try {
-			BaseExcution<Player> insertObj = playerService.add(teamId, playerName, playerNum, stuno, depart, tel);
+			BaseExcution<Player> insertObj = playerService.add(player, playerInfo);
 			if (insertObj.getState() != BaseStateEnum.SUCCESS.getState()) {
 				return ModelMapUtil.getErrorMap("加入球队失败：" + insertObj.getStateInfo());
 			}
 			String playerId = insertObj.getObj().getPlayerId();
 			request.getSession().setAttribute("signed", playerId);
-			if (ParamUtils.validString(openid)) {
+			if (ParamUtils.validString(requestEntity.getOpenid())) {
 				WechatAccount wechat = new WechatAccount();
-				wechat.setOpenid(openid);
+				wechat.setOpenid(requestEntity.getOpenid());
 				wechat.setPlayerId(playerId);
 				wechatService.add(wechat);
 			}
@@ -124,29 +125,23 @@ public class AppServiceController {
 
 	@PostMapping("/createTeam")
 	@ResponseBody
-	public Map<String, Object> createTeam(HttpServletRequest request) {
-		String openid = HttpServletRequestUtil.getString(request, "openid");
+	public Map<String, Object> createTeam(HttpServletRequest request, RequestEntity entity) {
+		String openid = entity.getOpenid();
 
-		String cupId = HttpServletRequestUtil.getString(request, "cupId");
-		String vaildCode = HttpServletRequestUtil.getString(request, "vaildCode");
-		String teamName = HttpServletRequestUtil.getString(request, "teamName");
-		String teamDesc = HttpServletRequestUtil.getString(request, "teamDesc");
-		if (ParamUtils.emptyString(cupId) || ParamUtils.emptyString(vaildCode) || ParamUtils.emptyString(teamName)
-				|| ParamUtils.emptyString(teamDesc)) {
+		Team team = entity.getTeam();
+		if (team == null || ParamUtils.emptyString(team.getCupId()) || ParamUtils.emptyString(team.getVaildCode())
+				|| ParamUtils.emptyString(team.getTeamName()) || ParamUtils.emptyString(team.getTeamDesc())) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
-		String playerName = HttpServletRequestUtil.getString(request, "playerName");
-		int playerNum = HttpServletRequestUtil.getInt(request, "playerNum");
-		String stuno = HttpServletRequestUtil.getString(request, "playerStuno");
-		String depart = HttpServletRequestUtil.getString(request, "playerDepart");
-		String tel = HttpServletRequestUtil.getString(request, "playerTel");
-		if (ParamUtils.emptyString(playerName) || ParamUtils.emptyString(stuno) || ParamUtils.emptyString(depart)
-				|| ParamUtils.emptyString(tel) || playerNum < 0) {
+		Player player = entity.getPlayer();
+		PlayerInfo info = entity.getPlayerInfo();
+		if (player == null || info == null || ParamUtils.emptyString(player.getPlayerName())
+				|| ParamUtils.emptyString(info.getPlayerStuno()) || ParamUtils.emptyString(info.getPlayerDepart())
+				|| ParamUtils.emptyString(info.getPlayerTel()) || player.getPlayerNum() < 0) {
 			return ModelMapUtil.getErrorMap(BaseStateEnum.EMPTY.getStateInfo());
 		}
 		try {
-			BaseExcution<Team> createTeamAddPlayer = teamService.createTeamAddPlayer(cupId, teamName, vaildCode,
-					teamDesc, playerName, playerNum, stuno, depart, tel);
+			BaseExcution<Team> createTeamAddPlayer = teamService.createTeamAddPlayer(team, player, info);
 			String teamId = createTeamAddPlayer.getObj().getTeamId();
 			request.getSession().setAttribute("created", teamId);
 			if (ParamUtils.validString(openid)) {
@@ -163,8 +158,8 @@ public class AppServiceController {
 
 	@PostMapping("/getByOpenid")
 	@ResponseBody
-	public Map<String, Object> getByOpenid(HttpServletRequest request) {
-		String openid = HttpServletRequestUtil.getString(request, "openid");
+	public Map<String, Object> getByOpenid(RequestEntity request) {
+		String openid = request.getOpenid();
 		BaseExcution<WechatAccount> queryObjOneByPrimaryKey = null;
 		if (ParamUtils.emptyString(openid)) {
 			return ModelMapUtil.getErrorMap("查询失败，记录不存在[code:a]");
@@ -224,8 +219,8 @@ public class AppServiceController {
 
 	@PostMapping("/getTeamDetail")
 	@ResponseBody
-	public Map<String, Object> getTeamDetail(HttpServletRequest request) {
-		String teamId = HttpServletRequestUtil.getString(request, "teamId");
+	public Map<String, Object> getTeamDetail(RequestEntity request) {
+		String teamId = request.getTeam() == null ? null : request.getTeam().getTeamId();
 		if (ParamUtils.emptyString(teamId)) {
 			return ModelMapUtil.getErrorMap("该球队信息有误,请联系管理员解决.");
 		}
@@ -239,12 +234,12 @@ public class AppServiceController {
 
 	@PostMapping("/checkValidId")
 	@ResponseBody
-	public Map<String, Object> checkValidId(HttpServletRequest request) {
-		String playerId = HttpServletRequestUtil.getString(request, "playerId");
-		if (ParamUtils.emptyString(playerId)) {
+	public Map<String, Object> checkValidId(RequestEntity request) {
+		String playerStuno = request.getPlayerInfo() == null ? null : request.getPlayerInfo().getPlayerStuno();
+		if (ParamUtils.emptyString(playerStuno)) {
 			return ModelMapUtil.getErrorMap("输入有误.");
 		}
-		BaseExcution<Player> checkValidId = playerService.checkValidId(playerId);
+		BaseExcution<Player> checkValidId = playerService.checkValidId(playerStuno);
 		if (checkValidId.getState() != BaseStateEnum.SUCCESS.getState()) {
 			return ModelMapUtil.getErrorMap("该学号已报名,请确认学号正确!");
 		}

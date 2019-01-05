@@ -116,7 +116,7 @@ $('#deleteObj').click(function() {
 function delOne() {
 	var objId = $('#deleteObj').val();
 	var formData = new FormData();
-	formData.append('cupId', objId);
+	formData.append('cup.cupId', objId);
 	formData.append('dbCode', 'FootballSystem');
 	formData.append('dbType', 'MyBatis'); 
 	$.ajax({
@@ -161,7 +161,7 @@ function delList() {
 	var formData = new FormData();
 	formData.append('dbCode', 'FootballSystem');
 	formData.append('dbType', 'MyBatis'); 
-	formData.append('list', JSON.stringify(list));
+	formData.append('idList',list);
 
 	$.ajax({
 		url : delListUrl,
@@ -207,8 +207,8 @@ $('#submitData').click(function() {
 	var cupId = $('#cupId').val();
 	var cupName = $('#cupName').val();
 	var formData = new FormData();
-	formData.append('cupId', cupId);
-	formData.append('cupName', cupName);
+	formData.append('cup.cupId', cupId);
+	formData.append('cup.cupName', cupName);
 	formData.append('dbCode', 'FootballSystem');
 	formData.append('dbType', 'MyBatis'); 
 	$.ajax({

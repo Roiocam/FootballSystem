@@ -83,7 +83,7 @@ var app = new Vue(
 				var formData = new FormData();
 				formData.append('pageIndex', pageIndex);
 				formData.append('pageSize', pageSize);
-				formData.append('cupId', cupId);
+				formData.append('cup.cupId', cupId);
 				formData.append('dbCode', 'FootballSystem');
 				formData.append('dbType', 'MyBatis'); 
 				const that = this

@@ -8,7 +8,7 @@ $(function() {
 
 	function getData() {
 		var formData = new FormData();
-		formData.append('teamId', teamId);
+		formData.append('team.teamId', teamId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$.ajax({

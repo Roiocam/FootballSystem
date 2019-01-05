@@ -47,7 +47,7 @@ $(function() {
 	function getGroupData(cupId) {
 		var cupId = $('#cupId').val();
 		var formData = new FormData();
-		formData.append('cupId', cupId);
+		formData.append('cup.cupId', cupId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$.ajax({

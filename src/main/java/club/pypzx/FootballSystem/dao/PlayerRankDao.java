@@ -58,9 +58,7 @@ public class PlayerRankDao implements BaseDao<PlayerRank> {
 		PlayerRank bean = EntityFactroy.getBean(PlayerRank.class);
 		bean.setPlayerId(objId);
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			if (1 != mapper.delete(bean)) {
-				throw new RuntimeException("删除球员排行失败");
-			}
+			mapper.delete(bean);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			repository.delete(bean);
 		}

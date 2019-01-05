@@ -55,7 +55,7 @@ var app = new Vue(
 			getGroupData: function (cupId) {
 				var cupId = $('#cupId').val();
 				var formData = new FormData();
-				formData.append('cupId', cupId);
+				formData.append('cup.cupId', cupId);
 				formData.append('dbCode', 'FootballSystem');
 				formData.append('dbType', 'MyBatis'); 
 				const that = this
@@ -103,7 +103,7 @@ $(function () {
 		var formData = new FormData();
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
-		formData.append('cupId', cupId);
+		formData.append('cup.cupId', cupId);
 		$.ajax({
 			url: randomUrl,
 			type: 'POST',
@@ -136,7 +136,7 @@ $(function () {
 		loading.show();
 		var cupId = $('#cupId').val();
 		var formData = new FormData();
-		formData.append('cupId', cupId)
+		formData.append('cup.cupId', cupId)
 		formData.append('dbCode', 'FootballSystem');
 			formData.append('dbType', 'MyBatis'); 
 		$.ajax({
@@ -177,7 +177,7 @@ $(function () {
 		$('#modalBody').html('正在安排赛程中,请稍等...');
 		var cupId = $('#cupId').val();
 		var formData = new FormData();
-		formData.append('cupId', cupId);
+		formData.append('cup.cupId', cupId);
 		formData.append('dbCode', 'FootballSystem');
 		formData.append('dbType', 'MyBatis'); 
 		$.ajax({

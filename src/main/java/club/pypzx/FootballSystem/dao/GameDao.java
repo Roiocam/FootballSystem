@@ -63,9 +63,7 @@ public class GameDao implements BaseDao<Game> {
 		Game bean = EntityFactroy.getBean(Game.class);
 		bean.setGameId(objId);
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			if (1 != mapper.delete(bean)) {
-				throw new RuntimeException("删除比赛失败");
-			}
+			mapper.delete(bean);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
 			List<Game> findAll = repository.findAll(Example.of(bean));
 			repository.deleteInBatch(findAll);
