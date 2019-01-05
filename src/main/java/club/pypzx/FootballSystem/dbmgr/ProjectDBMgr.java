@@ -3,13 +3,19 @@ package club.pypzx.FootballSystem.dbmgr;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 /**
  * 项目数据库管理。提供根据项目编码查询数据库名称和IP的接口。
  * 
  * @author Roiocam
  * @date 2018年12月30日 下午4:10:12
  */
+@Component
+@Scope(value = "singleton")
 public class ProjectDBMgr {
+	private static ProjectDBMgr instance = null;
 
 	/**
 	 * 保存项目编码与数据名称的映射关系。这里是硬编码，实际开发中这个关系数据可以保存到redis缓存中；
@@ -34,7 +40,10 @@ public class ProjectDBMgr {
 	 * @return
 	 */
 	public static ProjectDBMgr instance() {
-		return ProjectDBMgrBuilder.instance;
+		if (instance == null) {
+			instance = EntityFactroy.getBean(ProjectDBMgr.class);
+		}
+		return instance;
 	}
 
 	/**
@@ -69,13 +78,4 @@ public class ProjectDBMgr {
 		return "";
 	}
 
-	/**
-	 * 单例对象构建类
-	 * 
-	 * @author Roiocam
-	 * @date 2018年12月30日 下午4:13:07
-	 */
-	private static class ProjectDBMgrBuilder {
-		private static ProjectDBMgr instance = new ProjectDBMgr();
-	}
 }

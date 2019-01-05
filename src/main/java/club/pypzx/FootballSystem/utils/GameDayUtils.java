@@ -1,16 +1,18 @@
 package club.pypzx.FootballSystem.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
+/**
+ * 获取随机比赛日期工具类
+ * 
+ * @author Roiocam
+ * @date 2019年1月5日 下午3:15:57
+ */
 public class GameDayUtils {
 	private static Calendar cal = Calendar.getInstance();
-	private static SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	/**
 	 * 根据当前日期，获取第N周后的周N的日期
@@ -22,7 +24,7 @@ public class GameDayUtils {
 	public static Date getWeekDate(int dayOfWeek, int whitchWeek) {
 		whitchWeek = (whitchWeek - 1) * 7;
 		cal.setTime(new Date());
-		
+
 		// 获得当前日期是一个星期的第几天
 		int dayWeek = cal.get(Calendar.DAY_OF_WEEK);
 		if (1 == dayOfWeek && dayWeek != 1) {
@@ -39,7 +41,7 @@ public class GameDayUtils {
 		return cal.getTime();
 	}
 
-	private static Date getGameDayIndex(int count, int index)  {
+	private static Date getGameDayIndex(int count, int index) {
 		Date temp = null;
 		count = count % 5;
 		switch (count) {
@@ -64,30 +66,16 @@ public class GameDayUtils {
 		return temp;
 	}
 
-	public static List<Date> getGameDay(int gameCount)  {
+	public static List<Date> getGameDay(int gameCount) {
 		List<Date> list = new ArrayList<Date>();
 		int count = 1;
 		while (count != gameCount + 1) {
-			Date gameDayIndex = getGameDayIndex(count, ((count-1) / 5) + 2);
+			Date gameDayIndex = getGameDayIndex(count, ((count - 1) / 5) + 2);
 			count++;
 			list.add(gameDayIndex);
 		}
 		return list;
 
-	}
-
-	public static void main(String[] args) throws ParseException {
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
-//		System.out.println(sdf.format(GameDayUtils.getWeekDate(Calendar.MONDAY, 1)));
-//		System.out.println(sdf.format(GameDayUtils.getWeekDate(Calendar.SUNDAY, 1)));
-//		Date parse = sdf.parse("2018-10-21");
-//		System.out.println(sdf.format(GameDayUtils.getWeekDate(parse,Calendar.SUNDAY, 1)));
-		List<Date> gameDay = getGameDay(12);
-		Iterator<Date> iterator = gameDay.iterator();
-		while (iterator.hasNext()) {
-			Date date = (Date) iterator.next();
-			System.out.println(sdf1.format(date));
-		}
 	}
 
 }

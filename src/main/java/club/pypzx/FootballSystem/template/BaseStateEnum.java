@@ -1,5 +1,10 @@
 package club.pypzx.FootballSystem.template;
 
+/**
+ * 通用状态枚举  
+ * @author Roiocam
+ * @date 2019年1月5日 下午3:36:02
+ */
 public enum BaseStateEnum {
 	SUCCESS(0, "操作成功"), INNER_ERROR(-1004, "新增失败"), EMPTY(-1001, "存在必填项未填写,对象为空!"), QUERY_ERROR(-1003, "查询失败"),
 	DELETE_ERROR(-1006, "删除失败"), UPDATE_ERROR(-1005, "更新失败"), FAIL(-1000, "操作失败"), PAGE_ERROR(-1002, "分页信息错误"),

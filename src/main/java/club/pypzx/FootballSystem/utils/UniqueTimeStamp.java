@@ -1,7 +1,8 @@
 package club.pypzx.FootballSystem.utils;
 
 /**
- *   唯一时间戳工具类
+ * 唯一时间戳工具类，供IdUtils使用
+ * 
  * @author Roiocam
  * @date 2018年10月7日 下午7:11:43
  */

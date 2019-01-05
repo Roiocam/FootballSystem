@@ -3,28 +3,18 @@ package club.pypzx.FootballSystem.service.impl;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import club.pypzx.FootballSystem.dao.jpa.PlayerInfoRepository;
-import club.pypzx.FootballSystem.dao.jpa.PlayerRankRepository;
-import club.pypzx.FootballSystem.dao.jpa.PlayerRepository;
-import club.pypzx.FootballSystem.dao.jpa.PlayerVoRepository;
-import club.pypzx.FootballSystem.dao.mybatis.PlayerInfoMapper;
-import club.pypzx.FootballSystem.dao.mybatis.PlayerMapper;
-import club.pypzx.FootballSystem.dao.mybatis.PlayerRankMapper;
-import club.pypzx.FootballSystem.datasource.DBIdentifier;
-import club.pypzx.FootballSystem.entity.Page;
+import club.pypzx.FootballSystem.dao.PlayerDao;
+import club.pypzx.FootballSystem.dao.PlayerInfoDao;
+import club.pypzx.FootballSystem.dao.PlayerRankDao;
+import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
 import club.pypzx.FootballSystem.entity.Player;
 import club.pypzx.FootballSystem.entity.PlayerInfo;
-import club.pypzx.FootballSystem.entity.PlayerRank;
 import club.pypzx.FootballSystem.entity.PlayerVo;
 import club.pypzx.FootballSystem.entity.Team;
-import club.pypzx.FootballSystem.enums.DBType;
 import club.pypzx.FootballSystem.service.PlayerService;
 import club.pypzx.FootballSystem.service.TeamService;
 import club.pypzx.FootballSystem.template.BaseExcution;
@@ -37,24 +27,17 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 public class PlayerServiceImpl implements PlayerService {
 
 	@Autowired
-	private PlayerMapper mapper;
+	private PlayerDao dao;
 	@Autowired
-	private PlayerVoRepository voRepository;
+	private PlayerRankDao rankDao;
 	@Autowired
-	private PlayerRepository repository;
-	@Autowired
-	private PlayerRankMapper rankMapper;
-	@Autowired
-	private PlayerRankRepository rankRepository;
-	@Autowired
-	private PlayerInfoMapper infoMapper;
-	@Autowired
-	private PlayerInfoRepository infoRepository;
+	private PlayerInfoDao infoDao;
+
 	@Autowired
 	private TeamService teamService;
 
 	public Player packagePlayer(String teamId, String name, int num) throws Exception {
-		Player obj = new Player();
+		Player obj = EntityFactroy.getBean(Player.class);
 		obj.setPlayerNum(num);
 		obj.setPlayerId(IDUtils.getUUID());
 		obj.setPlayerName(name);
@@ -63,7 +46,7 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public Player packagePlayer(String id, String teamId, String name, int num) throws Exception {
-		Player obj = new Player();
+		Player obj = EntityFactroy.getBean(Player.class);
 		obj.setPlayerId(id);
 		obj.setPlayerNum(num);
 		obj.setPlayerName(name);
@@ -72,7 +55,7 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public PlayerInfo packagePlayerInfo(String id, String stuno, String depart, String tel) throws Exception {
-		PlayerInfo obj = new PlayerInfo();
+		PlayerInfo obj = EntityFactroy.getBean(PlayerInfo.class);
 		obj.setPlayerId(id);
 		obj.setPlayerStuno(stuno);
 		obj.setPlayerDepart(depart);
@@ -94,17 +77,9 @@ public class PlayerServiceImpl implements PlayerService {
 				throw new RuntimeException("球员信息有误");
 			}
 		}
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			infoMapper.delete(new PlayerInfo(objId));
-			rankMapper.delete(new PlayerRank(objId));
-			if (1 != mapper.delete(new Player(objId))) {
-				throw new RuntimeException("删除球员失败");
-			}
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			infoRepository.delete(new PlayerInfo(objId));
-			rankRepository.delete(new PlayerRank(objId));
-			repository.delete(new Player(objId));
-		}
+		infoDao.remove(objId);
+		rankDao.remove(objId);
+		dao.remove(objId);
 
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
@@ -114,13 +89,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			if (1 != mapper.insert(obj)) {
-				return new BaseExcution<>(BaseStateEnum.FAIL);
-			}
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			repository.save(obj);
-		}
+		dao.add(obj);
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
@@ -129,24 +98,13 @@ public class PlayerServiceImpl implements PlayerService {
 		if (obj == null) {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			if (1 != mapper.update(obj)) {
-				return new BaseExcution<>(BaseStateEnum.FAIL);
-			}
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			repository.save(obj);
-		}
+		dao.edit(obj);
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
 	@Override
 	public BaseExcution<Player> findById(String objId) {
-		Player selectByPrimaryKey = null;
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			selectByPrimaryKey = mapper.selectByPrimary(objId);
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimaryKey = repository.findById(objId).orElse(null);
-		}
+		Player selectByPrimaryKey = dao.findById(objId);
 		if (selectByPrimaryKey == null) {
 			return new BaseExcution<Player>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -155,13 +113,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public BaseExcution<Player> findByCondition(Player obj) {
-		List<Player> selectRowBounds = null;
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			int selectCount = mapper.selectCount(obj);
-			selectRowBounds = mapper.selectRowBounds(obj, new RowBounds(0, selectCount));
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectRowBounds = repository.findAll(Example.of(obj));
-		}
+		List<Player> selectRowBounds = dao.findAllCondition(obj);
 		if (selectRowBounds != null && selectRowBounds.size() > -1) {
 			return new BaseExcution<Player>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
 		}
@@ -170,17 +122,8 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public BaseExcution<Player> findAll(int pageIndex, int pageSize) {
-		List<Player> selectAll = null;
-		int selectCount = 0;
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			selectAll = mapper.selectRowBounds(new Player(), Page.getInstance(pageIndex, pageSize));
-			selectCount = mapper.selectCount(new Player());
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			org.springframework.data.domain.Page<Player> findAll = repository
-					.findAll(PageRequest.of(pageIndex - 1, pageSize));
-			selectAll = findAll.getContent();
-			selectCount = (int) repository.count();
-		}
+		List<Player> selectAll = dao.findAll(pageIndex, pageSize);
+		int selectCount = dao.count();
 		if (selectAll == null) {
 			return new BaseExcution<Player>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -189,12 +132,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public BaseExcution<PlayerVo> findByIdMore(String id) {
-		PlayerVo selectByPrimary = null;
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			selectByPrimary = mapper.selectPrimaryVo(new Player(id));
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectByPrimary = voRepository.findById(id).orElse(null);
-		}
+		PlayerVo selectByPrimary = dao.findIdMore(id);
 		if (selectByPrimary == null) {
 			return new BaseExcution<PlayerVo>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -203,18 +141,8 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public BaseExcution<PlayerVo> findAllMore(Player example, int pageIndex, int pageSize) {
-		List<PlayerVo> selectAllByPage = null;
-		int selectCount = 0;
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			selectAllByPage = mapper.selectMoreRowBounds(example, Page.getInstance(pageIndex, pageSize));
-			selectCount = mapper.selectCount(example);
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			org.springframework.data.domain.Page<PlayerVo> findAll = voRepository.findAll(
-					Example.of(new PlayerVo(example.getTeamId(), example.getPlayerName())),
-					PageRequest.of(pageIndex - 1, pageSize));
-			selectAllByPage = findAll.getContent();
-			selectCount = (int) repository.count(Example.of(example));
-		}
+		List<PlayerVo> selectAllByPage = dao.findAllMore(example, pageIndex, pageSize);
+		int selectCount = dao.countExmaple(example);
 		if (selectAllByPage == null) {
 			return new BaseExcution<PlayerVo>(BaseStateEnum.QUERY_ERROR);
 		}
@@ -234,37 +162,21 @@ public class PlayerServiceImpl implements PlayerService {
 			return new BaseExcution<Player>(BaseStateEnum.EMPTY);
 		}
 		// 球队人数限制
-		Player temp = new Player();
+		Player temp =EntityFactroy.getBean(Player.class);
 		temp.setTeamId(teamId);
-		int selectCount = 0;
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			selectCount = mapper.selectCount(temp);
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectCount = (int) repository.count(Example.of(temp));
-		}
+		int selectCount = dao.countExmaple(temp);
 		if (selectCount >= 14) {
 			return new BaseExcution<>(BaseStateEnum.TO_MANY_PLAYER);
 		}
 		temp.setPlayerNum(num);
-		Player selectPrimary = null;
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			selectPrimary = mapper.selectPrimary(temp);
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectPrimary = repository.findOne(Example.of(temp)).orElse(null);
-		}
+		Player selectPrimary = dao.findByCondition(temp);
 		if (null != selectPrimary) {
 			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYERNUM);
 		}
 		if (BaseStateEnum.SUCCESS.getState() != add(packagePlayer).getState()) {
 			throw new Exception("加入球队失败");
 		}
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			if (1 != infoMapper.insert(packagePlayerInfo)) {
-				throw new Exception("加入球队失败,请检查学号");
-			}
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			infoRepository.save(packagePlayerInfo);
-		}
+		infoDao.add(packagePlayerInfo);
 		return new BaseExcution<>(BaseStateEnum.SUCCESS, packagePlayer);
 	}
 
@@ -283,14 +195,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (BaseStateEnum.SUCCESS.getState() != edit(packagePlayer).getState()) {
 			throw new Exception("修改球员失败");
 		}
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			if (1 != infoMapper.update(packagePlayerInfo)) {
-				throw new Exception("修改球员失败");
-			}
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			infoRepository.save(packagePlayerInfo);
-		}
-
+		infoDao.edit(packagePlayerInfo);
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
 
@@ -324,12 +229,9 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public BaseExcution<Player> checkValidId(String playerId) {
-		int selectCount = 0;
-		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
-			selectCount = mapper.selectCount(new Player(playerId));
-		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {
-			selectCount = (int) repository.count(Example.of(new Player(playerId)));
-		}
+		Player bean = EntityFactroy.getBean(Player.class);
+		bean.setPlayerId(playerId);
+		int selectCount = dao.countExmaple(bean);
 		if (0 != selectCount) {
 			return new BaseExcution<>(BaseStateEnum.FAIL);
 		}

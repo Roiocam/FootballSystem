@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,21 +25,15 @@ import club.pypzx.FootballSystem.template.BaseStateEnum;
 import club.pypzx.FootballSystem.utils.IDUtils;
 import club.pypzx.FootballSystem.utils.ResultUtil;
 
-@Service()
-
+@Service
 public class CupServiceImpl implements CupService {
 
-	@Resource(name = "cupDao")
+	@Autowired
 	private CupDao cupDao;
 	@Autowired
 	private TeamService teamSerivce;
 	@Autowired
 	private GroupService groupService;
-//
-//	@Autowired
-//	private CupMapper mapper;
-//	@Autowired
-//	private CupRepository repository;
 
 	public Cup packageCup(String name) {
 		Cup obj = EntityFactroy.getBean(Cup.class);
@@ -68,7 +60,7 @@ public class CupServiceImpl implements CupService {
 		}
 		// 先删除比赛记录,再删除球员,再删除球队,再删除赛程安排表
 		// --查询赛事下是否有球队
-		Team t = new Team();
+		Team t = EntityFactroy.getBean(Team.class);
 		t.setCupId(objId);
 		BaseExcution<Team> findByCondition = teamSerivce.findByCondition(t);
 		if (!ResultUtil.failListResult(findByCondition)) {
@@ -90,7 +82,7 @@ public class CupServiceImpl implements CupService {
 			return new BaseExcution<>(BaseStateEnum.EMPTY);
 		}
 		obj.setIsGroup(DecideEnum.FALSE.getState());
-		Cup temp = new Cup();
+		Cup temp = EntityFactroy.getBean(Cup.class);
 		temp.setCupName(obj.getCupName());
 		Cup findByCondition = cupDao.findByCondition(temp);
 		if (findByCondition != null) {
@@ -158,7 +150,7 @@ public class CupServiceImpl implements CupService {
 	@Override
 	@Transactional
 	public BaseExcution<Cup> randomTeamToGroup(String cupId) throws Exception {
-		Team t = new Team();
+		Team t = EntityFactroy.getBean(Team.class);
 		t.setCupId(cupId);
 		BaseExcution<TeamVo> queryAllByPage = teamSerivce.findAllMore(t, 1, 9);
 		if (ResultUtil.failListResult(queryAllByPage)) {
@@ -178,7 +170,7 @@ public class CupServiceImpl implements CupService {
 			for (int j = 1; j < 4; j++) {
 				GroupEnum stringOf = GroupEnum.stringOf(j);
 				TeamVo teamVo = list.get(count);
-				Group g = new Group();
+				Group g = EntityFactroy.getBean(Group.class);
 				g.setCupId(cupId);
 				g.setTeamId(teamVo.getTeamId());
 				g.setTeamGroup(stringOf.getGroup_string());

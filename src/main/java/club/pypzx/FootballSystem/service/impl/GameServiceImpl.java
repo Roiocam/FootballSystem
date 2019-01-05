@@ -55,7 +55,7 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public BaseExcution<Game> findById(String objId) {
-		Game game = new Game();
+		Game game = EntityFactroy.getBean(Game.class);
 		game.setCupId(objId);
 		Game findById = dao.findByCondition(game);
 		if (findById == null) {
@@ -102,7 +102,7 @@ public class GameServiceImpl implements GameService {
 	@Override
 	@Transactional
 	public BaseExcution<Game> removeGroupByCup(String cupId) throws Exception {
-		Game record = new Game();
+		Game record = EntityFactroy.getBean(Game.class);
 		record.setCupId(cupId);
 		dao.remove(cupId);
 		if (BaseStateEnum.SUCCESS.getState() != groupService.removeById(cupId).getState()) {
@@ -167,7 +167,7 @@ public class GameServiceImpl implements GameService {
 	}
 
 	private Game packGame(String cupId, String homeId, String awayId) {
-		Game g = new Game();
+		Game g = EntityFactroy.getBean(Game.class);
 		g.setCupId(cupId);
 		g.setGameId(IDUtils.getUUID());
 		g.setTeamHome(homeId);

@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	public UserExcution getUser(String username, String password) {
 		if ("".equals(username) || "".equals(password))
 			throw new UserException("用户信息为空");
-		User temp = new User();
+		User temp =EntityFactroy.getBean(User.class);
 		temp.setUsername(username);
 		temp.setPassword(DESUtil.getEncryptStrig(password));
 		User selectPrimary = null;
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
 	public UserExcution editUser(String username, String password) {
 		if (ParamUtils.emptyString(username) || ParamUtils.emptyString(password))
 			throw new UserException("用户ID或密码为空");
-		User user = new User();
+		User user = EntityFactroy.getBean(User.class);
 		user.setUsername(username);
 		user.setPassword(DESUtil.getEncryptStrig(password));
 		dao.edit(user);

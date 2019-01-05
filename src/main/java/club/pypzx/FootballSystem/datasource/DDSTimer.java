@@ -1,6 +1,10 @@
 package club.pypzx.FootballSystem.datasource;
 
 import org.apache.tomcat.jdbc.pool.DataSource;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
 
 /**
  * 动态数据源定时器管理。长时间无访问的数据库连接关闭。
@@ -8,6 +12,8 @@ import org.apache.tomcat.jdbc.pool.DataSource;
  * @author Roiocam
  * @date 2018年12月30日 下午4:01:55
  */
+@Component
+@Scope("prototype")
 public class DDSTimer {
 
 	/**
@@ -25,9 +31,17 @@ public class DDSTimer {
 	 */
 	private long lastUseTime;
 
-	public DDSTimer(DataSource dds) {
+	public DDSTimer() {
+	}
+
+	public static DDSTimer instance(DataSource dds) {
+		return EntityFactroy.getBean(DDSTimer.class).build(dds);
+	}
+
+	public DDSTimer build(DataSource dds) {
 		this.dds = dds;
 		this.lastUseTime = System.currentTimeMillis();
+		return this;
 	}
 
 	/**

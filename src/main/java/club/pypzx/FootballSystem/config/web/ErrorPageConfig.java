@@ -6,6 +6,12 @@ import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 
+/**
+ * 错误页面配置
+ * 
+ * @author Roiocam
+ * @date 2019年1月5日 下午3:25:28
+ */
 @Configuration
 public class ErrorPageConfig implements ErrorPageRegistrar {
 
@@ -23,7 +29,5 @@ public class ErrorPageConfig implements ErrorPageRegistrar {
 		ErrorPage e500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/app/view/404");
 		registry.addErrorPages(e404, e500);
 	}
-
-	
 
 }

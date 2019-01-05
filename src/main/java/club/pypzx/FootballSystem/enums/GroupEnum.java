@@ -1,5 +1,10 @@
 package club.pypzx.FootballSystem.enums;
 
+/**
+ *   组别枚举
+ * @author Roiocam
+ * @date 2019年1月5日 下午3:35:13
+ */
 public enum GroupEnum {
 	GROUP_A(1, "A"), GROUP_B(2, "B"), GROUP_C(3, "C");
 	private int group_int;

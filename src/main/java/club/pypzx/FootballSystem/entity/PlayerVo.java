@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
 import club.pypzx.FootballSystem.utils.ParamUtils;
 
 @Entity(name = "PlayerVo")
@@ -37,7 +38,9 @@ public class PlayerVo {
 
 	public PlayerVo(String teamId, String playerName) {
 		if (ParamUtils.validString(teamId)) {
-			this.team = new Team(teamId);
+			Team bean = EntityFactroy.getBean(Team.class);
+			bean.setTeamId(teamId);
+			this.team = bean;
 		}
 		if (ParamUtils.validString(playerName)) {
 			this.playerName = playerName;

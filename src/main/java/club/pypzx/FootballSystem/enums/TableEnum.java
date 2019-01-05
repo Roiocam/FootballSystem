@@ -1,5 +1,10 @@
 package club.pypzx.FootballSystem.enums;
 
+/**
+ *   数据表对应枚举
+ * @author Roiocam
+ * @date 2019年1月5日 下午3:35:35
+ */
 public enum TableEnum {
 	USER("User", "pypzx_" + "user"), CUP("Cup", "pypzx_" + "cup"), GAME("Game", "pypzx_" + "game"),
 	GAME_RECORD("GameRecord", "pypzx_" + "game_record"), GROUP("Group", "pypzx_" + "group"),

@@ -2,6 +2,13 @@ package club.pypzx.FootballSystem.template;
 
 import java.util.List;
 
+/**
+ * 统一结果类
+ * 
+ * @author Roiocam
+ * @date 2019年1月5日 下午3:29:40
+ * @param <T>
+ */
 public class BaseExcution<T> {
 	// 结果状态
 	private int state;
@@ -19,20 +26,35 @@ public class BaseExcution<T> {
 	public BaseExcution() {
 	}
 
-	// 失败的构造器
+	/**
+	 * 无数据的构造器
+	 * 
+	 * @param stateEnum
+	 */
 	public BaseExcution(BaseStateEnum stateEnum) {
 		this.state = stateEnum.getState();
 		this.stateInfo = stateEnum.getStateInfo();
 	}
 
-	// 成功的构造器
+	/**
+	 * 包含一个对象的构造器
+	 * 
+	 * @param stateEnum
+	 * @param obj
+	 */
 	public BaseExcution(BaseStateEnum stateEnum, T obj) {
 		this.state = stateEnum.getState();
 		this.stateInfo = stateEnum.getStateInfo();
 		this.obj = obj;
 	}
 
-	// 成功的构造器
+	/**
+	 * 集合对象的构造器
+	 * 
+	 * @param stateEnum
+	 * @param objList
+	 * @param count
+	 */
 	public BaseExcution(BaseStateEnum stateEnum, List<T> objList, int count) {
 		this.state = stateEnum.getState();
 		this.stateInfo = stateEnum.getStateInfo();

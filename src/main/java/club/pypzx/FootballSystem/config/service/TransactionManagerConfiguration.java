@@ -31,6 +31,11 @@ public class TransactionManagerConfiguration {
 	@Qualifier("dataSource")
 	private DataSource dataSource;
 
+	/**
+	 * 返回的事务管理，首先去查找线程中是否存在值为MyBatis的DbType变量，若不存在则默认返回JPA的事务管理
+	 * 
+	 * @return
+	 */
 	@Bean(name = "transactionManager")
 	public PlatformTransactionManager transactionManager() {
 		if (DBIdentifier.getDbType() != null && DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {

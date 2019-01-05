@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import club.pypzx.FootballSystem.dbmgr.EntityFactroy;
+
 @Entity(name = "GameVo")
 @Table(name = "pypzx_game")
 @Component
@@ -30,11 +32,14 @@ public class GameVo {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cup_id", referencedColumnName = "cup_id")
 	private Cup cup;
+
 	public GameVo() {
 	}
 
 	public GameVo(String cupId) {
-		this.cup = new Cup(cupId);
+		Cup bean = EntityFactroy.getBean(Cup.class);
+		bean.setCupId(cupId);
+		this.cup = bean;
 	}
 
 	public String getGameId() {

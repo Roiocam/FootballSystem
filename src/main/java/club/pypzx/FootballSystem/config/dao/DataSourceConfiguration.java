@@ -44,7 +44,8 @@ public class DataSourceConfiguration {
 		 * 文档:https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/htmlsingle
 		 * /#howto-configure-a-datasource 另有其他两种方式，在本文件夹的Markdown文件中
 		 */
-		DataSourceBuilder builder = DataSourceBuilder.create();
+
+		DataSourceBuilder<?> builder = DataSourceBuilder.create();
 		builder.type(DynamicDataSource.class);
 		// 使用Spring
 		// Boot自动生成一个dataSource对象(已写好的参数为url,username,password,driver-class-name)
@@ -73,6 +74,10 @@ public class DataSourceConfiguration {
 		}
 	}
 
+	/**
+	 * 获取MyBatis的全局设置
+	 * @return
+	 */
 	@Bean
 	@ConfigurationProperties("mybatis.configuration")
 	public org.apache.ibatis.session.Configuration globalConfig() {
