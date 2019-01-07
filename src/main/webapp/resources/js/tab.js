@@ -163,9 +163,13 @@
   
       });
 	 $('#logout').click(function(){
+		 var formData = new FormData();
+			formData.append('dbCode', 'FootballSystem');
+			formData.append('dbType', 'MyBatis'); 
 		 $.ajax({
 			url : '/FootballSystem/admin/service/logout',
 			type : 'POST',
+			data : formData,
 			contentType : false,
 			processData : false,
 			cache : false,

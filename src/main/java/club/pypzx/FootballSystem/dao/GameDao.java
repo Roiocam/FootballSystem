@@ -61,7 +61,7 @@ public class GameDao implements BaseDao<Game> {
 	@Override
 	public void remove(String objId) {
 		Game bean = EntityFactroy.getBean(Game.class);
-		bean.setGameId(objId);
+		bean.setCupId(objId);
 		if (DBIdentifier.getDbType().equals(DBType.MY_BATIS)) {
 			mapper.delete(bean);
 		} else if (DBIdentifier.getDbType().equals(DBType.JPA)) {

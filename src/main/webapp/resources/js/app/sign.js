@@ -140,7 +140,7 @@ $(function() {
 	}
 	function checkId(id) {
 		 var formData = new FormData();
-			formData.append('player.playerId', id);
+			formData.append('playerInfo.playerId', id);
 			formData.append('dbCode', 'FootballSystem');
 			formData.append('dbType', 'MyBatis'); 
 		$.ajax({

@@ -208,6 +208,7 @@ public class TeamServiceImpl implements TeamService {
 		if (ResultUtil.failResult(createTeam)) {
 			throw new RuntimeException("创建球队失败：" + createTeam.getStateInfo());
 		}
+		player.setTeamId(createTeam.getObj().getTeamId());
 		BaseExcution<Player> insertObj = playerService.add(player, info);
 		if (ResultUtil.failResult(insertObj)) {
 			throw new RuntimeException("创建球员失败" + insertObj.getStateInfo());
