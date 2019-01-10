@@ -31,7 +31,7 @@
     src/main/resources
     |---db		数据库语句
     
-# [API接口](https://github.com/Roiocam/FootballSystem/edit/master/API.md)
+# [API接口](https://github.com/Roiocam/FootballSystem/blob/master/API.md)
 # 项目设计
 
 ## DAO层设计
