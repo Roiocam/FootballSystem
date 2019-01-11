@@ -27,13 +27,16 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 
 @Service
 public class CupServiceImpl implements CupService {
+    private final CupDao cupDao;
+    private final TeamService teamSerivce;
+    private final GroupService groupService;
 
-	@Autowired
-	private CupDao cupDao;
-	@Autowired
-	private TeamService teamSerivce;
-	@Autowired
-	private GroupService groupService;
+    @Autowired
+    public CupServiceImpl(CupDao cupDao, TeamService teamSerivce, GroupService groupService) {
+        this.cupDao = cupDao;
+        this.teamSerivce = teamSerivce;
+        this.groupService = groupService;
+    }
 
 	public Cup packageCup(String name) {
 		Cup obj = EntityFactroy.getBean(Cup.class);
