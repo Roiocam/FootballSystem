@@ -3,17 +3,12 @@ package club.pypzx.FootballSystem.dbmgr;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 /**
  * 项目数据库管理。提供根据项目编码查询数据库名称和IP的接口。
  * 
  * @author Roiocam
  * @date 2018年12月30日 下午4:10:12
  */
-@Component
-@Scope(value = "singleton")
 public class ProjectDBMgr {
 	private static ProjectDBMgr instance = null;
 
@@ -41,7 +36,7 @@ public class ProjectDBMgr {
 	 */
 	public static ProjectDBMgr instance() {
 		if (instance == null) {
-			instance = EntityFactroy.getBean(ProjectDBMgr.class);
+			instance = new ProjectDBMgr();
 		}
 		return instance;
 	}
