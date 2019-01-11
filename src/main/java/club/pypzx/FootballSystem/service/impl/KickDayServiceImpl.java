@@ -14,8 +14,12 @@ import club.pypzx.FootballSystem.template.BaseStateEnum;
 
 @Service
 public class KickDayServiceImpl implements KickDayService {
+	private final KickDayDao dao;
+
 	@Autowired
-	private KickDayDao dao;
+	public KickDayServiceImpl(KickDayDao dao) {
+		this.dao = dao;
+	}
 
 	@Override
 	public BaseExcution<KickDay> newDay() {

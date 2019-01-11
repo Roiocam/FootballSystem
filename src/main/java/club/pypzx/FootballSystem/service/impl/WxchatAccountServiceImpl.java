@@ -14,8 +14,12 @@ import club.pypzx.FootballSystem.template.BaseStateEnum;
 
 @Service
 public class WxchatAccountServiceImpl implements WechatAccountService {
+	private final WechatAccountDao dao;
+
 	@Autowired
-	private WechatAccountDao dao;
+	public WxchatAccountServiceImpl(WechatAccountDao dao) {
+		this.dao = dao;
+	}
 
 	@Override
 	public BaseExcution<WechatAccount> add(WechatAccount obj) {

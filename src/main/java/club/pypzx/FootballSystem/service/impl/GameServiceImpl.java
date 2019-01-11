@@ -27,12 +27,16 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 
 @Service
 public class GameServiceImpl implements GameService {
+	private final GroupService groupService;
+	private final GameDao dao;
+	private final CupService cupService;
+
 	@Autowired
-	private GroupService groupService;
-	@Autowired
-	private GameDao dao;
-	@Autowired
-	private CupService cupService;
+	public GameServiceImpl(GroupService groupService, GameDao dao, CupService cupService) {
+		this.groupService = groupService;
+		this.dao = dao;
+		this.cupService = cupService;
+	}
 
 	@Override
 	@Transactional

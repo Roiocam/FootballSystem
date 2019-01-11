@@ -15,8 +15,12 @@ import club.pypzx.FootballSystem.template.BaseStateEnum;
 
 @Service
 public class GroupServiceImpl implements GroupService {
+	private final GroupDao dao;
+
 	@Autowired
-	private GroupDao dao;
+	public GroupServiceImpl(GroupDao dao) {
+		this.dao = dao;
+	}
 
 	@Override
 	public BaseExcution<Group> add(Group obj) {

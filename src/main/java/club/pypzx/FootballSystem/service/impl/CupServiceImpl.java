@@ -140,12 +140,8 @@ public class CupServiceImpl implements CupService {
 	@Override
 	@Transactional
 	public BaseExcution<Cup> removeByIdList(List<String> list) throws Exception {
-		Iterator<?> iterator = list.iterator();
-		if (iterator == null) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
-		}
-		while (iterator.hasNext()) {
-			removeById((String) iterator.next());
+		for(String is:list){
+			removeById(is);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}

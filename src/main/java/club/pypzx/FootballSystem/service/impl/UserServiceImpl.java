@@ -3,6 +3,8 @@ package club.pypzx.FootballSystem.service.impl;
 import java.util.Iterator;
 import java.util.List;
 
+import club.pypzx.FootballSystem.template.BaseExcution;
+import club.pypzx.FootballSystem.template.BaseStateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +22,12 @@ import club.pypzx.FootballSystem.utils.ParamUtils;
 @Service
 public class UserServiceImpl implements UserService {
 	private static final String EMPTY_STRING = "";
+	private final UserDao dao;
+
 	@Autowired
-	private UserDao dao;
+	public UserServiceImpl(UserDao dao) {
+		this.dao = dao;
+	}
 
 	@Override
 	@Transactional
@@ -98,12 +104,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserExcution removeUserList(List<String> list) {
-		Iterator<?> iterator = list.iterator();
-		if (iterator == null) {
-			return new UserExcution(UserStateEnum.DELETE_ERROR);
-		}
-		while (iterator.hasNext()) {
-			removeUser((String) iterator.next());
+		for(String is:list){
+			removeUser(is);
 		}
 		return new UserExcution(UserStateEnum.SUCCESS);
 	}

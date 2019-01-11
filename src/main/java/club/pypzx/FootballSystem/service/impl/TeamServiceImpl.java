@@ -29,14 +29,18 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 @Service
 public class TeamServiceImpl implements TeamService {
 
+	private final TeamDao dao;
+	private final PlayerService playerService;
+	private final TeamRankDao rankDao;
+	private final GroupService groupService;
+
 	@Autowired
-	private TeamDao dao;
-	@Autowired
-	private PlayerService playerService;
-	@Autowired
-	private TeamRankDao rankDao;
-	@Autowired
-	private GroupService groupService;
+	public TeamServiceImpl(TeamDao dao, PlayerService playerService, TeamRankDao rankDao, GroupService groupService) {
+		this.dao = dao;
+		this.playerService = playerService;
+		this.rankDao = rankDao;
+		this.groupService = groupService;
+	}
 
 	public Team packageTeam(String cupId, String name, String code, String desc) {
 		Team obj = EntityFactroy.getBean(Team.class);
@@ -160,12 +164,8 @@ public class TeamServiceImpl implements TeamService {
 	@Transactional
 	public BaseExcution<Team> removeByIdList(List<String> list) {
 		try {
-			Iterator<?> iterator = list.iterator();
-			if (iterator == null) {
-				return new BaseExcution<>(BaseStateEnum.FAIL);
-			}
-			while (iterator.hasNext()) {
-				removeById((String) iterator.next());
+			for(String is:list){
+				removeById(is);
 			}
 			return new BaseExcution<>(BaseStateEnum.SUCCESS);
 		} catch (Exception e) {

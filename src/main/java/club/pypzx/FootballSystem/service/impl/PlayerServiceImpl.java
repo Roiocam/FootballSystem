@@ -26,15 +26,19 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
-	@Autowired
-	private PlayerDao dao;
-	@Autowired
-	private PlayerRankDao rankDao;
-	@Autowired
-	private PlayerInfoDao infoDao;
+	private final PlayerDao dao;
+	private final PlayerRankDao rankDao;
+	private final PlayerInfoDao infoDao;
+
+	private final TeamService teamService;
 
 	@Autowired
-	private TeamService teamService;
+	public PlayerServiceImpl(PlayerDao dao, PlayerRankDao rankDao, PlayerInfoDao infoDao, TeamService teamService) {
+		this.dao = dao;
+		this.rankDao = rankDao;
+		this.infoDao = infoDao;
+		this.teamService = teamService;
+	}
 
 	@Override
 	@Transactional
@@ -182,12 +186,8 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public BaseExcution<Player> removeByIdList(List<String> list) throws Exception {
-		Iterator<?> iterator = list.iterator();
-		if (iterator == null) {
-			return new BaseExcution<>(BaseStateEnum.FAIL);
-		}
-		while (iterator.hasNext()) {
-			removeById((String) iterator.next());
+		for(String is:list){
+			removeById(is);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
 	}
