@@ -41,19 +41,18 @@ public class WxchatAccountServiceImpl implements WechatAccountService {
 		WechatAccount obj = EntityFactroy.getBean(WechatAccount.class);
 		obj.setOpenid(objId);
 		WechatAccount selectByPrimaryKey = dao.findByCondition(obj);
-		if (selectByPrimaryKey == null) {
-			return new BaseExcution<WechatAccount>(BaseStateEnum.QUERY_ERROR);
-		}
-		return new BaseExcution<WechatAccount>(BaseStateEnum.SUCCESS, selectByPrimaryKey);
+
+		BaseExcution<WechatAccount> be= (selectByPrimaryKey == null) ?new BaseExcution<WechatAccount>(BaseStateEnum.SUCCESS, selectByPrimaryKey)
+				:new BaseExcution<WechatAccount>(BaseStateEnum.QUERY_ERROR);
+		return be;
 	}
 
 	@Override
 	public BaseExcution<WechatAccount> findByCondition(WechatAccount obj) {
 		List<WechatAccount> selectRowBounds = dao.findAllCondition(obj);
-		if (selectRowBounds != null && selectRowBounds.size() > -1) {
-			return new BaseExcution<WechatAccount>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
-		}
-		return new BaseExcution<WechatAccount>(BaseStateEnum.QUERY_ERROR);
+		BaseExcution<WechatAccount> be=(selectRowBounds != null && selectRowBounds.size() > -1)? new BaseExcution<WechatAccount>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size())
+				:new BaseExcution<WechatAccount>(BaseStateEnum.QUERY_ERROR);
+		return be;
 	}
 
 	@Override

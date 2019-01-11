@@ -65,27 +65,19 @@ public class UserServiceImpl implements UserService {
 		temp.setPassword(DESUtil.getEncryptStrig(password));
 		User selectPrimary = null;
 		selectPrimary = dao.findByCondition(temp);
-		if (selectPrimary != null) {
-			return new UserExcution(UserStateEnum.SUCCESS, selectPrimary);
-		} else {
-			return new UserExcution(UserStateEnum.QUERY_ERROR);
-		}
+		UserExcution ue=(selectPrimary != null)? new UserExcution(UserStateEnum.SUCCESS, selectPrimary):new UserExcution(UserStateEnum.QUERY_ERROR);
+		return ue;
 	}
 
 	@Override
 	public UserExcution getUserList(int pageIndex, int pageSize) {
 		List<User> selectAll = dao.findAll(pageIndex, pageSize);
 		int selectCount = dao.count();
-		if (selectAll == null) {
+		if (selectAll == null||selectAll.size() < 0) {
 			return new UserExcution(UserStateEnum.QUERY_ERROR);
 		}
-		if (selectAll.size() < 0) {
-			return new UserExcution(UserStateEnum.QUERY_ERROR);
-		}
-		Iterator<User> iterator = selectAll.iterator();
-		while (iterator.hasNext()) {
-			User next = iterator.next();
-			next.setPassword(DESUtil.getDecryptString(next.getPassword()));
+		for(User iu:selectAll){
+			iu.setPassword(DESUtil.getDecryptString(iu.getPassword()));
 		}
 		return new UserExcution(UserStateEnum.SUCCESS, selectAll, selectCount);
 

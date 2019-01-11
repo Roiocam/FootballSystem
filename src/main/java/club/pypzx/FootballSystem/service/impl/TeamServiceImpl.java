@@ -83,9 +83,8 @@ public class TeamServiceImpl implements TeamService {
 		}
 		List<Player> selectByExample = findByCondition2.getObjList();
 		if (selectByExample != null && selectByExample.size() > 0) {
-			Iterator<Player> iterator = selectByExample.iterator();
-			while (iterator.hasNext()) {
-				playerService.removeById(iterator.next().getPlayerId());
+			for(Player ip:selectByExample){
+				playerService.removeById(ip.getPlayerId());
 			}
 		}
 		rankDao.remove(objId);
@@ -124,10 +123,9 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	public BaseExcution<Team> findByCondition(Team obj) {
 		List<Team> selectRowBounds = dao.findAllCondition(obj);
-		if (selectRowBounds != null && selectRowBounds.size() > -1) {
-			return new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size());
-		}
-		return new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
+		BaseExcution<Team> be=(selectRowBounds != null && selectRowBounds.size() > -1)? new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size()):
+				new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
+		return be;
 
 	}
 
@@ -135,29 +133,24 @@ public class TeamServiceImpl implements TeamService {
 	public BaseExcution<Team> findAll(int pageIndex, int pageSize) {
 		List<Team> selectAll = dao.findAll(pageIndex, pageSize);
 		int selectCount = dao.count();
-		if (selectAll == null) {
-			return new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
-		}
-		return new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectAll, selectCount);
+		BaseExcution<Team> be= (selectAll != null) ? new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectAll, selectCount):
+				new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
+		return be;
 	}
 
 	@Override
 	public BaseExcution<TeamVo> findByIdMore(String id) {
 		TeamVo selectByPrimary = dao.findIdMore(id);
-		if (selectByPrimary == null) {
-			return new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR);
-		}
-		return new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectByPrimary);
+		BaseExcution<TeamVo> be = (selectByPrimary == null)? new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR):new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectByPrimary) ;
+		return be;
 	}
 
 	@Override
 	public BaseExcution<TeamVo> findAllMore(Team obj, int pageIndex, int pageSize) {
 		List<TeamVo> selectAllByPage = dao.findAllMore(obj, pageIndex, pageSize);
 		int selectCount = dao.countExmaple(obj);
-		if (selectAllByPage == null) {
-			return new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR);
-		}
-		return new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectAllByPage, selectCount);
+		BaseExcution<TeamVo> be=(selectAllByPage == null) ?new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR): new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectAllByPage, selectCount);
+		return be;
 	}
 
 	@Override
