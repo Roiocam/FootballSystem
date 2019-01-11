@@ -1,10 +1,7 @@
 package club.pypzx.FootballSystem.service.impl;
 
-import java.util.Iterator;
 import java.util.List;
 
-import club.pypzx.FootballSystem.template.BaseExcution;
-import club.pypzx.FootballSystem.template.BaseStateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

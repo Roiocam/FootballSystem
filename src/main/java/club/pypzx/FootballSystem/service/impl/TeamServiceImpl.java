@@ -1,6 +1,5 @@
 package club.pypzx.FootballSystem.service.impl;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +29,16 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 public class TeamServiceImpl implements TeamService {
 
 	private final TeamDao dao;
-	private final PlayerService playerService;
 	private final TeamRankDao rankDao;
-	private final GroupService groupService;
+	@Autowired
+	private PlayerService playerService;
+	@Autowired
+	private GroupService groupService;
 
 	@Autowired
-	public TeamServiceImpl(TeamDao dao, PlayerService playerService, TeamRankDao rankDao, GroupService groupService) {
+	public TeamServiceImpl(TeamDao dao, TeamRankDao rankDao) {
 		this.dao = dao;
-		this.playerService = playerService;
 		this.rankDao = rankDao;
-		this.groupService = groupService;
 	}
 
 	public Team packageTeam(String cupId, String name, String code, String desc) {
@@ -83,7 +82,7 @@ public class TeamServiceImpl implements TeamService {
 		}
 		List<Player> selectByExample = findByCondition2.getObjList();
 		if (selectByExample != null && selectByExample.size() > 0) {
-			for(Player ip:selectByExample){
+			for (Player ip : selectByExample) {
 				playerService.removeById(ip.getPlayerId());
 			}
 		}
@@ -123,8 +122,9 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	public BaseExcution<Team> findByCondition(Team obj) {
 		List<Team> selectRowBounds = dao.findAllCondition(obj);
-		BaseExcution<Team> be=(selectRowBounds != null && selectRowBounds.size() > -1)? new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size()):
-				new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
+		BaseExcution<Team> be = (selectRowBounds != null && selectRowBounds.size() > -1)
+				? new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectRowBounds, selectRowBounds.size())
+				: new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
 		return be;
 
 	}
@@ -133,15 +133,17 @@ public class TeamServiceImpl implements TeamService {
 	public BaseExcution<Team> findAll(int pageIndex, int pageSize) {
 		List<Team> selectAll = dao.findAll(pageIndex, pageSize);
 		int selectCount = dao.count();
-		BaseExcution<Team> be= (selectAll != null) ? new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectAll, selectCount):
-				new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
+		BaseExcution<Team> be = (selectAll != null)
+				? new BaseExcution<Team>(BaseStateEnum.SUCCESS, selectAll, selectCount)
+				: new BaseExcution<Team>(BaseStateEnum.QUERY_ERROR);
 		return be;
 	}
 
 	@Override
 	public BaseExcution<TeamVo> findByIdMore(String id) {
 		TeamVo selectByPrimary = dao.findIdMore(id);
-		BaseExcution<TeamVo> be = (selectByPrimary == null)? new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR):new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectByPrimary) ;
+		BaseExcution<TeamVo> be = (selectByPrimary == null) ? new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR)
+				: new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectByPrimary);
 		return be;
 	}
 
@@ -149,7 +151,8 @@ public class TeamServiceImpl implements TeamService {
 	public BaseExcution<TeamVo> findAllMore(Team obj, int pageIndex, int pageSize) {
 		List<TeamVo> selectAllByPage = dao.findAllMore(obj, pageIndex, pageSize);
 		int selectCount = dao.countExmaple(obj);
-		BaseExcution<TeamVo> be=(selectAllByPage == null) ?new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR): new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectAllByPage, selectCount);
+		BaseExcution<TeamVo> be = (selectAllByPage == null) ? new BaseExcution<TeamVo>(BaseStateEnum.QUERY_ERROR)
+				: new BaseExcution<TeamVo>(BaseStateEnum.SUCCESS, selectAllByPage, selectCount);
 		return be;
 	}
 
@@ -157,7 +160,7 @@ public class TeamServiceImpl implements TeamService {
 	@Transactional
 	public BaseExcution<Team> removeByIdList(List<String> list) {
 		try {
-			for(String is:list){
+			for (String is : list) {
 				removeById(is);
 			}
 			return new BaseExcution<>(BaseStateEnum.SUCCESS);
@@ -191,7 +194,7 @@ public class TeamServiceImpl implements TeamService {
 		}
 		obj.setTeamId(IDUtils.getUUID());
 		dao.add(obj);
-		return new BaseExcution<>(BaseStateEnum.SUCCESS,obj);
+		return new BaseExcution<>(BaseStateEnum.SUCCESS, obj);
 	}
 
 	@Override

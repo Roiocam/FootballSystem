@@ -1,6 +1,5 @@
 package club.pypzx.FootballSystem.service.impl;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +28,14 @@ public class PlayerServiceImpl implements PlayerService {
 	private final PlayerDao dao;
 	private final PlayerRankDao rankDao;
 	private final PlayerInfoDao infoDao;
-
-	private final TeamService teamService;
+	@Autowired
+	private TeamService teamService;
 
 	@Autowired
-	public PlayerServiceImpl(PlayerDao dao, PlayerRankDao rankDao, PlayerInfoDao infoDao, TeamService teamService) {
+	public PlayerServiceImpl(PlayerDao dao, PlayerRankDao rankDao, PlayerInfoDao infoDao) {
 		this.dao = dao;
 		this.rankDao = rankDao;
 		this.infoDao = infoDao;
-		this.teamService = teamService;
 	}
 
 	@Override
@@ -144,7 +142,7 @@ public class PlayerServiceImpl implements PlayerService {
 			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYERNUM);
 		}
 		BaseExcution<Player> checkValidId = checkValidId(info.getPlayerStuno());
-		if(BaseStateEnum.SUCCESS.getState()!=checkValidId.getState()) {
+		if (BaseStateEnum.SUCCESS.getState() != checkValidId.getState()) {
 			return new BaseExcution<Player>(BaseStateEnum.SAME_PLAYER_STUNO);
 		}
 		BaseExcution<Player> add = add(player);
@@ -186,7 +184,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public BaseExcution<Player> removeByIdList(List<String> list) throws Exception {
-		for(String is:list){
+		for (String is : list) {
 			removeById(is);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);

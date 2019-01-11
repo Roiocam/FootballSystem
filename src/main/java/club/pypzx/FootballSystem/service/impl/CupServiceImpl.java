@@ -27,16 +27,16 @@ import club.pypzx.FootballSystem.utils.ResultUtil;
 
 @Service
 public class CupServiceImpl implements CupService {
-    private final CupDao cupDao;
-    private final TeamService teamSerivce;
-    private final GroupService groupService;
+	private final CupDao cupDao;
+	@Autowired
+	private TeamService teamSerivce;
+	@Autowired
+	private GroupService groupService;
 
-    @Autowired
-    public CupServiceImpl(CupDao cupDao, TeamService teamSerivce, GroupService groupService) {
-        this.cupDao = cupDao;
-        this.teamSerivce = teamSerivce;
-        this.groupService = groupService;
-    }
+	@Autowired
+	public CupServiceImpl(CupDao cupDao) {
+		this.cupDao = cupDao;
+	}
 
 	public Cup packageCup(String name) {
 		Cup obj = EntityFactroy.getBean(Cup.class);
@@ -140,7 +140,7 @@ public class CupServiceImpl implements CupService {
 	@Override
 	@Transactional
 	public BaseExcution<Cup> removeByIdList(List<String> list) throws Exception {
-		for(String is:list){
+		for (String is : list) {
 			removeById(is);
 		}
 		return new BaseExcution<>(BaseStateEnum.SUCCESS);
