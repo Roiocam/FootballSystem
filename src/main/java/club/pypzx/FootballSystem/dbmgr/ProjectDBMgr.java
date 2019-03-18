@@ -1,7 +1,10 @@
 package club.pypzx.FootballSystem.dbmgr;
 
+
 import java.util.HashMap;
 import java.util.Map;
+
+import club.pypzx.FootballSystem.datasource.ServerDatasource;
 
 /**
  * 项目数据库管理。提供根据项目编码查询数据库名称和IP的接口。
@@ -21,12 +24,14 @@ public class ProjectDBMgr {
 	/**
 	 * 保存项目编码与数据库IP的映射关系。
 	 */
-	private Map<String, String> dbIPMap = new HashMap<String, String>();
+	private Map<String, ServerDatasource> dbIPMap = new HashMap<String, ServerDatasource>();
 
 	private ProjectDBMgr() {
-		dbNameMap.put("某个ProjectCode[项目编码]", "输入你的数据库名");
-		dbIPMap.put("某个ProjectCode[项目编码]", "输入你的数据库ip+端口");
+		dbNameMap.put("119.29.35.133:1306", "FootballSystem");
+		dbIPMap.put("119.29.35.133:1306", new ServerDatasource(5, 5, "119.29.35.133:1306"));
 
+		dbNameMap.put("127.0.0.1:3306", "FootballSystem");
+		dbIPMap.put("127.0.0.1:3306", new ServerDatasource(1, 1, "127.0.0.1:3306"));
 	}
 
 	/**
@@ -61,16 +66,32 @@ public class ProjectDBMgr {
 
 	/**
 	 * 获取数据库ip
-	 * 
+	 * 使用平滑加权轮询算法
 	 * @param projectCode
 	 * @return
 	 */
-	public String getDBIP(String projectCode) {
-		if (dbIPMap.containsKey(projectCode)) {
-			return dbIPMap.get(projectCode);
+	public String getDBIP() {
+		ServerDatasource maxWeightServer = null;
+		//获取总权重
+		int allWeight = dbIPMap.values().stream().mapToInt(ServerDatasource::getWeight).sum();
+		//遍历服务器，选择最大权重
+		for (Map.Entry<String, ServerDatasource> item : dbIPMap.entrySet()) {
+			ServerDatasource currentServer = item.getValue();
+			//当前权重是否大于最大权重，若大于，则替换
+			if (maxWeightServer == null || currentServer.getCurrentWeight() > maxWeightServer.getCurrentWeight()) {
+				maxWeightServer = currentServer;
+			}
 		}
+		assert maxWeightServer != null;
+		//为当前最大权重设置新的权重值（减去所有权重）
+		maxWeightServer.setCurrentWeight(maxWeightServer.getCurrentWeight() - allWeight);
+		//遍历服务器，当前服务器的当前权重设置为（当前权重加与固定权重。）
+		for (Map.Entry<String, ServerDatasource> item : dbIPMap.entrySet()) {
+			ServerDatasource currentServer = item.getValue();
+			currentServer.setCurrentWeight(currentServer.getCurrentWeight() + currentServer.getWeight());
+		}
+		return maxWeightServer.getIp();
 
-		return "";
 	}
 
 }

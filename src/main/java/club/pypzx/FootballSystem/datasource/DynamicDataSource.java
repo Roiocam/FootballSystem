@@ -85,7 +85,7 @@ public class DynamicDataSource extends DataSource {
 		// 3.设置数据库名称和IP(一般来说，端口和用户名、密码都是统一固定的),在properties中写好了
 		// 根据项目名,获取ProjectDBMgr下写好的数据库名称和具体数据库Ip
 		String urlFormat = this.getUrl();
-		String url = String.format(urlFormat, ProjectDBMgr.instance().getDBIP(dbCode),
+		String url = String.format(urlFormat, ProjectDBMgr.instance().getDBIP(),
 				ProjectDBMgr.instance().getDBName(dbCode));
 		dds.setUrl(url);
 		// 4.返回动态生成的数据源
